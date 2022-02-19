@@ -44,7 +44,7 @@ export const App = () => {
                                 <Link className="link-secondary" to={'/sub'}>订阅</Link>
                             </div>
                             <div className="col-4 text-center">
-                                <Link className="blog-header-logo text-dark" to={'/'}>典典博客</Link>
+                                <Link className="blog-header-logo text-dark" to={'/'}>梁典典的博客</Link>
                             </div>
                             <div className="col-4 d-flex justify-content-end align-items-center">
                                 <Button  >打赏</Button>
