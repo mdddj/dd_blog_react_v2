@@ -1,13 +1,10 @@
 import React from "react";
-import {BlogData} from "dd_server_api_web/apis/model/result/BlogPushNewResultData";
 import {Link} from "react-router-dom";
+import {BlogCardProps} from "./props";
 
-type Props = {
-    blog: BlogData
-}
 
 ///超大的博客卡片
-const LargeBlogCard: React.FC<Props> = ({blog}) => {
+const LargeBlogCard: React.FC<BlogCardProps> = ({blog}) => {
     return <>
         <div className="p-4 p-md-5 mb-4 text-white rounded bg-dark">
             <div className="col-md-6 px-0">

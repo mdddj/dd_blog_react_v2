@@ -1,5 +1,6 @@
 import * as React from "react"
 import {
+    Button,
     ChakraProvider,
     theme,
 } from "@chakra-ui/react"
@@ -45,7 +46,9 @@ export const App = () => {
                             <div className="col-4 text-center">
                                 <Link className="blog-header-logo text-dark" to={'/'}>典典博客</Link>
                             </div>
-
+                            <div className="col-4 d-flex justify-content-end align-items-center">
+                                <Button  >打赏</Button>
+                            </div>
                         </div>
                     </header>
 
