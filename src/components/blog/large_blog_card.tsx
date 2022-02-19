@@ -13,7 +13,7 @@ const LargeBlogCard: React.FC<Props> = ({blog}) => {
             <div className="col-md-6 px-0">
                 <h1 className="display-4 fst-italic">{blog.title}</h1>
                 <p className="lead my-3">{blog.dateString}</p>
-                <p className="lead mb-0"><Link to={'/detail?id='+blog.id} className="text-white fw-bold">记录阅读...</Link></p>
+                <p className="lead mb-0"><Link to={'/detail?id='+blog.id} className="text-white fw-bold">查看文章...</Link></p>
             </div>
         </div>
     </>
