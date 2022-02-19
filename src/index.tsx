@@ -4,11 +4,14 @@ import ReactDOM from "react-dom"
 import { App } from "./App"
 import reportWebVitals from "./reportWebVitals"
 import * as serviceWorker from "./serviceWorker"
+import {RecoilRoot} from "recoil";
 
 ReactDOM.render(
   <React.StrictMode>
     <ColorModeScript />
-    <App />
+    <RecoilRoot>
+        <App />
+    </RecoilRoot>
   </React.StrictMode>,
   document.getElementById("root"),
 )
