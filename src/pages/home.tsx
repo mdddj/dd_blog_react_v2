@@ -18,9 +18,8 @@ const Home: React.FC = () => {
     //获取博客列表
     const getHomePostList = () => {
         blogApi().getBlogList(1,5).then(value => {
-            let _list = [...blogs];
-            _list = [...value.data?.list??[]]
-            setBlogs(_list)
+            let resultList = value.data?.list??[]
+            setBlogs([...blogs,...resultList])
         })
     }
 
