@@ -9,44 +9,42 @@ import dayjs from "dayjs";
 const Archive: React.FC = () => {
 
 
-  const [archive] = useRecoilState(archivesDataState)
-  const archives = archive?.archiveModels ?? []
-  console.log(archives)
+    const [archive] = useRecoilState(archivesDataState)
+    const archives = archive?.archiveModels ?? []
+    console.log(archives)
 
-  return <>
-    {
-      archives.map(value => <MonthGroup monthItem={value} key={value.months} />)
-    }
+    return <>
+        {
+            archives.map(value => <MonthGroup monthItem={value} key={value.months}/>)
+        }
 
-  </>
+    </>
 }
 
 
-const MonthGroup: React.FC<{monthItem:  MonthsCount}> = ({monthItem}) => {
+const MonthGroup: React.FC<{ monthItem: MonthsCount }> = ({monthItem}) => {
 
-  const blogs = monthItem.blogs ?? []
+    const blogs = monthItem.blogs ?? []
 
 
+    return <>
+        <Heading as={'h3'} className={'mb-2'}>{monthItem.months}</Heading>
+        <ul className="list mb-5" style={{listStyle: 'none'}}>
+            {
+                blogs.map(value => {
+                    let dateString = dayjs(value.createTime).format('YYYY-MM-DD')
+                    return (<li style={{display: 'block'}} className={'mb-2'} key={value.id}>
+                        <span style={{float: 'right', color: '#767676'}}>{dateString}</span>
+                        <Link style={{color: '#007bff', cursor: 'pointer'}}
+                              to={'/post/' + value.id}>{value.title}</Link>
+                    </li>)
+                })
+            }
 
-  return <>
-      <Heading as={'h3'} className={'mb-2'}>{monthItem.months}</Heading>
+        </ul>
 
-    <ul className="list mb-5" style={{listStyle: 'none'}}>
-      {
-        blogs.map(value => {
-          let dateString = dayjs(value.createTime).format('YYYY-MM-DD')
-          return (<li style={{display: 'block'}} className={'mb-2'} key={value.id}>
-            <span style={{float: 'right',color: '#767676'}}>{dateString}</span>
-            <Link style={{color: '#007bff',cursor: 'pointer'}} to={'/post/'+value.id}>{value.title}</Link>
-          </li>)
-        })
-      }
-
-    </ul>
-
-  </>
+    </>
 }
 
 
-
-export  default  Archive
+export default Archive
