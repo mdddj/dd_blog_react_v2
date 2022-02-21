@@ -1,8 +1,8 @@
 import React from "react";
-import {Heading, ListItem, UnorderedList} from "@chakra-ui/react";
+import {Heading, Link, ListItem, UnorderedList} from "@chakra-ui/react";
 import {useRecoilState} from "recoil";
 import {archivesDataState} from "../providers/archives";
-import {Link} from "react-router-dom";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 //关于我的卡片
 const AboutMeCard: React.FC = () => {
@@ -25,7 +25,9 @@ const ArchiveCard: React.FC = () => {
         <Heading as={'h4'}>归档</Heading>
         <UnorderedList>
             {
-                months.map(value => <ListItem key={value.months}><Link className={'link'} to={'/months/'+value.months}>{value.months}</Link> <span>({value.count})</span></ListItem>)
+                months.map(value => <ListItem key={value.months}><Link isExternal={true} color={'teal.500'} href={'/months/'+value.months}>{value.months} <ExternalLinkIcon mx='2px' /></Link> <span>({value.count})</span>
+
+                </ListItem>)
             }
         </UnorderedList>
     </>

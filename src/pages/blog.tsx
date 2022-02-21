@@ -3,7 +3,7 @@ import {useParams} from "react-router-dom";
 import {blogApi} from "../utils/request";
 import {useMount} from "react-use";
 import {BlogData} from "dd_server_api_web/apis/model/result/BlogPushNewResultData";
-import {Fade, Spinner} from "@chakra-ui/react";
+import {Avatar, Fade, Spinner, Tag, TagLabel} from "@chakra-ui/react";
 import {BlogPreview} from "../components/blog_content";
 
 //博客详情页面
@@ -29,6 +29,22 @@ const BlogPage: React.FC = () => {
   return <>
     {loading && <Spinner />}
     <Fade in={blog!==undefined}>
+      <div className="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+        <div className="px-0"><h1 className="display-4 fst-italic">{blog?.title}</h1>
+          <p className="lead my-3">{blog?.dateString}</p>
+          <p>
+            <Tag size='lg' colorScheme='gray' borderRadius='full'>
+              <Avatar
+                  src={blog?.category.logo}
+                  size='xs'
+                  ml={-1}
+                  mr={2}
+              />
+              <TagLabel>{blog?.category.name}</TagLabel>
+            </Tag>
+          </p>
+        </div>
+      </div>
       {blog &&  <BlogPreview content={blog!.content}/> }
     </Fade>
   </>

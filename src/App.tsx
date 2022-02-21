@@ -5,14 +5,14 @@ import {
 } from "@chakra-ui/react"
 import {BrowserRouter, Routes, Route, Link} from "react-router-dom"
 import Home from "./pages/home"
-import './app.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import {blogApi} from "./utils/request";
 import {useMount} from "react-use";
 import {useRecoilState} from "recoil";
 import {archivesDataState} from "./providers/archives";
 import Archive from "./pages/archive";
 import BlogPage from "./pages/blog";
+import './app.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 export const App = () => {
 
@@ -87,10 +87,10 @@ const AppFoot: React.FC = () => {
     return <>
         <footer className="blog-footer mt-5">
 
-            <p>Blog template built for <a href="https://getbootstrap.com/">Bootstrap</a> by <a
+            <p> © 2022 <a
                 href="https://itbug.shop">@梁典典</a>.</p>
             <p>
-                <a href="#">回到顶部</a>
+                <Link to="#">回到顶部</Link>
             </p>
         </footer>
     </>

@@ -4,9 +4,9 @@ import {blogApi} from "../utils/request";
 import {BlogData} from "dd_server_api_web/apis/model/result/BlogPushNewResultData";
 import LargeBlogCard from "../components/blog/large_blog_card";
 import TwoColumnBlogCard from "../components/blog/two_column_card";
-import BaseBlogCard from "../components/blog/base_blog_card";
 import {Button} from "@chakra-ui/react";
 import {AboutMeCard, ArchiveCard} from "../components/about_me";
+import BaseBlogCardStyle2 from "../components/blog/base_blog_card_style2";
 
 //首页
 const Home: React.FC = () => {
@@ -57,7 +57,7 @@ const Home: React.FC = () => {
         <div className={'row g-5'}>
             <div className={'col-md-8'}>
                 {
-                    blogs.length>=3 && getBaseBlogs.map(value => <BaseBlogCard blog={value} key={value.id}/>)
+                    blogs.length>=3 && getBaseBlogs.map(value => <BaseBlogCardStyle2 blog={value} key={value.id}/>)
                 }
                 {/*    加载下一页  */}
                 {
