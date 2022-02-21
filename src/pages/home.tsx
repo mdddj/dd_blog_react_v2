@@ -34,7 +34,7 @@ const Home: React.FC = () => {
 
     /// 加载博客数据并进行UI更新
     const fetchBlogData = (page: number) => {
-        blogApi().getBlogList(page,5).then(value => {
+        blogApi().getBlogList(page,20).then(value => {
             let resultList = value.data?.list??[]
             setBlogs([...blogs,...resultList])
             setNextPageLoading(false)

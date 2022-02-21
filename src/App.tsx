@@ -7,7 +7,7 @@ import {BrowserRouter, Routes, Route, Link} from "react-router-dom"
 import Home from "./pages/home"
 import {blogApi} from "./utils/request";
 import {useMount} from "react-use";
-import {useRecoilState, useSetRecoilState} from "recoil";
+import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
 import {archivesDataState} from "./providers/archives";
 import Archive from "./pages/archive";
 import BlogPage from "./pages/blog";
@@ -53,32 +53,54 @@ export const App = () => {
 
 
 const BlogNav: React.FC = () => {
-    const [archives] = useRecoilState(archivesDataState)
+    const archives = useRecoilValue(archivesDataState)
   return <>
-      <div className="container">
-          <header className="blog-header py-3">
-              <div className="row flex-nowrap justify-content-between align-items-center">
-                  <div className="col-4 pt-1">
-                      <Link className="link-secondary" to={'/archive'}>归档</Link>
-                  </div>
-                  <div className="col-4 text-center">
-                      <Link className="blog-header-logo text-dark" to={'/'}>梁典典的博客</Link>
-                  </div>
-                  <div className="col-4 d-flex justify-content-end align-items-center">
-                      <Button>打赏</Button>
-                  </div>
+      <nav className="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" aria-label="Main navigation">
+          <div className="container-fluid">
+              <Link className="navbar-brand" to="/">梁典典的博客</Link>
+              <button className="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse"
+                      aria-label="Toggle navigation">
+                  <span className="navbar-toggler-icon"/>
+              </button>
+
+              <div className="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+                  <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                      <li className="nav-item">
+                          <a className="nav-link active" aria-current="page" href="#">首页</a>
+                      </li>
+                      <li className="nav-item">
+                          <a className="nav-link" href="#">动态</a>
+                      </li>
+                      <li className="nav-item">
+                          <a className="nav-link" href="#">归档</a>
+                      </li>
+                      <li className="nav-item">
+                          <a className="nav-link" href="#">标签</a>
+                      </li>
+                      <li className="nav-item">
+                          <a className="nav-link" href="#">友链</a>
+                      </li>
+                      <li className="nav-item">
+                          <a className="nav-link" href="#">教程</a>
+                      </li>
+                      <li className="nav-item">
+                          <a className="nav-link" href="#">关于</a>
+                      </li>
+                  </ul>
+
               </div>
-          </header>
-          <div className="nav-scroller py-1 mb-2">
-              <nav className="nav d-flex justify-content-between">
-                  {
-                      archives && archives.categoryList.map(value => {
-                          return <Link to={'/category?id='+value.id} key={value.id}>{value.name}</Link>
-                      })
-                  }
-              </nav>
           </div>
+      </nav>
+      <div className="nav-scroller bg-body shadow-sm">
+          <nav className="nav nav-underline" aria-label="Secondary navigation">
+              {
+                  archives && archives.categoryList.map(value => {
+                      return <Link className="nav-link" to={'/category/'+value.id}>{value.name}</Link>
+                  })
+              }
+          </nav>
       </div>
+      <div style={{height: 12}}/>
   </>
 }
 
