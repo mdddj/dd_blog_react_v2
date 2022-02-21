@@ -6,6 +6,7 @@ import LargeBlogCard from "../components/blog/large_blog_card";
 import TwoColumnBlogCard from "../components/blog/two_column_card";
 import BaseBlogCard from "../components/blog/base_blog_card";
 import {Button} from "@chakra-ui/react";
+import {AboutMeCard, ArchiveCard} from "../components/about_me";
 
 //首页
 const Home: React.FC = () => {
@@ -53,21 +54,31 @@ const Home: React.FC = () => {
             <TwoColumnBlogCard blog={blogs[1]} />
             <TwoColumnBlogCard blog={blogs[2]} />
         </div>}
-        {
-            blogs.length>=3 && getBaseBlogs.map(value => <BaseBlogCard blog={value} key={value.id}/>)
-        }
-    {/*    加载下一页  */}
-        {
-          blogs.length !== 0 &&  <Button
-                isLoading={nextPageLoading}
-                loadingText='加载中'
-                colorScheme='teal'
-                variant='outline'
-                onClick={getNextPage}
-            >
-                加载下一页
-            </Button>
-        }
+        <div className={'row g-5'}>
+            <div className={'col-md-8'}>
+                {
+                    blogs.length>=3 && getBaseBlogs.map(value => <BaseBlogCard blog={value} key={value.id}/>)
+                }
+                {/*    加载下一页  */}
+                {
+                    blogs.length !== 0 &&  <Button
+                        isLoading={nextPageLoading}
+                        loadingText='加载中'
+                        colorScheme='teal'
+                        variant='outline'
+                        onClick={getNextPage}
+                    >
+                        加载下一页
+                    </Button>
+                }
+            </div>
+            <div className={'col-md-4'}>
+                <div className={'position-sticky'} style={{top:'2rem'}}>
+                    <AboutMeCard/>
+                    <ArchiveCard/>
+                </div>
+            </div>
+        </div>
     </>
 }
 
