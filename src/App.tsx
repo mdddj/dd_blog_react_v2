@@ -45,6 +45,7 @@ export const App = () => {
                         </Route>
                     </Routes>
                 </main>
+                <AppFoot/>
             </BrowserRouter>
         </ChakraProvider>
     )
@@ -79,4 +80,18 @@ const BlogNav: React.FC = () => {
           </div>
       </div>
   </>
+}
+
+
+const AppFoot: React.FC = () => {
+    return <>
+        <footer className="blog-footer mt-5">
+
+            <p>Blog template built for <a href="https://getbootstrap.com/">Bootstrap</a> by <a
+                href="https://itbug.shop">@梁典典</a>.</p>
+            <p>
+                <a href="#">回到顶部</a>
+            </p>
+        </footer>
+    </>
 }
