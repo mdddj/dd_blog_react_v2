@@ -14,7 +14,7 @@ const TwoColumnBlogCard: React.FC<BlogCardProps> = ({blog}) => {
                     <h3 className="mb-0">{blog.title}</h3>
                     <div className="mb-1 text-muted">{blog.dateString}</div>
                     <p className="card-text mb-auto"> </p>
-                    <Link to={'/'} className="stretched-link">查看文章</Link>
+                    <Link to={'/post/'+blog.id} className="stretched-link">查看文章</Link>
                 </div>
                 <div className="col-auto d-none d-lg-block">
                     <svg className="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg"
