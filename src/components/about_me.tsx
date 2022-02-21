@@ -1,6 +1,6 @@
 import React from "react";
 import {Heading, Link, ListItem, UnorderedList} from "@chakra-ui/react";
-import {useRecoilState} from "recoil";
+import {useRecoilValue} from "recoil";
 import {archivesDataState} from "../providers/archives";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 
@@ -16,7 +16,7 @@ const AboutMeCard: React.FC = () => {
 
 
 const ArchiveCard: React.FC = () => {
-    const [archives] = useRecoilState(archivesDataState)
+    const archives = useRecoilValue(archivesDataState)
     if(!archives){
         return <></>
     }

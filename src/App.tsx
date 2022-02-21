@@ -7,7 +7,7 @@ import {BrowserRouter, Routes, Route, Link} from "react-router-dom"
 import Home from "./pages/home"
 import {blogApi} from "./utils/request";
 import {useMount} from "react-use";
-import {useRecoilState} from "recoil";
+import {useRecoilState, useSetRecoilState} from "recoil";
 import {archivesDataState} from "./providers/archives";
 import Archive from "./pages/archive";
 import BlogPage from "./pages/blog";
@@ -16,8 +16,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 export const App = () => {
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [ _, setArchives] = useRecoilState(archivesDataState)
+    const setArchives = useSetRecoilState(archivesDataState)
 
     //组件被挂载后执行的方法
     useMount(() => {
@@ -33,7 +32,6 @@ export const App = () => {
 
     return (
         <ChakraProvider theme={theme}>
-
             <BrowserRouter>
                 <BlogNav/>
                 <main className={'container'}>
@@ -44,8 +42,10 @@ export const App = () => {
                             <Route path={':id'} element={<BlogPage />} />
                         </Route>
                     </Routes>
+                    <div style={{height: 12}} />
                 </main>
             </BrowserRouter>
+
             <AppFoot />
         </ChakraProvider>
     )
@@ -84,12 +84,11 @@ const BlogNav: React.FC = () => {
 
 const AppFoot: React.FC = () => {
     return<>
-
         <footer className="blog-footer mt-auto">
             <p> © 2022 <a
                 href="https://itbug.shop">@梁典典</a>.</p>
             <p>
-                <a href="#">回到顶部</a>
+                <Link to="#">回到顶部</Link>
             </p>
         </footer>
     </>
