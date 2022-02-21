@@ -85,10 +85,9 @@ const BlogNav: React.FC = () => {
 const AppFoot: React.FC = () => {
     return<>
         <footer className="blog-footer mt-auto">
-            <p> © 2022 <a
-                href="https://itbug.shop">@梁典典</a>.</p>
+            <p> © 2022 <button>@梁典典</button>.</p>
             <p>
-                <Link to="#">回到顶部</Link>
+                <button >回到顶部</button>
             </p>
         </footer>
     </>
