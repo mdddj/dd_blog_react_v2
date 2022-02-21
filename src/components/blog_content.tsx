@@ -25,16 +25,14 @@ export const BlogPreview: React.FC<{ content: string; }> = ({
                         const match = /language-(\w+)/.exec(className || '');
                         return !inline && match ? (
                             // @ts-ignore
-                            <Box borderWidth={1} borderRadius={'lg'}>
+                            <Box borderWidth={2}>
                                 <SyntaxHighlighter
                                     children={String(children).replace(/\n$/, '')}
                                     style={vs}
                                     language={match[1]}
                                     PreTag="div"
                                     customStyle={{
-                                        border: 'none',
                                         fontSize: 15,
-                                        // backgroundColor: 'rgba(27,31,35,.05)',
                                         fontFamily: 'Fira Code',
                                         lineHeight: 1.5,
                                         margin: 0,
