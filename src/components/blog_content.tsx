@@ -32,7 +32,7 @@ export const BlogPreview: React.FC<{ content: string; }> = ({
                                 customStyle={{
                                     border: 'none',
                                     fontSize: 15,
-                                    backgroundColor: 'rgba(27,31,35,.05)',
+                                    // backgroundColor: 'rgba(27,31,35,.05)',
                                     fontFamily: 'Fira Code',
                                     lineHeight: 1.5,
                                     margin: 0,

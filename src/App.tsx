@@ -12,6 +12,7 @@ import {blogApi} from "./utils/request";
 import {useMount} from "react-use";
 import {useRecoilState} from "recoil";
 import {archivesDataState} from "./providers/archives";
+import Archive from "./pages/archive";
 
 export const App = () => {
 
@@ -30,9 +31,6 @@ export const App = () => {
         });
     }
 
-    console.log(archives)
-
-
     return (
         <ChakraProvider theme={theme}>
 
@@ -41,7 +39,7 @@ export const App = () => {
                     <header className="blog-header py-3">
                         <div className="row flex-nowrap justify-content-between align-items-center">
                             <div className="col-4 pt-1">
-                                <Link className="link-secondary" to={'/sub'}>订阅</Link>
+                                <Link className="link-secondary" to={'/archive'}>归档</Link>
                             </div>
                             <div className="col-4 text-center">
                                 <Link className="blog-header-logo text-dark" to={'/'}>梁典典的博客</Link>
@@ -65,6 +63,7 @@ export const App = () => {
                 <main className={'container'}>
                     <Routes>
                         <Route path={'/'} element={<Home/>}/>
+                        <Route path={'/archive'} element={<Archive />}/>
                     </Routes>
                 </main>
             </BrowserRouter>

@@ -4228,10 +4228,15 @@ data-urls@^2.0.0:
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
 
-dd_server_api_web@^1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/dd_server_api_web/-/dd_server_api_web-1.7.0.tgz#8bdefbaea8220bd51defa474d2e228b08d65a3df"
-  integrity sha512-669EZnsOI4N5CVBqOVoc4y91+JfS0z+GzjNkuXx9OKv/vmhsDxbVLa6xACIinByKVPQBnR+cEuC9Ee7MUduqHg==
+dayjs@^1.10.7:
+  version "1.10.7"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.10.7.tgz#2cf5f91add28116748440866a0a1d26f3a6ce468"
+  integrity sha512-P6twpd70BcPK34K26uJ1KT3wlhpuOAPoMwJzpsIWUxHZ7wpmbdZL/hQqBDfz7hGurYSa5PhzdhDHtt319hL3ig==
+
+dd_server_api_web@^1.7.1:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/dd_server_api_web/-/dd_server_api_web-1.7.1.tgz#91c83e723d91426adda168fb1e913d001999db73"
+  integrity sha512-Gq7O3Pjnw2GeZ/pMjs9hDCYp7hoyDqfE5ty1uGR3Y72yRDctUv40nTSPEA5+/siYS9OiuRS6rgLHIpkJS3LKyQ==
   dependencies:
     umi-request "^1.4.0"
 
