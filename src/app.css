@@ -1,4 +1,25 @@
-/* stylelint-disable selector-list-comma-newline-after */
+
+
+code {
+    color: rgb(57, 58, 52);
+    font-family:  "Fira Code",sans-serif !important;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    font-size: 16px;
+    line-height: 1.2em;
+    tab-size: 4;
+    hyphens: none;
+}
+
+code span {
+    font-style: normal !important;
+}
+
+.markdown-body pre {
+    padding: 0 !important;
+}
 
 .blog-header {
     line-height: 1;

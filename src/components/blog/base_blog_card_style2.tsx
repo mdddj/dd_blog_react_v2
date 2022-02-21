@@ -13,9 +13,6 @@ const BaseBlogCardStyle2: React.FC<BlogCardProps> = ({blog}) => {
                     {blog.title}
                 </LinkOverlay>
             </Heading>
-            <Box as='a' color='teal.400' href={'/post/'+blog.id} fontWeight='bold'>
-                查看全文
-            </Box>
         </LinkBox>
     </>
 }

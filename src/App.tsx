@@ -45,8 +45,8 @@ export const App = () => {
                         </Route>
                     </Routes>
                 </main>
-                <AppFoot/>
             </BrowserRouter>
+            <AppFoot />
         </ChakraProvider>
     )
 }
@@ -82,16 +82,16 @@ const BlogNav: React.FC = () => {
   </>
 }
 
-
 const AppFoot: React.FC = () => {
-    return <>
-        <footer className="blog-footer mt-5">
+    return<>
 
+        <footer className="blog-footer mt-auto">
             <p> © 2022 <a
                 href="https://itbug.shop">@梁典典</a>.</p>
             <p>
-                <Link to="#">回到顶部</Link>
+                <a href="#">回到顶部</a>
             </p>
         </footer>
     </>
 }
+

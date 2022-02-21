@@ -4,6 +4,7 @@ import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import 'github-markdown-css/github-markdown.css';
+import {Box} from "@chakra-ui/react";
 
 /**
  * 博客预览组件
@@ -24,21 +25,23 @@ export const BlogPreview: React.FC<{ content: string; }> = ({
                         const match = /language-(\w+)/.exec(className || '');
                         return !inline && match ? (
                             // @ts-ignore
-                            <SyntaxHighlighter
-                                children={String(children).replace(/\n$/, '')}
-                                style={vs}
-                                language={match[1]}
-                                PreTag="div"
-                                customStyle={{
-                                    border: 'none',
-                                    fontSize: 15,
-                                    // backgroundColor: 'rgba(27,31,35,.05)',
-                                    fontFamily: 'Fira Code',
-                                    lineHeight: 1.5,
-                                    margin: 0,
-                                }}
-                                {...props}
-                            />
+                            <Box borderWidth={1} borderRadius={'lg'}>
+                                <SyntaxHighlighter
+                                    children={String(children).replace(/\n$/, '')}
+                                    style={vs}
+                                    language={match[1]}
+                                    PreTag="div"
+                                    customStyle={{
+                                        border: 'none',
+                                        fontSize: 15,
+                                        // backgroundColor: 'rgba(27,31,35,.05)',
+                                        fontFamily: 'Fira Code',
+                                        lineHeight: 1.5,
+                                        margin: 0,
+                                    }}
+                                    {...props}
+                                />
+                            </Box>
                         ) : (
                             <code>
                 <span
