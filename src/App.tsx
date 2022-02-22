@@ -14,6 +14,7 @@ import './app.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import CategoryPage from "./pages/category";
 import NotFoundPage from "./pages/not_found";
+import TagsPage from "./pages/tags";
 
 export const App = () => {
 
@@ -45,12 +46,14 @@ export const App = () => {
                         <Route path={'/category'} element={<CategoryPage/>}>
                             <Route path={':id'} element={<CategoryPage/>} />
                         </Route>
+                        <Route path={'/tag'} element={<TagsPage/>}>
+
+                        </Route>
                         <Route path={'*'} element={<NotFoundPage/>} />
                     </Routes>
                     <div style={{ height: 12 }} />
                 </main>
             </BrowserRouter>
-
             <AppFoot />
         </ChakraProvider>
     )
@@ -71,7 +74,10 @@ const BlogNav: React.FC = () => {
                 <div className="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                            <Link className="nav-link active" aria-current="page" to="/">首页</Link>
+                            <Link className="nav-link" aria-current="page" to="/">首页</Link>
+                        </li>
+                        <li className={'nav-item'}>
+                            <Link className="nav-link" aria-current="page" to="/tag">标签</Link>
                         </li>
                     </ul>
                 </div>
