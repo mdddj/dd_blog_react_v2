@@ -13,6 +13,7 @@ import BlogPage from "./pages/blog";
 import './app.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import CategoryPage from "./pages/category";
+import NotFoundPage from "./pages/not_found";
 
 export const App = () => {
 
@@ -34,7 +35,8 @@ export const App = () => {
         <ChakraProvider theme={theme}>
             <BrowserRouter>
                 <BlogNav />
-                <main className={'container'}>
+
+                <main className={'container mt-3'}>
                     <Routes>
                         <Route path={'/'} element={<Home />} />
                         <Route path={'/archive'} element={<Archive />} />
@@ -44,6 +46,7 @@ export const App = () => {
                         <Route path={'/category'} element={<CategoryPage/>}>
                             <Route path={':id'} element={<CategoryPage/>} />
                         </Route>
+                        <Route path={'*'} element={<NotFoundPage/>} />
                     </Routes>
                     <div style={{ height: 12 }} />
                 </main>

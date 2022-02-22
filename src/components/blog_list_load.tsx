@@ -25,7 +25,8 @@ const BlogListLoad:React.FC<Props> = ({api}) => {
         setLoading.on()
          api(p).then(value => {
             setLoading.off()
-             setBlogs([...blogs,...value.data?.list??[]])
+             let b = value.data?.list??[]
+             setBlogs([...blogs,...b])
              setPager(value.data?.page)
              setPage(p)
          });
