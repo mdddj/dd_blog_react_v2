@@ -1,23 +1,26 @@
-import React, {useState} from "react";
-import {useMount} from "react-use";
-import {blogApi} from "../utils/request";
-import {BlogData} from "dd_server_api_web/apis/model/result/BlogPushNewResultData";
+import React, { useState } from "react";
+import { useMount } from "react-use";
+import { blogApi } from "../utils/request";
+import { BlogData } from "dd_server_api_web/apis/model/result/BlogPushNewResultData";
 import LargeBlogCard from "../components/blog/large_blog_card";
 import TwoColumnBlogCard from "../components/blog/two_column_card";
-import {Button} from "@chakra-ui/react";
-import {AboutMeCard, ArchiveCard} from "../components/about_me";
+import { Button } from "@chakra-ui/react";
+import { AboutMeCard, ArchiveCard } from "../components/about_me";
 import BaseBlogCardStyle2 from "../components/blog/base_blog_card_style2";
+import { PagerModel } from "dd_server_api_web/apis/utils/ResultUtil";
+import PagerNextLoad from "../components/pager_next_load";
 
 //首页
 const Home: React.FC = () => {
 
 
-    const [blogs,setBlogs] = useState<BlogData[]>([])
-    const [page,setPage] = useState<number>(1)
-    const [nextPageLoading,setNextPageLoading] = useState<boolean>(false)
+    const [blogs, setBlogs] = useState<BlogData[]>([])
+    const [page, setPage] = useState<number>(1)
+    const [nextPageLoading, setNextPageLoading] = useState<boolean>(false)
+    const [pager, setPager] = useState<PagerModel>()
 
     //组件挂载
-    useMount(()=>{
+    useMount(() => {
         fetchBlogData(1)
     })
 
@@ -34,48 +37,40 @@ const Home: React.FC = () => {
 
     /// 加载博客数据并进行UI更新
     const fetchBlogData = (page: number) => {
-        blogApi().getBlogList(page,20).then(value => {
-            let resultList = value.data?.list??[]
-            setBlogs([...blogs,...resultList])
+        blogApi().getBlogList(page, 20).then(value => {
+            let resultList = value.data?.list ?? []
+            setBlogs([...blogs, ...resultList])
             setNextPageLoading(false)
+            setPager(value.data?.page)
         })
     }
 
 
-    const getBaseBlogs  = blogs.filter((value, index) => {
+    const getBaseBlogs = blogs.filter((value, index) => {
         return index >= 3;
     });
 
 
 
     return <>
-        {blogs.length>1 && <LargeBlogCard blog={blogs[0]} />}
-        {blogs.length>3 && <div className={'row mb-2'}>
+        {blogs.length > 1 && <LargeBlogCard blog={blogs[0]} />}
+        {blogs.length > 3 && <div className={'row mb-2'}>
             <TwoColumnBlogCard blog={blogs[1]} />
             <TwoColumnBlogCard blog={blogs[2]} />
         </div>}
         <div className={'row g-5'}>
             <div className={'col-md-8'}>
                 {
-                    blogs.length>=3 && getBaseBlogs.map(value => <BaseBlogCardStyle2 blog={value} key={value.id}/>)
+                    blogs.length >= 3 && getBaseBlogs.map(value => <BaseBlogCardStyle2 blog={value} key={value.id} />)
                 }
-                {/*    加载下一页  */}
                 {
-                    blogs.length !== 0 &&  <Button
-                        isLoading={nextPageLoading}
-                        loadingText='加载中'
-                        colorScheme='teal'
-                        variant='outline'
-                        onClick={getNextPage}
-                    >
-                        加载下一页
-                    </Button>
+                    pager && <PagerNextLoad pager={pager} onload={getNextPage} loading={nextPageLoading} />
                 }
             </div>
             <div className={'col-md-4'}>
-                <div className={'position-sticky'} style={{top:'2rem'}}>
-                    <AboutMeCard/>
-                    <ArchiveCard/>
+                <div className={'position-sticky'} style={{ top: '2rem' }}>
+                    <AboutMeCard />
+                    <ArchiveCard />
                 </div>
             </div>
         </div>
