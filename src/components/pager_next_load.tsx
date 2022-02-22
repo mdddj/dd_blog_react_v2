@@ -24,7 +24,11 @@ const PagerNextLoad: React.FC<Props> = ({ pager, onload, loading }) => {
             </Button>
         }
         {
-            pager.paged && <Box color={'gray.500'}>没有更多了</Box>
+            pager.paged && pager.total!==0 && <Box color={'gray.500'}>没有更多了</Box>
+        }
+
+        {
+            pager.total === 0 && <Box color={'gray.500'}>这里什么都没有</Box>
         }
     </div>
 }

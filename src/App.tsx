@@ -2,7 +2,7 @@ import * as React from "react"
 import {
     ChakraProvider, theme,
 } from "@chakra-ui/react"
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom"
+import {BrowserRouter, Routes, Route, Link, NavLink} from "react-router-dom"
 import Home from "./pages/home"
 import { blogApi } from "./utils/request";
 import { useMount } from "react-use";
@@ -35,7 +35,6 @@ export const App = () => {
         <ChakraProvider theme={theme}>
             <BrowserRouter>
                 <BlogNav />
-
                 <main className={'container mt-3'}>
                     <Routes>
                         <Route path={'/'} element={<Home />} />
@@ -72,28 +71,9 @@ const BlogNav: React.FC = () => {
                 <div className="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                            <a className="nav-link active" aria-current="page" href="#">首页</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">动态</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">归档</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">标签</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">友链</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">教程</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">关于</a>
+                            <Link className="nav-link active" aria-current="page" to="/">首页</Link>
                         </li>
                     </ul>
-
                 </div>
             </div>
         </nav>
@@ -101,7 +81,7 @@ const BlogNav: React.FC = () => {
             <nav className="nav nav-underline" aria-label="Secondary navigation">
                 {
                     archives && archives.categoryList.map(value => {
-                        return <Link key={value.id} className="nav-link" to={'/category/' + value.id}>{value.name}</Link>
+                        return <NavLink key={value.id} className="nav-link" to={'/category/' + value.id}>{value.name}</NavLink>
                     })
                 }
             </nav>

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {RefObject, useImperativeHandle, useState} from "react";
 import {Page, PagerModel, Result} from "dd_server_api_web/src/utils/ResultUtil";
 import {BlogData} from "dd_server_api_web/src/model/result/BlogPushNewResultData";
 import {useBoolean} from "@chakra-ui/react";
@@ -8,28 +8,45 @@ import BaseBlogCardStyle2 from "./blog/base_blog_card_style2";
 
 type Props = {
     api: (page: number) => Promise<Result<Page<BlogData>>>
+    refd?: RefObject<any>
 }
 
 
-const BlogListLoad:React.FC<Props> = ({api}) => {
+const BlogListLoad: React.FC<Props> = ({api, refd}) => {
 
 
-    const [page,setPage] = useState(1)
-    const [loading,setLoading] = useBoolean()
-    const [blogs,setBlogs] = useState<BlogData[]>([])
-    const [pager,setPager] = useState<PagerModel>()
+    const [page, setPage] = useState(1)
+    const [loading, setLoading] = useBoolean()
+    const [blogs, setBlogs] = useState<BlogData[]>([])
+    const [pager, setPager] = useState<PagerModel>()
 
-    useMount(()=>load(page))
+    useMount(() => load(page))
+
+    useImperativeHandle(refd, () => {
+        return {
+            onRefresh: refresh
+        }
+    })
 
     const load = (p: number) => {
         setLoading.on()
-         api(p).then(value => {
+        api(p).then(value => {
+            let bs = blogs;
+            if (p === 1) bs = []
             setLoading.off()
-             let b = value.data?.list??[]
-             setBlogs([...blogs,...b])
-             setPager(value.data?.page)
-             setPage(p)
-         });
+            let b = value.data?.list ?? []
+            setBlogs([...bs, ...b])
+            setPager(value.data?.page)
+            setPage(p)
+        });
+    }
+
+    const refresh = () => {
+        setPage(1)
+        setLoading.on()
+        setPager(undefined)
+        setBlogs([])
+        load(1)
     }
 
     const nextPage = () => {
@@ -37,20 +54,20 @@ const BlogListLoad:React.FC<Props> = ({api}) => {
         load(nt)
     }
 
-  return <>
+    return <>
 
 
-      {
-          blogs.map(value =>  {
-              return <BaseBlogCardStyle2 blog={value} key={value.id} />
-          })
-      }
+        {
+            blogs.map(value => {
+                return <BaseBlogCardStyle2 blog={value} key={value.id}/>
+            })
+        }
 
 
-      {
-          pager && <PagerNextLoad pager={pager} onload={nextPage} loading={loading}/>
-      }
-  </>
+        {
+            pager && <PagerNextLoad pager={pager} onload={nextPage} loading={loading}/>
+        }
+    </>
 }
 
-export  default  BlogListLoad
+export default BlogListLoad
