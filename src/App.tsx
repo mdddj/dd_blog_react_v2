@@ -3,12 +3,12 @@ import {
     Button,
     ChakraProvider, theme,
 } from "@chakra-ui/react"
-import {BrowserRouter, Routes, Route, Link} from "react-router-dom"
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom"
 import Home from "./pages/home"
-import {blogApi} from "./utils/request";
-import {useMount} from "react-use";
-import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
-import {archivesDataState} from "./providers/archives";
+import { blogApi } from "./utils/request";
+import { useMount } from "react-use";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { archivesDataState } from "./providers/archives";
 import Archive from "./pages/archive";
 import BlogPage from "./pages/blog";
 import './app.css'
@@ -33,16 +33,16 @@ export const App = () => {
     return (
         <ChakraProvider theme={theme}>
             <BrowserRouter>
-                <BlogNav/>
+                <BlogNav />
                 <main className={'container'}>
                     <Routes>
-                        <Route path={'/'} element={<Home/>}/>
-                        <Route path={'/archive'} element={<Archive />}/>
-                        <Route path={'/post'} element={<BlogPage/>}>
+                        <Route path={'/'} element={<Home />} />
+                        <Route path={'/archive'} element={<Archive />} />
+                        <Route path={'/post'} element={<BlogPage />}>
                             <Route path={':id'} element={<BlogPage />} />
                         </Route>
                     </Routes>
-                    <div style={{height: 12}} />
+                    <div style={{ height: 12 }} />
                 </main>
             </BrowserRouter>
 
@@ -54,58 +54,58 @@ export const App = () => {
 
 const BlogNav: React.FC = () => {
     const archives = useRecoilValue(archivesDataState)
-  return <>
-      <nav className="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" aria-label="Main navigation">
-          <div className="container-fluid">
-              <Link className="navbar-brand" to="/">梁典典的博客</Link>
-              <button className="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse"
-                      aria-label="Toggle navigation">
-                  <span className="navbar-toggler-icon"/>
-              </button>
+    return <>
+        <nav className="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" aria-label="Main navigation">
+            <div className="container-fluid">
+                <Link className="navbar-brand" to="/">梁典典的博客</Link>
+                <button className="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse"
+                    aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon" />
+                </button>
 
-              <div className="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
-                  <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                      <li className="nav-item">
-                          <a className="nav-link active" aria-current="page" href="#">首页</a>
-                      </li>
-                      <li className="nav-item">
-                          <a className="nav-link" href="#">动态</a>
-                      </li>
-                      <li className="nav-item">
-                          <a className="nav-link" href="#">归档</a>
-                      </li>
-                      <li className="nav-item">
-                          <a className="nav-link" href="#">标签</a>
-                      </li>
-                      <li className="nav-item">
-                          <a className="nav-link" href="#">友链</a>
-                      </li>
-                      <li className="nav-item">
-                          <a className="nav-link" href="#">教程</a>
-                      </li>
-                      <li className="nav-item">
-                          <a className="nav-link" href="#">关于</a>
-                      </li>
-                  </ul>
+                <div className="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li className="nav-item">
+                            <a className="nav-link active" aria-current="page" href="#">首页</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="#">动态</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="#">归档</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="#">标签</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="#">友链</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="#">教程</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="#">关于</a>
+                        </li>
+                    </ul>
 
-              </div>
-          </div>
-      </nav>
-      <div className="nav-scroller bg-body shadow-sm">
-          <nav className="nav nav-underline" aria-label="Secondary navigation">
-              {
-                  archives && archives.categoryList.map(value => {
-                      return <Link className="nav-link" to={'/category/'+value.id}>{value.name}</Link>
-                  })
-              }
-          </nav>
-      </div>
-      <div style={{height: 12}}/>
-  </>
+                </div>
+            </div>
+        </nav>
+        <div className="nav-scroller bg-body shadow-sm">
+            <nav className="nav nav-underline" aria-label="Secondary navigation">
+                {
+                    archives && archives.categoryList.map(value => {
+                        return <Link key={value.id} className="nav-link" to={'/category/' + value.id}>{value.name}</Link>
+                    })
+                }
+            </nav>
+        </div>
+        <div style={{ height: 12 }} />
+    </>
 }
 
 const AppFoot: React.FC = () => {
-    return<>
+    return <>
         <footer className="blog-footer mt-auto">
             <p> © 2022 <button>@梁典典</button>.</p>
             <p>
