@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 /// 两列展示的博客卡片
 const TwoColumnBlogCard: React.FC<BlogCardProps> = ({ blog, className }) => {
     return <>
-        <div className={className != undefined ? className : "col-md-6"}>
+        <div className={className !== undefined ? className : "col-md-6"}>
             <div
                 className="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm position-relative">
                 <div className="col p-4 d-flex flex-column position-static">
