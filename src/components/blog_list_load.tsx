@@ -60,7 +60,7 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
             title: '查询成功.',
             description: msg,
             status: 'success',
-            duration: 1000,
+            duration: 2000,
             isClosable: true,
         })
     }
