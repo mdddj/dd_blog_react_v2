@@ -1,13 +1,12 @@
 import * as React from "react"
 import {
-    Button,
     ChakraProvider, theme,
 } from "@chakra-ui/react"
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom"
 import Home from "./pages/home"
 import { blogApi } from "./utils/request";
 import { useMount } from "react-use";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { archivesDataState } from "./providers/archives";
 import Archive from "./pages/archive";
 import BlogPage from "./pages/blog";
