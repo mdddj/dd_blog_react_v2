@@ -1,6 +1,6 @@
-import { Button } from "@chakra-ui/react"
+import {Box, Button} from "@chakra-ui/react"
 import { PagerModel } from "dd_server_api_web/src/utils/ResultUtil"
-import { type } from "os"
+import React from "react";
 
 
 type Props = {
@@ -16,12 +16,15 @@ const PagerNextLoad: React.FC<Props> = ({ pager, onload, loading }) => {
             !pager.paged && <Button
                 isLoading={loading}
                 loadingText='加载中'
-                colorScheme='teal'
+                colorScheme='blackAlpha'
                 variant='outline'
                 onClick={onload}
             >
                 加载下一页
             </Button>
+        }
+        {
+            pager.paged && <Box color={'gray.500'}>没有更多了</Box>
         }
     </div>
 }

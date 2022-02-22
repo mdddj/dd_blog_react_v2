@@ -12,6 +12,7 @@ import Archive from "./pages/archive";
 import BlogPage from "./pages/blog";
 import './app.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import CategoryPage from "./pages/category";
 
 export const App = () => {
 
@@ -39,6 +40,9 @@ export const App = () => {
                         <Route path={'/archive'} element={<Archive />} />
                         <Route path={'/post'} element={<BlogPage />}>
                             <Route path={':id'} element={<BlogPage />} />
+                        </Route>
+                        <Route path={'/category'} element={<CategoryPage/>}>
+                            <Route path={':id'} element={<CategoryPage/>} />
                         </Route>
                     </Routes>
                     <div style={{ height: 12 }} />
