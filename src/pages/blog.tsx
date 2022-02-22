@@ -29,7 +29,7 @@ const BlogPage: React.FC = () => {
   return <>
     {loading && <Spinner />}
     <Fade in={blog!==undefined}>
-      <div className="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+      <div className="mb-4 rounded pb-4">
         <div className="px-0"><h1 className="display-4">{blog?.title}</h1>
           <p className="lead my-3">{blog?.dateString}</p>
           <p>
