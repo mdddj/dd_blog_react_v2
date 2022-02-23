@@ -21,10 +21,13 @@ import AboutPage from "./pages/about";
 import FriendsPage from "./pages/friends";
 import DocsPage from "./pages/doc";
 import AppLoadingWidget from "./components/app_loading_widget";
+import {appMoneyModalOpen} from "./providers/modal";
+import MoneyModal from "./components/modal/money";
 
 export const App = () => {
 
     const setArchives = useSetRecoilState(archivesDataState)
+
 
     //组件被挂载后执行的方法
     useMount(() => {
@@ -45,6 +48,7 @@ export const App = () => {
 
                 <main className={'container mt-3'}>
                     <AppLoadingWidget/>
+                    <MoneyModal/>
                     <Routes>
                         <Route path={'/'} element={<Home/>}>
 
@@ -91,6 +95,7 @@ export const App = () => {
 //博客导航
 const BlogNav: React.FC = () => {
     const archives = useRecoilValue(archivesDataState)
+    const openMoneyModal = useSetRecoilState(appMoneyModalOpen)
     return <>
         <nav className="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" aria-label="Main navigation">
             <div className="container-fluid">
@@ -122,7 +127,7 @@ const BlogNav: React.FC = () => {
                         </li>
                     </ul>
                     <form className="d-flex">
-                        <Button colorScheme='teal' variant='ghost'>
+                        <Button colorScheme='teal' variant='ghost' onClick={() => openMoneyModal(true)}>
                             打赏
                         </Button>
                     </form>
