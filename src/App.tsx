@@ -20,6 +20,7 @@ import TagPage from "./pages/tag";
 import AboutPage from "./pages/about";
 import FriendsPage from "./pages/friends";
 import DocsPage from "./pages/doc";
+import AppLoadingWidget from "./components/app_loading_widget";
 
 export const App = () => {
 
@@ -76,8 +77,10 @@ export const App = () => {
                         <Route path={'*'} element={<NotFoundPage/>}/>
                     </Routes>
                     <div style={{height: 12}}/>
+                    <AppLoadingWidget/>
                 </main>
             </BrowserRouter>
+
             <AppFoot/>
         </ChakraProvider>
     )

@@ -4,21 +4,26 @@ import {useMount} from "react-use";
 import {successResultHandle} from "dd_server_api_web/apis/utils/ResultUtil";
 import {ResCategory} from "dd_server_api_web/apis/model/ResCategory";
 import {Badge, Box, Image, SimpleGrid} from "@chakra-ui/react";
+import {useSetRecoilState} from "recoil";
+import {appLoading} from "../../providers/loading";
 
 //文档列表页面
 const DocsPage:React.FC = () => {
 
 
   const [docs, setDocs] = useState<ResCategory[]>([])
+  const setLoading = useSetRecoilState(appLoading)
 
 
   const fetchData = () => {
+    setLoading(true)
     blogApi().getResourceCategoryList({
       page: 0,
       pageSize: 1000
     },{
      type: 'doc'
     } as any).then(value => {
+      setLoading(false)
       successResultHandle(value,data => {
         console.log(data)
         setDocs(data.list??[])
