@@ -1,13 +1,14 @@
 import * as React from "react"
 import {
+    Button,
     ChakraProvider, theme,
 } from "@chakra-ui/react"
 import {BrowserRouter, Routes, Route, Link, NavLink} from "react-router-dom"
 import Home from "./pages/home"
-import { blogApi } from "./utils/request";
-import { useMount } from "react-use";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { archivesDataState } from "./providers/archives";
+import {blogApi} from "./utils/request";
+import {useMount} from "react-use";
+import {useRecoilValue, useSetRecoilState} from "recoil";
+import {archivesDataState} from "./providers/archives";
 import Archive from "./pages/archive";
 import BlogPage from "./pages/blog";
 import './app.css'
@@ -18,6 +19,7 @@ import TagsPage from "./pages/tags";
 import TagPage from "./pages/tag";
 import AboutPage from "./pages/about";
 import FriendsPage from "./pages/friends";
+import DocsPage from "./pages/doc";
 
 export const App = () => {
 
@@ -38,44 +40,50 @@ export const App = () => {
     return (
         <ChakraProvider theme={theme}>
             <BrowserRouter>
-                <BlogNav />
+                <BlogNav/>
                 <main className={'container mt-3'}>
                     <Routes>
-                        <Route path={'/'} element={<Home />} >
+                        <Route path={'/'} element={<Home/>}>
 
                         </Route>
-                        <Route path={'/archive'} element={<Archive />} />
-                        <Route path={'/post'} element={<BlogPage />}>
-                            <Route path={':id'} element={<BlogPage />} />
+                        <Route path={'/archive'} element={<Archive/>}/>
+                        <Route path={'/post'} element={<BlogPage/>}>
+                            <Route path={':id'} element={<BlogPage/>}/>
                         </Route>
                         <Route path={'/category'} element={<CategoryPage/>}>
-                            <Route path={':id'} element={<CategoryPage/>} />
+                            <Route path={':id'} element={<CategoryPage/>}/>
                         </Route>
-                        <Route path={'tag'} element={<TagsPage/>} >
+
+                        {/*标签页面*/}
+                        <Route path={'tag'} element={<TagsPage/>}>
                             {/*<Route path={'/tag'} element={<TagsPage/>} />*/}
-                            <Route path={':id'} element={<TagPage/>} />
+                            <Route path={':id'} element={<TagPage/>}/>
                         </Route>
                         <Route>
 
-                        {/*    关于我页面*/}
-                            <Route path={'/about'} element={<AboutPage />} />
+                            {/*    关于我页面*/}
+                            <Route path={'/about'} element={<AboutPage/>}/>
 
 
-                        {/*    友链页面*/}
-                            <Route path={'/friends'} element={<FriendsPage />} />
+                            {/*    友链页面*/}
+                            <Route path={'/friends'} element={<FriendsPage/>}/>
+
+
+                            {/*    文档页面 */}
+                            <Route path={'/docs'} element={<DocsPage/>}/>
 
                         </Route>
-                        <Route path={'*'} element={<NotFoundPage/>} />
+                        <Route path={'*'} element={<NotFoundPage/>}/>
                     </Routes>
-                    <div style={{ height: 12 }} />
+                    <div style={{height: 12}}/>
                 </main>
             </BrowserRouter>
-            <AppFoot />
+            <AppFoot/>
         </ChakraProvider>
     )
 }
 
-
+//博客导航
 const BlogNav: React.FC = () => {
     const archives = useRecoilValue(archivesDataState)
     return <>
@@ -83,8 +91,8 @@ const BlogNav: React.FC = () => {
             <div className="container-fluid">
                 <Link className="navbar-brand" to="/">梁典典的博客</Link>
                 <button className="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse"
-                    aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon" />
+                        aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"/>
                 </button>
 
                 <div className="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
@@ -105,6 +113,11 @@ const BlogNav: React.FC = () => {
                             <Link className="nav-link" aria-current="page" to="/friends">友链</Link>
                         </li>
                     </ul>
+                    <form className="d-flex">
+                        <Button colorScheme='teal' variant='ghost'>
+                            打赏
+                        </Button>
+                    </form>
                 </div>
             </div>
         </nav>
@@ -112,12 +125,13 @@ const BlogNav: React.FC = () => {
             <nav className="nav nav-underline" aria-label="Secondary navigation">
                 {
                     archives && archives.categoryList.map(value => {
-                        return <NavLink key={value.id} className="nav-link" to={'/category/' + value.id}>{value.name}</NavLink>
+                        return <NavLink key={value.id} className="nav-link"
+                                        to={'/category/' + value.id}>{value.name}</NavLink>
                     })
                 }
             </nav>
         </div>
-        <div style={{ height: 12 }} />
+        <div style={{height: 12}}/>
     </>
 }
 
@@ -126,7 +140,7 @@ const AppFoot: React.FC = () => {
         <footer className="blog-footer mt-auto">
             <p> © 2022 <button>@梁典典</button>.</p>
             <p>
-                <button >回到顶部</button>
+                <button>回到顶部</button>
             </p>
         </footer>
     </>
