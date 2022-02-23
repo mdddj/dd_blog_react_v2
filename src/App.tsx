@@ -42,7 +42,9 @@ export const App = () => {
         <ChakraProvider theme={theme}>
             <BrowserRouter>
                 <BlogNav/>
+
                 <main className={'container mt-3'}>
+                    <AppLoadingWidget/>
                     <Routes>
                         <Route path={'/'} element={<Home/>}>
 
@@ -77,7 +79,7 @@ export const App = () => {
                         <Route path={'*'} element={<NotFoundPage/>}/>
                     </Routes>
                     <div style={{height: 12}}/>
-                    <AppLoadingWidget/>
+
                 </main>
             </BrowserRouter>
 

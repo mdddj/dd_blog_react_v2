@@ -1,6 +1,7 @@
 import {Box, Button} from "@chakra-ui/react"
 import { PagerModel } from "dd_server_api_web/src/utils/ResultUtil"
 import React from "react";
+import NothingWidget from "./nothing";
 
 
 type Props = {
@@ -27,9 +28,9 @@ const PagerNextLoad: React.FC<Props> = ({ pager, onload, loading }) => {
             pager.paged && pager.total!==0 && <Box color={'gray.500'}>没有更多了</Box>
         }
 
-        {
-            pager.total === 0 && <Box color={'gray.500'}>这里什么都没有</Box>
-        }
+
+        <NothingWidget nothing={pager.total === 0 } />
+
     </div>
 }
 export default PagerNextLoad

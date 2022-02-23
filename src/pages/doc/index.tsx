@@ -6,12 +6,16 @@ import {ResCategory} from "dd_server_api_web/apis/model/ResCategory";
 import {Badge, Box, Image, SimpleGrid} from "@chakra-ui/react";
 import {useSetRecoilState} from "recoil";
 import {appLoading} from "../../providers/loading";
+import NothingWidget from "../../components/nothing";
+import {PagerModel} from "dd_server_api_web/src/utils/ResultUtil";
+import PageHeader from "../../components/page_header";
 
 //文档列表页面
 const DocsPage:React.FC = () => {
 
 
   const [docs, setDocs] = useState<ResCategory[]>([])
+  const [pager,setPager] = useState<PagerModel>()
   const setLoading = useSetRecoilState(appLoading)
 
 
@@ -28,6 +32,7 @@ const DocsPage:React.FC = () => {
         console.log(data)
         setDocs(data.list??[])
       })
+      setPager(value.data?.page)
     })
   }
 
@@ -38,6 +43,9 @@ const DocsPage:React.FC = () => {
 
 
   return <>
+
+    <PageHeader title={'文档'} />
+    <NothingWidget nothing={ pager && pager.total === 0 } />
     <SimpleGrid columns={4} spacing={10}>
       {
         docs.map(property =>  <Box key={property.id} borderWidth='1px' borderRadius='lg' overflow='hidden'>

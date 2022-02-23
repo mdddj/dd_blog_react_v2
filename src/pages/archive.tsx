@@ -6,6 +6,7 @@ import {Link} from "react-router-dom";
 import {Heading} from "@chakra-ui/react";
 import dayjs from "dayjs";
 import PageHeader from "../components/page_header";
+import NothingWidget from "../components/nothing";
 
 const Archive: React.FC = () => {
 
@@ -17,9 +18,7 @@ const Archive: React.FC = () => {
     return <>
 
         <PageHeader title={'归档'}/>
-        {
-            archives.length === 0 && <span>这里什么都没有</span>
-        }
+        <NothingWidget nothing={archives.length === 0} />
 
         {
             archives.map(value => <MonthGroup monthItem={value} key={value.months}/>)
