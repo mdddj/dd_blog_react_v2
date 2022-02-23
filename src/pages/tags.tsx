@@ -9,7 +9,6 @@ const TagsPage:React.FC = () => {
 
 
   const tags = useRecoilValue(archivesDataState)?.tags??[]
-  console.log(tags)
   return <>
     <Box p={12} border={1} width={'100%'}>
       <Heading>标签</Heading>

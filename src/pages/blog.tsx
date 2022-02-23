@@ -16,7 +16,7 @@ const BlogPage: React.FC = () => {
 
   useMount(()=>getBlogDetail())
 
-
+ 
   const getBlogDetail = () => {
     setLoading(true)
     id && blogApi().getBlogDetailById(parseInt(id)).then(r => {

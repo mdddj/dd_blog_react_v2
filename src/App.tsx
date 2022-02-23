@@ -15,6 +15,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import CategoryPage from "./pages/category";
 import NotFoundPage from "./pages/not_found";
 import TagsPage from "./pages/tags";
+import TagPage from "./pages/tag";
 
 export const App = () => {
 
@@ -38,7 +39,9 @@ export const App = () => {
                 <BlogNav />
                 <main className={'container mt-3'}>
                     <Routes>
-                        <Route path={'/'} element={<Home />} />
+                        <Route path={'/'} element={<Home />} >
+
+                        </Route>
                         <Route path={'/archive'} element={<Archive />} />
                         <Route path={'/post'} element={<BlogPage />}>
                             <Route path={':id'} element={<BlogPage />} />
@@ -46,8 +49,9 @@ export const App = () => {
                         <Route path={'/category'} element={<CategoryPage/>}>
                             <Route path={':id'} element={<CategoryPage/>} />
                         </Route>
-                        <Route path={'/tag'} element={<TagsPage/>}>
-
+                        <Route path={'tag'} element={<TagsPage/>} >
+                            {/*<Route path={'/tag'} element={<TagsPage/>} />*/}
+                            <Route path={':id'} element={<TagPage/>} />
                         </Route>
                         <Route path={'*'} element={<NotFoundPage/>} />
                     </Routes>
