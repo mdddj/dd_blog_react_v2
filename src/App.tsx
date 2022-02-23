@@ -107,10 +107,13 @@ const BlogNav: React.FC = () => {
                             <Link className="nav-link" aria-current="page" to="/archive">归档</Link>
                         </li>
                         <li className={'nav-item'}>
-                            <Link className="nav-link" aria-current="page" to="/about">关于</Link>
+                            <Link className="nav-link" aria-current="page" to="/docs">文档</Link>
                         </li>
                         <li className={'nav-item'}>
                             <Link className="nav-link" aria-current="page" to="/friends">友链</Link>
+                        </li>
+                        <li className={'nav-item'}>
+                            <Link className="nav-link" aria-current="page" to="/about">关于</Link>
                         </li>
                     </ul>
                     <form className="d-flex">
