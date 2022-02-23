@@ -16,7 +16,7 @@ const Archive: React.FC = () => {
     return <>
 
         {
-            archives.length === 1 && <span>这里什么都没有</span>
+            archives.length === 0 && <span>这里什么都没有</span>
         }
 
         {

@@ -16,6 +16,7 @@ import CategoryPage from "./pages/category";
 import NotFoundPage from "./pages/not_found";
 import TagsPage from "./pages/tags";
 import TagPage from "./pages/tag";
+import AboutPage from "./pages/about";
 
 export const App = () => {
 
@@ -53,6 +54,12 @@ export const App = () => {
                             {/*<Route path={'/tag'} element={<TagsPage/>} />*/}
                             <Route path={':id'} element={<TagPage/>} />
                         </Route>
+                        <Route>
+
+                        {/*    关于我页面*/}
+                            <Route path={'/about'} element={<AboutPage />}></Route>
+
+                        </Route>
                         <Route path={'*'} element={<NotFoundPage/>} />
                     </Routes>
                     <div style={{ height: 12 }} />
@@ -85,6 +92,9 @@ const BlogNav: React.FC = () => {
                         </li>
                         <li className={'nav-item'}>
                             <Link className="nav-link" aria-current="page" to="/archive">归档</Link>
+                        </li>
+                        <li className={'nav-item'}>
+                            <Link className="nav-link" aria-current="page" to="/about">关于</Link>
                         </li>
                     </ul>
                 </div>
