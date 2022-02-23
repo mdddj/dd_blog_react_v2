@@ -2,7 +2,7 @@ import React from "react";
 import {useRecoilValue} from "recoil";
 import {archivesDataState} from "../providers/archives";
 import {Box, Heading, HStack, Tag} from "@chakra-ui/react";
-import {Link} from "react-router-dom";
+import {Link, Outlet} from "react-router-dom";
 
 //标签列表页面
 const TagsPage:React.FC = () => {
@@ -19,6 +19,10 @@ const TagsPage:React.FC = () => {
           })
         }
       </HStack>
+
+      <div style={{marginTop: 20}}>
+        <Outlet />
+      </div>
     </Box>
   </>
 }

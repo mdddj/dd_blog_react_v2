@@ -83,6 +83,9 @@ const BlogNav: React.FC = () => {
                         <li className={'nav-item'}>
                             <Link className="nav-link" aria-current="page" to="/tag">标签</Link>
                         </li>
+                        <li className={'nav-item'}>
+                            <Link className="nav-link" aria-current="page" to="/archive">归档</Link>
+                        </li>
                     </ul>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 import React, {RefObject, useImperativeHandle, useState} from "react";
 import {Page, PagerModel, Result} from "dd_server_api_web/src/utils/ResultUtil";
 import {BlogData} from "dd_server_api_web/src/model/result/BlogPushNewResultData";
-import {useBoolean, useToast} from "@chakra-ui/react";
+import {Spinner, useBoolean, useToast} from "@chakra-ui/react";
 import {useMount} from "react-use";
 import PagerNextLoad from "./pager_next_load";
 import BaseBlogCardStyle2 from "./blog/base_blog_card_style2";
@@ -17,6 +17,7 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
 
     const [page, setPage] = useState(1)
     const [loading, setLoading] = useBoolean()
+    const [initLoading,setInitLoading] = useBoolean()
     const [blogs, setBlogs] = useState<BlogData[]>([])
     const [pager, setPager] = useState<PagerModel>()
     const toast = useToast()
@@ -39,6 +40,7 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
             setBlogs([...bs, ...b])
             setPager(value.data?.page)
             setPage(p)
+            setInitLoading.off()
             if(value.data?.page){
                 showSuccessMsg('找到'+value.data?.page.total+'篇文章.')
             }
@@ -51,6 +53,7 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
         setLoading.on()
         setPager(undefined)
         setBlogs([])
+        setInitLoading.on();
         load(1)
     }
 
@@ -74,6 +77,10 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
 
     return <>
 
+
+        {
+            initLoading && <Spinner />
+        }
 
         {
             blogs.map(value => {

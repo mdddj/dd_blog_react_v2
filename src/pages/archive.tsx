@@ -14,6 +14,11 @@ const Archive: React.FC = () => {
     console.log(archives)
 
     return <>
+
+        {
+            archives.length === 1 && <span>这里什么都没有</span>
+        }
+
         {
             archives.map(value => <MonthGroup monthItem={value} key={value.months}/>)
         }
