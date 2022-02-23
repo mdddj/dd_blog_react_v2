@@ -17,6 +17,7 @@ import NotFoundPage from "./pages/not_found";
 import TagsPage from "./pages/tags";
 import TagPage from "./pages/tag";
 import AboutPage from "./pages/about";
+import FriendsPage from "./pages/friends";
 
 export const App = () => {
 
@@ -57,7 +58,11 @@ export const App = () => {
                         <Route>
 
                         {/*    关于我页面*/}
-                            <Route path={'/about'} element={<AboutPage />}></Route>
+                            <Route path={'/about'} element={<AboutPage />} />
+
+
+                        {/*    友链页面*/}
+                            <Route path={'/friends'} element={<FriendsPage />} />
 
                         </Route>
                         <Route path={'*'} element={<NotFoundPage/>} />
@@ -95,6 +100,9 @@ const BlogNav: React.FC = () => {
                         </li>
                         <li className={'nav-item'}>
                             <Link className="nav-link" aria-current="page" to="/about">关于</Link>
+                        </li>
+                        <li className={'nav-item'}>
+                            <Link className="nav-link" aria-current="page" to="/friends">友链</Link>
                         </li>
                     </ul>
                 </div>
