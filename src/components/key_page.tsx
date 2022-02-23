@@ -1,10 +1,11 @@
 import React, {useState} from "react";
 import {blogApi} from "../utils/request";
 import {useMount} from "react-use";
-import {Spinner, useBoolean} from "@chakra-ui/react";
 import {TextModel} from "dd_server_api_web/apis/model/TextModel";
 import {successResultHandle} from "dd_server_api_web/apis/utils/ResultUtil";
 import {BlogPreview} from "./blog_content";
+import {useSetRecoilState} from "recoil";
+import {appLoading} from "../providers/loading";
 type Props = {
     keyText: string
 }
@@ -12,16 +13,16 @@ type Props = {
 const KeyPage:React.FC<Props> = ({keyText}) => {
 
 
-    const [loading,setLoading] = useBoolean()
     const [model,setModel] = useState<TextModel>()
+    const setLoading = useSetRecoilState(appLoading)
     useMount(()=>{
         fetchData()
     })
 
     const fetchData = () => {
-        setLoading.on()
+        setLoading(true)
         blogApi().getTextByName(keyText).then(value => {
-            setLoading.off()
+            setLoading(false)
             console.log(value)
             successResultHandle(value,data => {
                 setModel(data)
@@ -30,10 +31,6 @@ const KeyPage:React.FC<Props> = ({keyText}) => {
     }
 
   return <>
-      {
-          loading && <Spinner />
-      }
-
       {
           model && <BlogPreview content={model.context}/>
       }

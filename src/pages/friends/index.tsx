@@ -4,22 +4,23 @@ import {blogApi} from "../../utils/request";
 import {useMount} from "react-use";
 import {successResultHandle} from "dd_server_api_web/apis/utils/ResultUtil";
 import {Friend} from "dd_server_api_web/apis/model/friend";
-import {Box, SimpleGrid, Text, Flex, Avatar, Link, useBoolean, Spinner} from "@chakra-ui/react";
+import {Box, SimpleGrid, Text, Flex, Avatar, Link} from "@chakra-ui/react";
+import {useSetRecoilState} from "recoil";
+import {appLoading} from "../../providers/loading";
 
 //友链页面
 const FriendsPage:React.FC = () => {
 
 
+    const setLoading = useSetRecoilState(appLoading)
     const [friends,setFriends] = useState<Friend[]>([])
-    const [loading,setLoading] = useBoolean()
 
     useMount(()=>fetchData())
 
     const fetchData = () =>{
-        setLoading.on()
+        setLoading(true)
         blogApi().getFriends({'state': '1'}).then(value => {
-            console.log(value)
-            setLoading.off()
+            setLoading(false)
             successResultHandle(value,data => {
                 setFriends(data)
             })
@@ -28,10 +29,6 @@ const FriendsPage:React.FC = () => {
 
   return <>
       <PageHeader title={'友链'} />
-
-      {
-          loading && <Spinner />
-      }
 
       <SimpleGrid columns={2} spacingX='40px' spacingY='20px'>
           {

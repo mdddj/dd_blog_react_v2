@@ -1,10 +1,12 @@
 import React, {RefObject, useImperativeHandle, useState} from "react";
 import {Page, PagerModel, Result} from "dd_server_api_web/src/utils/ResultUtil";
 import {BlogData} from "dd_server_api_web/src/model/result/BlogPushNewResultData";
-import {Spinner, useBoolean, useToast} from "@chakra-ui/react";
+import {useBoolean, useToast} from "@chakra-ui/react";
 import {useMount} from "react-use";
 import PagerNextLoad from "./pager_next_load";
 import BaseBlogCardStyle2 from "./blog/base_blog_card_style2";
+import {useSetRecoilState} from "recoil";
+import {appLoading} from "../providers/loading";
 
 type Props = {
     api: (page: number) => Promise<Result<Page<BlogData>>>
@@ -17,10 +19,10 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
 
     const [page, setPage] = useState(1)
     const [loading, setLoading] = useBoolean()
-    const [initLoading,setInitLoading] = useBoolean()
     const [blogs, setBlogs] = useState<BlogData[]>([])
     const [pager, setPager] = useState<PagerModel>()
     const toast = useToast()
+    const appLoadingSet=  useSetRecoilState(appLoading)
 
     useMount(() => load(page))
 
@@ -40,7 +42,7 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
             setBlogs([...bs, ...b])
             setPager(value.data?.page)
             setPage(p)
-            setInitLoading.off()
+            appLoadingSet(false)
             if(value.data?.page){
                 showSuccessMsg('找到'+value.data?.page.total+'篇文章.')
             }
@@ -53,7 +55,7 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
         setLoading.on()
         setPager(undefined)
         setBlogs([])
-        setInitLoading.on();
+        appLoadingSet(true)
         load(1)
     }
 
@@ -76,11 +78,6 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
     }
 
     return <>
-
-
-        {
-            initLoading && <Spinner />
-        }
 
         {
             blogs.map(value => {

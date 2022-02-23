@@ -3,16 +3,18 @@ import {useParams} from "react-router-dom";
 import {blogApi} from "../utils/request";
 import {useMount} from "react-use";
 import {BlogData} from "dd_server_api_web/apis/model/result/BlogPushNewResultData";
-import {Avatar, Fade, Spinner, Tag, TagLabel} from "@chakra-ui/react";
+import {Avatar, Fade, Tag, TagLabel} from "@chakra-ui/react";
 import {BlogPreview} from "../components/blog_content";
+import {useSetRecoilState} from "recoil";
+import {appLoading} from "../providers/loading";
 
 //博客详情页面
 const BlogPage: React.FC = () => {
 
 
   let {id} = useParams<{id: string}>()
-  const [loading,setLoading] = useState(false)
   const [blog,setBlog] = useState<BlogData>()
+  const setLoading = useSetRecoilState(appLoading)
 
   useMount(()=>getBlogDetail())
 
@@ -27,7 +29,6 @@ const BlogPage: React.FC = () => {
   }
 
   return <>
-    {loading && <Spinner />}
     <Fade in={blog!==undefined}>
       <div className="mb-4 rounded pb-4">
         <div className="px-0"><h1 className="display-4">{blog?.title}</h1>
