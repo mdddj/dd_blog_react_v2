@@ -23,6 +23,7 @@ import DocsPage from "./pages/doc";
 import AppLoadingWidget from "./components/app_loading_widget";
 import {appMoneyModalOpen} from "./providers/modal";
 import MoneyModal from "./components/modal/money";
+import MonthPage from "./pages/month";
 
 export const App = () => {
 
@@ -79,6 +80,11 @@ export const App = () => {
                             {/*    文档页面 */}
                             <Route path={'/docs'} element={<DocsPage/>}/>
 
+
+
+                        </Route>
+                        <Route path={'/month'} element={<MonthPage />}>
+                            <Route path={':month'} element={<MonthPage/>} />
                         </Route>
                         <Route path={'*'} element={<NotFoundPage/>}/>
                     </Routes>

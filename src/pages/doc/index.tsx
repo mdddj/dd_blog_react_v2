@@ -19,6 +19,7 @@ const DocsPage:React.FC = () => {
   const setLoading = useSetRecoilState(appLoading)
 
 
+  // 加载数据
   const fetchData = () => {
     setLoading(true)
     blogApi().getResourceCategoryList({

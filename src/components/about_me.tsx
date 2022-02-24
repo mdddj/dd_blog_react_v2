@@ -25,7 +25,7 @@ const ArchiveCard: React.FC = () => {
         <Heading as={'h4'}>归档</Heading>
         <UnorderedList>
             {
-                months.map(value => <ListItem key={value.months}><Link isExternal={true} color={'teal.500'} href={'/months/'+value.months}>{value.months} <ExternalLinkIcon mx='2px' /></Link> <span>({value.count})</span>
+                months.map(value => <ListItem key={value.months}><Link color={'teal.500'} href={'/month/'+value.months}>{value.months} <ExternalLinkIcon mx='2px' /></Link> <span>({value.count})</span>
 
                 </ListItem>)
             }

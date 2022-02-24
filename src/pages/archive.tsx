@@ -18,7 +18,6 @@ const Archive: React.FC = () => {
 
         <PageHeader title={'归档'}/>
         <NothingWidget nothing={archives.length === 0} />
-
         {
             archives.map(value => <MonthGroup monthItem={value} key={value.months}/>)
         }
