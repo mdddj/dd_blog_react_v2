@@ -13,7 +13,6 @@ const Archive: React.FC = () => {
 
     const [archive] = useRecoilState(archivesDataState)
     const archives = archive?.archiveModels ?? []
-    console.log(archives)
 
     return <>
 
