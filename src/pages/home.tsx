@@ -4,11 +4,12 @@ import { blogApi } from "../utils/request";
 import { BlogData } from "dd_server_api_web/apis/model/result/BlogPushNewResultData";
 import LargeBlogCard from "../components/blog/large_blog_card";
 import TwoColumnBlogCard from "../components/blog/two_column_card";
-import { Button } from "@chakra-ui/react";
 import { AboutMeCard, ArchiveCard } from "../components/about_me";
 import BaseBlogCardStyle2 from "../components/blog/base_blog_card_style2";
 import { PagerModel } from "dd_server_api_web/apis/utils/ResultUtil";
 import PagerNextLoad from "../components/pager_next_load";
+import {useSetRecoilState} from "recoil";
+import {appLoading} from "../providers/loading";
 
 //首页
 const Home: React.FC = () => {
@@ -18,6 +19,7 @@ const Home: React.FC = () => {
     const [page, setPage] = useState<number>(1)
     const [nextPageLoading, setNextPageLoading] = useState<boolean>(false)
     const [pager, setPager] = useState<PagerModel>()
+    const setAppLoading = useSetRecoilState(appLoading)
 
     //组件挂载
     useMount(() => {
@@ -37,7 +39,13 @@ const Home: React.FC = () => {
 
     /// 加载博客数据并进行UI更新
     const fetchBlogData = (page: number) => {
+        if(page===1){
+            setAppLoading(true)
+        }
         blogApi().getBlogList(page, 20).then(value => {
+            if(page===1){
+                setAppLoading(false)
+            }
             let resultList = value.data?.list ?? []
             setBlogs([...blogs, ...resultList])
             setNextPageLoading(false)

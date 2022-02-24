@@ -6,14 +6,32 @@ import {
     ModalContent,
     ModalFooter,
     ModalHeader,
-    ModalOverlay,
+    ModalOverlay, Spinner, useBoolean,
 } from "@chakra-ui/react";
 import {useRecoilState} from "recoil";
-import {appMoneyModalOpen} from "../../providers/modal";
+import {appMoneyModalOpen, appMoneyTextModel} from "../../providers/modal";
+import {useMount} from "react-use";
+import {blogApi} from "../../utils/request";
+import {successResultHandle} from "dd_server_api_web/apis/utils/ResultUtil";
+import {BlogPreview} from "../blog_content";
 
 const MoneyModal: React.FC = () => {
     const [isOpen, setIsOpen] = useRecoilState(appMoneyModalOpen)
+    const [moneyTextModel,setMoneyTextModel] = useRecoilState(appMoneyTextModel)
     const onClose = () => setIsOpen(false)
+    const [loading,setLoading] = useBoolean()
+
+    useMount(()=>{
+        if(!moneyTextModel){
+            setLoading.on()
+            blogApi().getTextByName('blog-ds').then(value => {
+                successResultHandle(value,data => {
+                    setMoneyTextModel(data)
+                })
+                setLoading.off()
+            })
+        }
+    })
 
     return (
         <>
@@ -23,9 +41,9 @@ const MoneyModal: React.FC = () => {
                     <ModalHeader>打赏</ModalHeader>
                     <ModalCloseButton/>
                     <ModalBody>
-                        打赏
+                        {loading && <Spinner/>}
+                        {moneyTextModel && <BlogPreview content={moneyTextModel.context}/>}
                     </ModalBody>
-
                     <ModalFooter>
                         <Button colorScheme='blue' mr={3} onClick={onClose}>
                             关闭
