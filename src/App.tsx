@@ -1,7 +1,8 @@
 import * as React from "react"
 import {
+    Box,
     Button,
-    ChakraProvider, theme,
+    ChakraProvider, Tag, theme, Wrap, WrapItem,
 } from "@chakra-ui/react"
 import {BrowserRouter, Routes, Route, Link, NavLink} from "react-router-dom"
 import Home from "./pages/home"
@@ -24,6 +25,7 @@ import AppLoadingWidget from "./components/app_loading_widget";
 import {appMoneyModalOpen} from "./providers/modal";
 import MoneyModal from "./components/modal/money";
 import MonthPage from "./pages/month";
+import JianliPage from "./pages/me";
 
 export const App = () => {
 
@@ -83,9 +85,17 @@ export const App = () => {
 
 
                         </Route>
+
+                        {/*月份归档查看页面*/}
                         <Route path={'/month'} element={<MonthPage />}>
                             <Route path={':month'} element={<MonthPage/>} />
                         </Route>
+
+
+                        {/*简历页面*/}
+                        <Route path={'/jianli'} element={<JianliPage />} />
+
+
                         <Route path={'*'} element={<NotFoundPage/>}/>
                     </Routes>
                     <div style={{height: 12}}/>
@@ -131,6 +141,9 @@ const BlogNav: React.FC = () => {
                         <li className={'nav-item'}>
                             <Link className="nav-link" aria-current="page" to="/about">关于</Link>
                         </li>
+                        <li className={'nav-item'}>
+                            <Link className="nav-link" aria-current="page" to="/jianli">求职简历</Link>
+                        </li>
                     </ul>
                     <form className="d-flex">
                         <Button colorScheme='teal' variant='ghost' onClick={() => openMoneyModal(true)}>
@@ -157,7 +170,27 @@ const BlogNav: React.FC = () => {
 const AppFoot: React.FC = () => {
     return <>
         <footer className="blog-footer mt-auto">
-            <p> © 2022 <button>@梁典典</button>.</p>
+            <p> © 2022 <button>@梁典典的博客</button>.</p>
+            <Box p={2}>
+                <Wrap spacing='12px' justify='center'>
+                    <WrapItem>
+                        <Tag>Springboot</Tag>
+                    </WrapItem>
+                    <WrapItem>
+                        <Tag>React</Tag>
+                    </WrapItem>
+                    <WrapItem>
+                        <Tag>Mysql8.0</Tag>
+                    </WrapItem>
+                    <WrapItem>
+                        <Tag>Redius</Tag>
+                    </WrapItem>
+                    <WrapItem>
+                        <Tag>Bootstrap</Tag>
+                    </WrapItem>
+                </Wrap>
+            </Box>
+
             <p>
                 <button>回到顶部</button>
             </p>

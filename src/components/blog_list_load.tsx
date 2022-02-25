@@ -34,6 +34,9 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
 
     const load = (p: number) => {
         setLoading.on()
+        if(p===1){
+            appLoadingSet(true)
+        }
         api(p).then(value => {
             let bs = blogs;
             if (p === 1) bs = []

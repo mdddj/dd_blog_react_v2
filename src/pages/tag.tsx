@@ -8,10 +8,9 @@ const TagPage: React.FC = () => {
   const ref = React.createRef<any>()
   const {id} = useParams<{id: string}>()
 
-  console.log(id)
   useEffect(()=>{
     ref.current.onRefresh();
-  },[id])
+  },[id, ref])
   if(!id){
     return <div/>
   }
