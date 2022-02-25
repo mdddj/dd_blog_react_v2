@@ -5,6 +5,7 @@
   "dependencies": {
     "@chakra-ui/icons": "^1.1.7",
     "@chakra-ui/react": "^1.8.5",
+    "@craco/craco": "^6.4.3",
     "@emotion/react": "^11.8.1",
     "@emotion/styled": "^11.8.1",
     "@testing-library/jest-dom": "^5.16.2",
@@ -17,6 +18,7 @@
     "@types/react-syntax-highlighter": "^13.5.2",
     "dayjs": "^1.10.7",
     "dd_server_api_web": "^1.7.4",
+    "esbuild-loader": "^2.18.0",
     "framer-motion": "^6.2.8",
     "github-markdown-css": "^5.1.0",
     "markdown-it": "^12.3.2",
@@ -30,14 +32,15 @@
     "react-use": "^17.3.2",
     "recoil": "^0.6.1",
     "remark-gfm": "^3.0.1",
+    "source-map-explorer": "^2.5.2",
     "typescript": "^4.5.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "analyze": "source-map-explorer build/static/js/main.*"
   },
   "eslintConfig": {
     "extends": "react-app"

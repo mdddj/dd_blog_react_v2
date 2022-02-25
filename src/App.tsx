@@ -2,9 +2,9 @@ import * as React from "react"
 import {
     Box,
     Button,
-    ChakraProvider, Tag, theme, Wrap, WrapItem,
+    ChakraProvider, Container, Flex, Heading, Spacer, Tag, theme, Wrap, WrapItem, HStack
 } from "@chakra-ui/react"
-import {BrowserRouter, Routes, Route, Link, NavLink} from "react-router-dom"
+import {BrowserRouter, Routes, Route, NavLink} from "react-router-dom"
 import Home from "./pages/home"
 import {blogApi} from "./utils/request";
 import {useMount} from "react-use";
@@ -13,7 +13,6 @@ import {archivesDataState} from "./providers/archives";
 import Archive from "./pages/archive";
 import BlogPage from "./pages/blog";
 import './app.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import CategoryPage from "./pages/category";
 import NotFoundPage from "./pages/not_found";
 import TagsPage from "./pages/tags";
@@ -49,7 +48,7 @@ export const App = () => {
             <BrowserRouter>
                 <BlogNav/>
 
-                <main className={'container mt-3'}>
+                <Container maxW={'container.lg'}>
                     <AppLoadingWidget/>
                     <MoneyModal/>
                     <Routes>
@@ -100,7 +99,7 @@ export const App = () => {
                     </Routes>
                     <div style={{height: 12}}/>
 
-                </main>
+                </Container>
             </BrowserRouter>
 
             <AppFoot/>
@@ -112,59 +111,43 @@ export const App = () => {
 const BlogNav: React.FC = () => {
     const archives = useRecoilValue(archivesDataState)
     const openMoneyModal = useSetRecoilState(appMoneyModalOpen)
-    return <>
-        <nav className="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" aria-label="Main navigation">
-            <div className="container-fluid">
-                <Link className="navbar-brand" to="/">梁典典的博客</Link>
-                <button className="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse"
-                        aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"/>
-                </button>
+    return <div>
+        <Container maxW={'container.lg'} className={'border-bottom app-bar'}>
+            <Flex alignItems={'center'}>
+                <Box p={2}>
+                    <Heading size='md'>梁典典的博客</Heading>
+                </Box>
+                <Spacer />
+                <HStack spacing={12}>
+                    <NavLink to="/">首页</NavLink>
+                    <NavLink  to="/tag">标签</NavLink>
+                    <NavLink  to="/archive">归档</NavLink>
+                    <NavLink  to="/docs">文档</NavLink>
+                    <NavLink  to="/friends">友链</NavLink>
+                    <NavLink  to="/about">关于</NavLink>
+                    <NavLink  to="/jianli">简历</NavLink>
+                </HStack>
+                <Spacer />
+                <Box>
+                    <Button colorScheme='blue' variant='ghost' onClick={() => openMoneyModal(true)}>
+                        打赏
+                    </Button>
+                </Box>
+            </Flex>
+        </Container>
 
-                <div className="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
-                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li className="nav-item">
-                            <Link className="nav-link" aria-current="page" to="/">首页</Link>
-                        </li>
-                        <li className={'nav-item'}>
-                            <Link className="nav-link" aria-current="page" to="/tag">标签</Link>
-                        </li>
-                        <li className={'nav-item'}>
-                            <Link className="nav-link" aria-current="page" to="/archive">归档</Link>
-                        </li>
-                        <li className={'nav-item'}>
-                            <Link className="nav-link" aria-current="page" to="/docs">文档</Link>
-                        </li>
-                        <li className={'nav-item'}>
-                            <Link className="nav-link" aria-current="page" to="/friends">友链</Link>
-                        </li>
-                        <li className={'nav-item'}>
-                            <Link className="nav-link" aria-current="page" to="/about">关于</Link>
-                        </li>
-                        <li className={'nav-item'}>
-                            <Link className="nav-link" aria-current="page" to="/jianli">求职简历</Link>
-                        </li>
-                    </ul>
-                    <form className="d-flex">
-                        <Button colorScheme='teal' variant='ghost' onClick={() => openMoneyModal(true)}>
-                            打赏
-                        </Button>
-                    </form>
-                </div>
-            </div>
-        </nav>
-        <div className="nav-scroller bg-body shadow-sm">
-            <nav className="nav nav-underline" aria-label="Secondary navigation">
-                {
-                    archives && archives.categoryList.map(value => {
-                        return <NavLink key={value.id} className="nav-link"
-                                        to={'/category/' + value.id}>{value.name}</NavLink>
-                    })
-                }
-            </nav>
-        </div>
+        {/*<div className="nav-scroller bg-body shadow-sm">*/}
+        {/*    <nav className="nav nav-underline" aria-label="Secondary navigation">*/}
+        {/*        {*/}
+        {/*            archives && archives.categoryList.map(value => {*/}
+        {/*                return <NavLink key={value.id} className="nav-link"*/}
+        {/*                                to={'/category/' + value.id}>{value.name}</NavLink>*/}
+        {/*            })*/}
+        {/*        }*/}
+        {/*    </nav>*/}
+        {/*</div>*/}
         <div style={{height: 12}}/>
-    </>
+    </div>
 }
 
 const AppFoot: React.FC = () => {
