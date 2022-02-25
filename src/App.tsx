@@ -46,60 +46,62 @@ export const App = () => {
     return (
         <ChakraProvider theme={theme}>
             <BrowserRouter>
-                <BlogNav/>
+               <main style={{flexShrink: '0'}}>
+                   <BlogNav/>
 
-                <Container maxW={'container.lg'}>
-                    <AppLoadingWidget/>
-                    <MoneyModal/>
-                    <Routes>
-                        <Route path={'/'} element={<Home/>}>
+                   <Container maxW={'container.lg'}>
+                       <AppLoadingWidget/>
+                       <MoneyModal/>
+                       <Routes>
+                           <Route path={'/'} element={<Home/>}>
 
-                        </Route>
-                        <Route path={'/archive'} element={<Archive/>}/>
-                        <Route path={'/post'} element={<BlogPage/>}>
-                            <Route path={':id'} element={<BlogPage/>}/>
-                        </Route>
-                        <Route path={'/category'} element={<CategoryPage/>}>
-                            <Route path={':id'} element={<CategoryPage/>}/>
-                        </Route>
+                           </Route>
+                           <Route path={'/archive'} element={<Archive/>}/>
+                           <Route path={'/post'} element={<BlogPage/>}>
+                               <Route path={':id'} element={<BlogPage/>}/>
+                           </Route>
+                           <Route path={'/category'} element={<CategoryPage/>}>
+                               <Route path={':id'} element={<CategoryPage/>}/>
+                           </Route>
 
-                        {/*标签页面*/}
-                        <Route path={'tag'} element={<TagsPage/>}>
-                            {/*<Route path={'/tag'} element={<TagsPage/>} />*/}
-                            <Route path={':id'} element={<TagPage/>}/>
-                        </Route>
-                        <Route>
+                           {/*标签页面*/}
+                           <Route path={'tag'} element={<TagsPage/>}>
+                               {/*<Route path={'/tag'} element={<TagsPage/>} />*/}
+                               <Route path={':id'} element={<TagPage/>}/>
+                           </Route>
+                           <Route>
 
-                            {/*    关于我页面*/}
-                            <Route path={'/about'} element={<AboutPage/>}/>
-
-
-                            {/*    友链页面*/}
-                            <Route path={'/friends'} element={<FriendsPage/>}/>
+                               {/*    关于我页面*/}
+                               <Route path={'/about'} element={<AboutPage/>}/>
 
 
-                            {/*    文档页面 */}
-                            <Route path={'/docs'} element={<DocsPage/>}/>
+                               {/*    友链页面*/}
+                               <Route path={'/friends'} element={<FriendsPage/>}/>
+
+
+                               {/*    文档页面 */}
+                               <Route path={'/docs'} element={<DocsPage/>}/>
 
 
 
-                        </Route>
+                           </Route>
 
-                        {/*月份归档查看页面*/}
-                        <Route path={'/month'} element={<MonthPage />}>
-                            <Route path={':month'} element={<MonthPage/>} />
-                        </Route>
-
-
-                        {/*简历页面*/}
-                        <Route path={'/jianli'} element={<JianliPage />} />
+                           {/*月份归档查看页面*/}
+                           <Route path={'/month'} element={<MonthPage />}>
+                               <Route path={':month'} element={<MonthPage/>} />
+                           </Route>
 
 
-                        <Route path={'*'} element={<NotFoundPage/>}/>
-                    </Routes>
-                    <div style={{height: 12}}/>
+                           {/*简历页面*/}
+                           <Route path={'/jianli'} element={<JianliPage />} />
 
-                </Container>
+
+                           <Route path={'*'} element={<NotFoundPage/>}/>
+                       </Routes>
+                       <div style={{height: 12}}/>
+
+                   </Container>
+               </main>
             </BrowserRouter>
 
             <AppFoot/>
@@ -111,6 +113,9 @@ export const App = () => {
 const BlogNav: React.FC = () => {
     const archives = useRecoilValue(archivesDataState)
     const openMoneyModal = useSetRecoilState(appMoneyModalOpen)
+
+
+
     return <div>
         <Container maxW={'container.lg'} className={'border-bottom app-bar'}>
             <Flex alignItems={'center'}>
@@ -119,7 +124,7 @@ const BlogNav: React.FC = () => {
                 </Box>
                 <Spacer />
                 <HStack spacing={12}>
-                    <NavLink to="/">首页</NavLink>
+                    <NavLink  to="/">首页</NavLink>
                     <NavLink  to="/tag">标签</NavLink>
                     <NavLink  to="/archive">归档</NavLink>
                     <NavLink  to="/docs">文档</NavLink>
