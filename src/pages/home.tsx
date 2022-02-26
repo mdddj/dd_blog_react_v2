@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import { useMount } from "react-use";
 import { blogApi } from "../utils/request";
 import { BlogData } from "dd_server_api_web/apis/model/result/BlogPushNewResultData";
-import LargeBlogCard from "../components/blog/large_blog_card";
-import TwoColumnBlogCard from "../components/blog/two_column_card";
 import { AboutMeCard, ArchiveCard } from "../components/about_me";
 import BaseBlogCardStyle2 from "../components/blog/base_blog_card_style2";
 import { PagerModel } from "dd_server_api_web/apis/utils/ResultUtil";
-import PagerNextLoad from "../components/pager_next_load";
 import {useSetRecoilState} from "recoil";
 import {appLoading} from "../providers/loading";
+import {Grid, GridItem} from "@chakra-ui/react";
+import PagerNextLoad from "../components/pager_next_load";
 
 //首页
 const Home: React.FC = () => {
@@ -53,35 +52,23 @@ const Home: React.FC = () => {
         })
     }
 
-
-    const getBaseBlogs = blogs.filter((value, index) => {
-        return index >= 3;
-    });
-
-
-
     return <>
-        {blogs.length > 1 && <LargeBlogCard blog={blogs[0]} />}
-        {blogs.length > 3 && <div className={'row mb-2'}>
-            <TwoColumnBlogCard blog={blogs[1]} />
-            <TwoColumnBlogCard blog={blogs[2]} />
-        </div>}
-        <div className={'row g-5'}>
-            <div className={'col-md-8'}>
+
+        <Grid gap={4} templateColumns='repeat(6, 1fr)'>
+            <GridItem colSpan={4} >
                 {
-                    blogs.length >= 3 && getBaseBlogs.map(value => <BaseBlogCardStyle2 blog={value} key={value.id} />)
+                    blogs.map(value => <BaseBlogCardStyle2 blog={value} key={value.id} />)
                 }
                 {
                     pager && <PagerNextLoad pager={pager} onload={getNextPage} loading={nextPageLoading} />
                 }
-            </div>
-            <div className={'col-md-4'}>
-                <div className={'position-sticky'} style={{ top: '2rem' }}>
-                    <AboutMeCard />
-                    <ArchiveCard />
-                </div>
-            </div>
-        </div>
+            </GridItem>
+            <GridItem colSpan={2} rowSpan={2} >
+                <AboutMeCard />
+                <ArchiveCard />
+            </GridItem>
+        </Grid>
+
     </>
 }
 

@@ -8,7 +8,7 @@ import {BrowserRouter, Routes, Route, NavLink} from "react-router-dom"
 import Home from "./pages/home"
 import {blogApi} from "./utils/request";
 import {useMount} from "react-use";
-import {useRecoilValue, useSetRecoilState} from "recoil";
+import {useSetRecoilState} from "recoil";
 import {archivesDataState} from "./providers/archives";
 import Archive from "./pages/archive";
 import BlogPage from "./pages/blog";
@@ -111,10 +111,7 @@ export const App = () => {
 
 //博客导航
 const BlogNav: React.FC = () => {
-    const archives = useRecoilValue(archivesDataState)
     const openMoneyModal = useSetRecoilState(appMoneyModalOpen)
-
-
 
     return <div>
         <Container maxW={'container.lg'} className={'border-bottom app-bar'}>
@@ -140,17 +137,6 @@ const BlogNav: React.FC = () => {
                 </Box>
             </Flex>
         </Container>
-
-        {/*<div className="nav-scroller bg-body shadow-sm">*/}
-        {/*    <nav className="nav nav-underline" aria-label="Secondary navigation">*/}
-        {/*        {*/}
-        {/*            archives && archives.categoryList.map(value => {*/}
-        {/*                return <NavLink key={value.id} className="nav-link"*/}
-        {/*                                to={'/category/' + value.id}>{value.name}</NavLink>*/}
-        {/*            })*/}
-        {/*        }*/}
-        {/*    </nav>*/}
-        {/*</div>*/}
         <div style={{height: 12}}/>
     </div>
 }
