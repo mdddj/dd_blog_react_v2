@@ -3,7 +3,7 @@ import {useRecoilState} from "recoil";
 import {archivesDataState} from "../providers/archives";
 import {MonthsCount} from "dd_server_api_web/apis/model/ArchiveModel";
 import {Link} from "react-router-dom";
-import {Heading} from "@chakra-ui/react";
+import {Box, Heading} from "@chakra-ui/react";
 import dayjs from "dayjs";
 import PageHeader from "../components/page_header";
 import NothingWidget from "../components/nothing";
@@ -31,13 +31,15 @@ const MonthGroup: React.FC<{ monthItem: MonthsCount }> = ({monthItem}) => {
     const blogs = monthItem.blogs ?? []
 
 
-    return <>
-        <Heading as={'h3'} className={'mb-2'}>{monthItem.months}</Heading>
-        <ul className="list mb-5" style={{listStyle: 'none'}}>
+    return <Box mb={5}>
+        <Box mb={5}>
+            <Heading as={'h3'}>{monthItem.months}</Heading>
+        </Box>
+        <ul style={{listStyle: 'none'}}>
             {
                 blogs.map(value => {
                     let dateString = dayjs(value.createTime).format('YYYY-MM-DD')
-                    return (<li style={{display: 'block'}} className={'mb-2'} key={value.id}>
+                    return (<li style={{display: 'block',marginBottom: 12}} key={value.id}>
                         <span style={{float: 'right', color: '#767676'}}>{dateString}</span>
                         <Link style={{color: '#007bff', cursor: 'pointer'}}
                               to={'/post/' + value.id}>{value.title}</Link>
@@ -47,7 +49,7 @@ const MonthGroup: React.FC<{ monthItem: MonthsCount }> = ({monthItem}) => {
 
         </ul>
 
-    </>
+    </Box>
 }
 
 

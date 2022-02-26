@@ -12,7 +12,7 @@ const NothingWidget: React.FC<Props> = ({nothing}) => {
     if (!nothing) {
         return <span/>
     }
-    return <Box alignContent={'center'} color={'gray'}>
+    return <Box textAlign={'center'} color={'gray'} mt={5} mb={5}>
         <SunIcon mr={2}/>
         这里什么都没有~
     </Box>

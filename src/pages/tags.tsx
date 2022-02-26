@@ -1,7 +1,7 @@
 import React from "react";
 import {useRecoilValue} from "recoil";
 import {archivesDataState} from "../providers/archives";
-import {Box, HStack, Tag} from "@chakra-ui/react";
+import {Box, Button, Wrap} from "@chakra-ui/react";
 import {Link, Outlet} from "react-router-dom";
 import PageHeader from "../components/page_header";
 
@@ -11,14 +11,13 @@ const TagsPage:React.FC = () => {
   return <>
     <PageHeader title={'标签'}/>
     <Box p={12} border={1} width={'100%'}>
-      <HStack spacing={4} mt={4}>
+      <Wrap spacing={4} mt={4}>
         {
           tags.map(value => {
-            return <Tag key={value.id}><Link to={'/tag/'+value.id}>{value.name}</Link></Tag>
+            return <Button key={value.id}><Link to={'/tag/'+value.id}>{value.name}</Link></Button>
           })
         }
-      </HStack>
-
+      </Wrap>
       <div style={{marginTop: 20}}>
         <Outlet />
       </div>
