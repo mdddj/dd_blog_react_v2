@@ -3,10 +3,11 @@ import {useParams} from "react-router-dom";
 import {blogApi} from "../utils/request";
 import {useMount} from "react-use";
 import {BlogData} from "dd_server_api_web/apis/model/result/BlogPushNewResultData";
-import {Avatar, Fade, Tag, TagLabel} from "@chakra-ui/react";
+import {Avatar, Box, Fade, Tag, TagLabel} from "@chakra-ui/react";
 import {BlogPreview} from "../components/blog_content";
 import {useSetRecoilState} from "recoil";
 import {appLoading} from "../providers/loading";
+import PageHeader from "../components/page_header";
 
 //博客详情页面
 const BlogPage: React.FC = () => {
@@ -30,10 +31,11 @@ const BlogPage: React.FC = () => {
 
   return <>
     <Fade in={blog!==undefined}>
-      <div className="mb-4 rounded pb-4">
-        <div className="px-0"><h1 className="display-4">{blog?.title}</h1>
-          <p className="lead my-3">{blog?.dateString}</p>
-          <p>
+      <Box mb={4} mt={4}>
+        <PageHeader title={blog?.title??''} />
+        <div style={{textAlign: 'center'}}>
+          <Box alignContent={'center'} pb={5}>
+            <Box>{blog?.dateString}</Box>
             <Tag size='lg' colorScheme='gray' borderRadius='full'>
               <Avatar
                   src={blog?.category.logo}
@@ -43,9 +45,9 @@ const BlogPage: React.FC = () => {
               />
               <TagLabel>{blog?.category.name}</TagLabel>
             </Tag>
-          </p>
+          </Box>
         </div>
-      </div>
+      </Box>
       {blog &&  <BlogPreview content={blog!.content}/> }
     </Fade>
   </>

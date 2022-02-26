@@ -36,7 +36,7 @@ const TwoColumnBlogCard: React.FC<BlogCardProps> = ({ blog, className }) => {
             </Box>
 
             <Box mt={4}>
-                <Link to={'/blog/'+blog.id}>查看全文</Link>
+                <Link to={'/post/'+blog.id}>查看全文</Link>
             </Box>
 
         </Box>
