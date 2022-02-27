@@ -5,7 +5,7 @@ import {Collapse, Spinner} from "@chakra-ui/react";
 
 const AppLoadingWidget: React.FC = () => {
     const loading = useRecoilValue(appLoading)
-    return <Collapse in={loading} animateOpacity>
+    return <Collapse in={loading} style={{textAlign: 'center'}} animateOpacity>
        <Spinner />
     </Collapse>
 }

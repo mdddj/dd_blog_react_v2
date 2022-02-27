@@ -8,6 +8,7 @@ import {useSetRecoilState} from "recoil";
 import {appLoading} from "../providers/loading";
 import {Result} from "dd_server_api_web/src/utils/ResultUtil";
 import {Box, Button, Input, useBoolean, useToast} from "@chakra-ui/react";
+import Nothing from "./nothing";
 type Props = {
     keyText: string
 }
@@ -65,6 +66,8 @@ const KeyPage:React.FC<Props> = ({keyText}) => {
     }
 
   return <>
+
+      <Nothing nothing={result && result.state === 404}  />
 
       {
           hasPassword && <Box>
