@@ -25,6 +25,7 @@ import {appMoneyModalOpen} from "./providers/modal";
 import MoneyModal from "./components/modal/money";
 import MonthPage from "./pages/month";
 import JianliPage from "./pages/me";
+import {ColorModeSwitcher} from "./ColorModeSwitcher";
 
 export const App = () => {
 
@@ -128,6 +129,7 @@ const BlogNav: React.FC = () => {
                     <NavLink  to="/friends">友链</NavLink>
                     <NavLink  to="/about">关于</NavLink>
                     <NavLink  to="/jianli">简历</NavLink>
+                    <ColorModeSwitcher />
                 </HStack>
                 <Spacer />
                 <Box>

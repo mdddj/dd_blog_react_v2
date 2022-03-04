@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useMount } from "react-use";
 import { blogApi } from "../utils/request";
 import { BlogData } from "dd_server_api_web/apis/model/result/BlogPushNewResultData";
-import { AboutMeCard, ArchiveCard } from "../components/about_me";
+import {AboutMeCard, ArchiveCard, CategoryCard} from "../components/about_me";
 import BaseBlogCardStyle2 from "../components/blog/base_blog_card_style2";
 import { PagerModel } from "dd_server_api_web/apis/utils/ResultUtil";
 import {useSetRecoilState} from "recoil";
@@ -66,6 +66,7 @@ const Home: React.FC = () => {
             <GridItem colSpan={2} rowSpan={2} >
                 <AboutMeCard />
                 <ArchiveCard />
+                <CategoryCard/>
             </GridItem>
         </Grid>
 

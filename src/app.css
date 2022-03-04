@@ -1,7 +1,6 @@
 
 
 code {
-    color: rgb(57, 58, 52);
     font-family:  "Fira Code",sans-serif !important;
     text-align: left;
     white-space: pre;
@@ -13,14 +12,6 @@ code {
     hyphens: none;
 }
 
-code span {
-    font-style: normal !important;
-}
-
-.markdown-body pre {
-    padding: 0 !important;
-}
-
 
 /*
  * Footer
@@ -29,7 +20,6 @@ code span {
     padding: 2.5rem 0;
     color: #727272;
     text-align: center;
-    border-top: .05rem solid #e5e5e5;
 }
 .blog-footer p:last-child {
     margin-bottom: 0;
@@ -38,9 +28,6 @@ code span {
 
 
 /*导航*/
-.border-bottom {
-    border-bottom: 1px solid #dee2e6!important;
-}
 .app-bar {
     padding-top: 12px;
     margin-bottom: 12px;
