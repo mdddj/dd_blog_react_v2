@@ -6,7 +6,7 @@ import {
 } from "@chakra-ui/react"
 import {HamburgerIcon} from '@chakra-ui/icons'
 
-import {BrowserRouter, Routes, Route, NavLink} from "react-router-dom"
+import {BrowserRouter, Routes, Route, NavLink, Link} from "react-router-dom"
 import Home from "./pages/home"
 import {blogApi} from "./utils/request";
 import {useMount} from "react-use";
@@ -120,7 +120,7 @@ const PhoneAppbar: React.FC = () => {
     return <>
     <Flex>
         <Box p='4'>
-            梁典典的博客
+            <Link to={'/'}>梁典典的博客</Link>
         </Box>
         <Spacer />
         <Box p='4'>
@@ -139,6 +139,7 @@ const PhoneMenuDrawer : React.FC<{isOpen: boolean,onClose: ()=>void}> = ({isOpen
         isOpen={isOpen}
         placement='right'
         onClose={onClose}
+        size={'xs'}
       >
         <DrawerOverlay />
         <DrawerContent>
