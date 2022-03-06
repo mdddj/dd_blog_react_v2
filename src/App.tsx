@@ -2,8 +2,10 @@ import * as React from "react"
 import {
     Box,
     Button,
-    ChakraProvider, Container, Flex, Heading, Spacer, Tag, theme, Wrap, WrapItem, HStack
+    ChakraProvider, Container, Flex, Heading, Spacer, Tag, theme, Wrap, WrapItem, HStack, useMediaQuery, IconButton, Drawer, useDisclosure, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay,
 } from "@chakra-ui/react"
+import {HamburgerIcon} from '@chakra-ui/icons'
+
 import {BrowserRouter, Routes, Route, NavLink} from "react-router-dom"
 import Home from "./pages/home"
 import {blogApi} from "./utils/request";
@@ -110,9 +112,60 @@ export const App = () => {
     )
 }
 
+
+
+// 手机端的导航条
+const PhoneAppbar: React.FC = () => {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    return <>
+    <Flex>
+        <Box p='4'>
+            梁典典的博客
+        </Box>
+        <Spacer />
+        <Box p='4'>
+            <IconButton icon={<HamburgerIcon />} aria-label={""} onClick={onOpen}></IconButton>
+        </Box>
+    </Flex>
+    <PhoneMenuDrawer isOpen={isOpen} onClose={onClose} />
+    </>
+}
+
+const PhoneMenuDrawer : React.FC<{isOpen: boolean,onClose: ()=>void}> = ({isOpen,onClose}) => {
+   
+    console.log(isOpen)
+    return <>
+      <Drawer
+        isOpen={isOpen}
+        placement='right'
+        onClose={onClose}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>梁典典的博客</DrawerHeader>
+
+          <DrawerBody>
+           
+          </DrawerBody>
+
+        </DrawerContent>
+      </Drawer>
+    </>
+}
+
 //博客导航
 const BlogNav: React.FC = () => {
     const openMoneyModal = useSetRecoilState(appMoneyModalOpen)
+    const [isDesk] = useMediaQuery('(min-width: 760px)')
+
+    const isPhone = !isDesk
+
+
+    if(isPhone){
+        return  <PhoneAppbar />
+        
+    }
 
     return <div>
         <Container maxW={'container.lg'} className={'border-bottom app-bar'}>
