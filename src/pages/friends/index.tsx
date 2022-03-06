@@ -17,6 +17,7 @@ const FriendsPage:React.FC = () => {
 
     useMount(()=>fetchData())
 
+// 加载数据
     const fetchData = () =>{
         setLoading(true)
         blogApi().getFriends({'state': '1'}).then(value => {
@@ -26,6 +27,7 @@ const FriendsPage:React.FC = () => {
             })
         })
     }
+    
 
   return <>
       <PageHeader title={'友链'} />
@@ -34,7 +36,7 @@ const FriendsPage:React.FC = () => {
           {
               friends.map(value => {
                   return <Link key={value.id} href={value.url} isExternal={true}>
-                      <Box  border={10} borderRadius={5} borderColor={'gray'} bg={'gray.200'} p={3} mb={1}>
+                      <Box  border={10} borderRadius={5} borderColor={'gray'} p={3} mb={1}>
                           <Flex>
                               <Avatar src={value.logo} />
                               <Box ml='3'>
