@@ -2,7 +2,7 @@ import * as React from "react"
 import {
     Box,
     Button,
-    ChakraProvider, Container, Flex, Heading, Spacer, Tag, theme, Wrap, WrapItem, HStack, useMediaQuery, IconButton, Drawer, useDisclosure, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay,
+    ChakraProvider,Text, Container, Flex, Heading, Spacer, Tag, theme, Wrap, WrapItem, HStack, useMediaQuery, IconButton, Drawer, useDisclosure, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay,
 } from "@chakra-ui/react"
 import {HamburgerIcon} from '@chakra-ui/icons'
 
@@ -28,6 +28,10 @@ import MoneyModal from "./components/modal/money";
 import MonthPage from "./pages/month";
 import JianliPage from "./pages/me";
 import {ColorModeSwitcher} from "./ColorModeSwitcher";
+import { navbarMenu } from "./menus"
+
+
+
 
 export const App = () => {
 
@@ -133,7 +137,6 @@ const PhoneAppbar: React.FC = () => {
 
 const PhoneMenuDrawer : React.FC<{isOpen: boolean,onClose: ()=>void}> = ({isOpen,onClose}) => {
    
-    console.log(isOpen)
     return <>
       <Drawer
         isOpen={isOpen}
@@ -147,7 +150,14 @@ const PhoneMenuDrawer : React.FC<{isOpen: boolean,onClose: ()=>void}> = ({isOpen
           <DrawerHeader>梁典典的博客</DrawerHeader>
 
           <DrawerBody>
-           
+           {
+               navbarMenu.map(value=><Text fontSize='xl' fontWeight='bold'>
+               {
+                   value.title
+               }
+               
+             </Text>)
+           }
           </DrawerBody>
 
         </DrawerContent>
@@ -176,13 +186,10 @@ const BlogNav: React.FC = () => {
                 </Box>
                 <Spacer />
                 <HStack spacing={12}>
-                    <NavLink  to="/">首页</NavLink>
-                    <NavLink  to="/tag">标签</NavLink>
-                    <NavLink  to="/archive">归档</NavLink>
-                    <NavLink  to="/docs">文档</NavLink>
-                    <NavLink  to="/friends">友链</NavLink>
-                    <NavLink  to="/about">关于</NavLink>
-                    <NavLink  to="/jianli">简历</NavLink>
+                    {
+                        navbarMenu.map(value=><NavLink key={value.url} to={value.url}>{value.title}</NavLink>)
+                    }
+                
                     <ColorModeSwitcher />
                 </HStack>
                 <Spacer />
