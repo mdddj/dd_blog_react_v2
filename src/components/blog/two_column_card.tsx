@@ -5,9 +5,9 @@ import {Box, Tag} from "@chakra-ui/react";
 
 
 /// 两列展示的博客卡片
-const TwoColumnBlogCard: React.FC<BlogCardProps> = ({ blog, className }) => {
+const TwoColumnBlogCard: React.FC<BlogCardProps> = ({ blog}) => {
     return <>
-        <Box borderWidth='1px' borderRadius='lg' overflow='hidden' p={6} mb={2}>
+        <Box borderRadius='lg' overflow='hidden' p={6} mb={2}>
             <Tag  px='2'>
                 {blog.category.name}
             </Tag>

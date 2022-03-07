@@ -213,9 +213,7 @@ const BlogNav: React.FC = () => {
                 </Box>
                 <Spacer />
                 <HStack spacing={12}>
-                    {
-                        navbarMenu.map(value=><NavLink key={value.url} to={value.url}>{value.title}</NavLink>)
-                    }
+                    { navbarMenu.map(value=><NavLink key={value.url} to={value.url}>{value.title}</NavLink>)}
                 
                     <ColorModeSwitcher />
                 </HStack>

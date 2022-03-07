@@ -7,7 +7,7 @@ import BaseBlogCardStyle2 from "../components/blog/base_blog_card_style2";
 import { PagerModel } from "dd_server_api_web/apis/utils/ResultUtil";
 import {useSetRecoilState} from "recoil";
 import {appLoading} from "../providers/loading";
-import {Grid, GridItem, useMediaQuery} from "@chakra-ui/react";
+import {Box, Grid, GridItem, useMediaQuery} from "@chakra-ui/react";
 import PagerNextLoad from "../components/pager_next_load";
 
 //首页
@@ -56,14 +56,18 @@ const Home: React.FC = () => {
     return <>
 
         <Grid gap={4} templateColumns='repeat(6, 1fr)'>
-            <GridItem colSpan={isDesk ?4 : 6} >
-                {
-                    blogs.map(value => <BaseBlogCardStyle2 blog={value} key={value.id} />)
-                }
-                {
-                    pager && <PagerNextLoad pager={pager} onload={getNextPage} loading={nextPageLoading} />
-                }
-            </GridItem>
+
+                <GridItem colSpan={isDesk ? 4 : 6} >
+                    <Box borderWidth={1} borderRadius={5}>
+                    {
+                        blogs.map(value => <BaseBlogCardStyle2 blog={value} key={value.id} />)
+                    }
+                    {
+                        pager && <PagerNextLoad pager={pager} onload={getNextPage} loading={nextPageLoading} />
+                    }
+                    </Box>
+                </GridItem>
+
             <GridItem colSpan={isDesk ? 2 : 6} rowSpan={2} >
                 <AboutMeCard />
                 <ArchiveCard />
