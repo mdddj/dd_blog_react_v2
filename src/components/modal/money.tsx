@@ -1,5 +1,6 @@
 import React from "react";
 import {
+    AspectRatio,
     Button,
     Modal,
     ModalBody, ModalCloseButton,
@@ -42,7 +43,9 @@ const MoneyModal: React.FC = () => {
                     <ModalCloseButton/>
                     <ModalBody>
                         {loading && <Spinner/>}
-                        {moneyTextModel && <BlogPreview content={moneyTextModel.context}/>}
+                        {moneyTextModel && <AspectRatio maxW={500} maxH={600}>
+                            <BlogPreview content={moneyTextModel.context}/>
+                            </AspectRatio>}
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme='blue' mr={3} onClick={onClose}>

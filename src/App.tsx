@@ -118,7 +118,7 @@ export const App = () => {
 const PhoneAppbar: React.FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     return <>
-    <Flex>
+    <Flex alignItems={'center'}>
         <Box p='4'>
             <Link to={'/'}>梁典典的博客</Link>
         </Box>
