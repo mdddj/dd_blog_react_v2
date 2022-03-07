@@ -4,14 +4,14 @@ import {blogApi} from "../../utils/request";
 import {useMount} from "react-use";
 import {successResultHandle} from "dd_server_api_web/apis/utils/ResultUtil";
 import {Friend} from "dd_server_api_web/apis/model/friend";
-import {Box, SimpleGrid, Text, Flex, Avatar, Link} from "@chakra-ui/react";
+import {Box, SimpleGrid, Text, Flex, Avatar, Link, useMediaQuery} from "@chakra-ui/react";
 import {useSetRecoilState} from "recoil";
 import {appLoading} from "../../providers/loading";
 
 //友链页面
 const FriendsPage:React.FC = () => {
 
-
+    const [isDesk] = useMediaQuery('(min-width: 760px)')
     const setLoading = useSetRecoilState(appLoading)
     const [friends,setFriends] = useState<Friend[]>([])
 
@@ -32,7 +32,7 @@ const FriendsPage:React.FC = () => {
   return <>
       <PageHeader title={'友链'} />
 
-      <SimpleGrid columns={2} spacingX='40px' spacingY='20px'>
+      <SimpleGrid columns={isDesk ? 2: 1} spacingX='40px' spacingY='20px'>
           {
               friends.map(value => {
                   return <Link key={value.id} href={value.url} isExternal={true}>
@@ -51,8 +51,6 @@ const FriendsPage:React.FC = () => {
               })
           }
       </SimpleGrid>
-
-
   </>
 }
 export default FriendsPage

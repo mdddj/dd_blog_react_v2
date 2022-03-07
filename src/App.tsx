@@ -2,7 +2,27 @@ import * as React from "react"
 import {
     Box,
     Button,
-    ChakraProvider,Text, Container, Flex, Heading, Spacer, Tag, theme, Wrap, WrapItem, HStack, useMediaQuery, IconButton, Drawer, useDisclosure, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay,
+    ChakraProvider,
+    Text,
+    Container,
+    Flex,
+    Heading,
+    Spacer,
+    Tag,
+    theme,
+    Wrap,
+    WrapItem,
+    HStack,
+    useMediaQuery,
+    IconButton,
+    Drawer,
+    useDisclosure,
+    DrawerBody,
+    DrawerCloseButton,
+    DrawerContent,
+    DrawerHeader,
+    DrawerOverlay,
+    DrawerFooter,
 } from "@chakra-ui/react"
 import {HamburgerIcon} from '@chakra-ui/icons'
 
@@ -128,7 +148,7 @@ const PhoneAppbar: React.FC = () => {
         </Box>
         <Spacer />
         <Box p='4'>
-            <IconButton icon={<HamburgerIcon />} aria-label={""} onClick={onOpen}></IconButton>
+            <IconButton icon={<HamburgerIcon/>} aria-label={""} onClick={onOpen}/>
         </Box>
     </Flex>
     <PhoneMenuDrawer isOpen={isOpen} onClose={onClose} />
@@ -136,7 +156,7 @@ const PhoneAppbar: React.FC = () => {
 }
 
 const PhoneMenuDrawer : React.FC<{isOpen: boolean,onClose: ()=>void}> = ({isOpen,onClose}) => {
-   
+    const openMoneyModal = useSetRecoilState(appMoneyModalOpen)
     return <>
       <Drawer
         isOpen={isOpen}
@@ -151,14 +171,24 @@ const PhoneMenuDrawer : React.FC<{isOpen: boolean,onClose: ()=>void}> = ({isOpen
 
           <DrawerBody>
            {
-               navbarMenu.map(value=><Text fontSize='xl' fontWeight='bold'>
-               {
-                   value.title
-               }
-               
-             </Text>)
+               navbarMenu.map(value=><Link to={value.url} key={value.url} onClick={onClose}>
+                   <Text fontSize='xl' fontWeight='bold'>
+                       {value.title}
+                   </Text>
+               </Link>)
            }
+
           </DrawerBody>
+            <DrawerFooter>
+                <ColorModeSwitcher />
+                <Button colorScheme='blue' variant='ghost' onClick={() => {
+                    openMoneyModal(true)
+                    onClose()
+                }
+                }>
+                    打赏
+                </Button>
+            </DrawerFooter>
 
         </DrawerContent>
       </Drawer>
@@ -169,16 +199,13 @@ const PhoneMenuDrawer : React.FC<{isOpen: boolean,onClose: ()=>void}> = ({isOpen
 const BlogNav: React.FC = () => {
     const openMoneyModal = useSetRecoilState(appMoneyModalOpen)
     const [isDesk] = useMediaQuery('(min-width: 760px)')
-
     const isPhone = !isDesk
-
 
     if(isPhone){
         return  <PhoneAppbar />
-        
     }
 
-    return <div>
+    return <div className={'my-nav-bar'}>
         <Container maxW={'container.lg'} className={'border-bottom app-bar'}>
             <Flex alignItems={'center'}>
                 <Box p={2}>
@@ -200,7 +227,6 @@ const BlogNav: React.FC = () => {
                 </Box>
             </Flex>
         </Container>
-        <div style={{height: 12}}/>
     </div>
 }
 

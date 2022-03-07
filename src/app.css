@@ -25,14 +25,13 @@ code {
     margin-bottom: 0;
 }
 
-
-
-/*导航*/
-.app-bar {
-    padding-top: 12px;
-    margin-bottom: 12px;
-    padding-bottom: 12px;
+/*博客导航样式*/
+.my-nav-bar {
+    border-bottom: 1px solid #dee2e6;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
 }
+
 .h-100 {
     height: 100% !important;
 }
