@@ -7,7 +7,7 @@ import BaseBlogCardStyle2 from "../components/blog/base_blog_card_style2";
 import { PagerModel } from "dd_server_api_web/apis/utils/ResultUtil";
 import {useSetRecoilState} from "recoil";
 import {appLoading} from "../providers/loading";
-import {Box, Grid, GridItem, useMediaQuery} from "@chakra-ui/react";
+import {Box, Grid, GridItem, Stack, useMediaQuery} from "@chakra-ui/react";
 import PagerNextLoad from "../components/pager_next_load";
 
 //首页
@@ -70,10 +70,12 @@ const Home: React.FC = () => {
                     }
                 </GridItem>
 
-            <GridItem colSpan={isDesk ? 2 : 6} rowSpan={2} >
-                <AboutMeCard />
-                <ArchiveCard />
-                <CategoryCard/>
+            <GridItem colSpan={isDesk ? 2 : 6} rowSpan={2}>
+                    <Stack spacing={3}>
+                        <AboutMeCard />
+                        <ArchiveCard />
+                        <CategoryCard/>
+                    </Stack>
             </GridItem>
         </Grid>
 
