@@ -23,7 +23,7 @@ export const BlogPreview: React.FC<{ content: string; }> = ({content}) => {
                         const match = /language-(\w+)/.exec(className || '');
                         return !inline && match ? (
                             // @ts-ignore
-                            <Box shadow={'lg'}>
+                            <Box>
                                 <SyntaxHighlighter
                                     children={String(children).replace(/\n$/, '')}
                                     style={vs}

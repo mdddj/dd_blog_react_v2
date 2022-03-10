@@ -7,14 +7,14 @@ import BaseBlogCardStyle2 from "../components/blog/base_blog_card_style2";
 import { PagerModel } from "dd_server_api_web/apis/utils/ResultUtil";
 import {useSetRecoilState} from "recoil";
 import {appLoading} from "../providers/loading";
-import {Box, Grid, GridItem, Stack, useMediaQuery} from "@chakra-ui/react";
+import {Box} from "@chakra-ui/react";
 import PagerNextLoad from "../components/pager_next_load";
+import TwoColumnLayout from "../components/two_column_layout";
 
 //首页
 const Home: React.FC = () => {
 
 
-    const [isDesk] = useMediaQuery('(min-width: 760px)')
     const [blogs, setBlogs] = useState<BlogData[]>([])
     const [page, setPage] = useState<number>(1)
     const [nextPageLoading, setNextPageLoading] = useState<boolean>(false)
@@ -55,30 +55,20 @@ const Home: React.FC = () => {
 
     return <>
 
-        <Grid gap={4} templateColumns='repeat(6, 1fr)'>
-
-                <GridItem colSpan={isDesk ? 4 : 6} >
+        <TwoColumnLayout right={[
+            <><AboutMeCard/><ArchiveCard/><CategoryCard/></>
+        ]}>
+            {
+                blogs.length !== 0 &&  <Box borderWidth={1} borderRadius={5} bg={'white'}>
                     {
-                        blogs.length !== 0 &&  <Box borderWidth={1} borderRadius={5} bg={'white'}>
-                            {
-                                blogs.map(value => <BaseBlogCardStyle2 blog={value} key={value.id} />)
-                            }
-                            {
-                                pager && <PagerNextLoad pager={pager} onload={getNextPage} loading={nextPageLoading} />
-                            }
-                        </Box>
+                        blogs.map(value => <BaseBlogCardStyle2 blog={value} key={value.id} />)
                     }
-                </GridItem>
-
-            <GridItem colSpan={isDesk ? 2 : 6} rowSpan={2}>
-                    <Stack spacing={3}>
-                        <AboutMeCard />
-                        <ArchiveCard />
-                        <CategoryCard/>
-                    </Stack>
-            </GridItem>
-        </Grid>
-
+                    {
+                        pager && <PagerNextLoad pager={pager} onload={getNextPage} loading={nextPageLoading} />
+                    }
+                </Box>
+            }
+        </TwoColumnLayout>
     </>
 }
 
