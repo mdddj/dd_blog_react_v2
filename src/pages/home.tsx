@@ -59,7 +59,7 @@ const Home: React.FC = () => {
 
                 <GridItem colSpan={isDesk ? 4 : 6} >
                     {
-                        blogs.length !== 0 &&  <Box borderWidth={1} borderRadius={5}>
+                        blogs.length !== 0 &&  <Box borderWidth={1} borderRadius={5} bg={'white'}>
                             {
                                 blogs.map(value => <BaseBlogCardStyle2 blog={value} key={value.id} />)
                             }

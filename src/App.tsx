@@ -9,7 +9,6 @@ import {
     Heading,
     Spacer,
     Tag,
-    theme,
     Wrap,
     WrapItem,
     HStack,
@@ -23,6 +22,8 @@ import {
     DrawerHeader,
     DrawerOverlay,
     DrawerFooter,
+    extendTheme,
+    useColorModeValue,
 } from "@chakra-ui/react"
 import {HamburgerIcon} from '@chakra-ui/icons'
 
@@ -49,8 +50,30 @@ import MonthPage from "./pages/month";
 import JianliPage from "./pages/me";
 import {ColorModeSwitcher} from "./ColorModeSwitcher";
 import { navbarMenu } from "./menus"
+import {mode} from '@chakra-ui/theme-tools'
 
-
+const myTheme = extendTheme({
+    styles: {
+        global: (props:any)=>({
+            body: {
+                bg: mode('#f5f6f9','gray.800')(props)
+            }
+        })
+    },
+    colors: {
+        appbar: {
+            'white': 'white',
+            'dark': 'black'
+        }
+    },
+    components: {
+        Box: {
+            bg: (props: any)=> ({
+                'new_bg': props.colorMode === 'dark' ? 'white' : 'black'
+            })
+        }
+    }
+})
 
 
 export const App = () => {
@@ -71,7 +94,7 @@ export const App = () => {
     }
 
     return (
-        <ChakraProvider theme={theme}>
+        <ChakraProvider theme={myTheme}>
             <BrowserRouter>
                <main style={{flexShrink: '0'}}>
                    <BlogNav/>
@@ -201,11 +224,13 @@ const BlogNav: React.FC = () => {
     const [isDesk] = useMediaQuery('(min-width: 760px)')
     const isPhone = !isDesk
 
+    const value = useColorModeValue('appbar.white','appbar.dark')
+
     if(isPhone){
         return  <PhoneAppbar />
     }
 
-    return <div className={'my-nav-bar'}>
+    return <Box className={'my-nav-bar'} bg={value}>
         <Container maxW={'container.lg'} className={'border-bottom app-bar'}>
             <Flex alignItems={'center'}>
                 <Box p={2}>
@@ -225,7 +250,7 @@ const BlogNav: React.FC = () => {
                 </Box>
             </Flex>
         </Container>
-    </div>
+    </Box>
 }
 
 const AppFoot: React.FC = () => {
