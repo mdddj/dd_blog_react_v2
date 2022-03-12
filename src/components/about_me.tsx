@@ -6,7 +6,7 @@ import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 //关于我的卡片
 const AboutMeCard: React.FC = () => {
-  return <Box borderWidth={1} p={5} borderRadius={5} bg={"white"}>
+  return <Box borderWidth={1} p={5} borderRadius={5}>
           <Heading as={'h3'} mb={2}>关于</Heading>
           <p className="mb-0">欢迎来到典典的博客</p>
   </Box>
@@ -19,7 +19,7 @@ const ArchiveCard: React.FC = () => {
         return <></>
     }
     let months = archives.monthsCounts
-    return <Box borderWidth={1} borderRadius={5} p={5} bg={"white"}>
+    return <Box borderWidth={1} borderRadius={5} p={5}>
         <Heading as={'h4'} mb={2}>归档</Heading>
         <UnorderedList>
             {
@@ -33,7 +33,7 @@ const ArchiveCard: React.FC = () => {
 //分类卡片
 const CategoryCard: React.FC = () => {
     const categorys = useRecoilValue(archivesDataState)?.categoryList ?? [];
-    return <Box borderWidth={1} borderRadius={5} p={5} bg={"white"}>
+    return <Box borderWidth={1} borderRadius={5} p={5} >
         <Heading as={'h4'} mb={2}>分类</Heading>
         { categorys.length === 0 && <span>空空如也~</span> }
 

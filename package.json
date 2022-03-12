@@ -18,7 +18,6 @@
     "@types/react-dom": "^17.0.13",
     "@types/react-syntax-highlighter": "^13.5.2",
     "dayjs": "^1.10.8",
-    "dd_server_api_web": "^1.7.9",
     "esbuild-loader": "^2.18.0",
     "framer-motion": "^6.2.8",
     "github-markdown-css": "^5.1.0",
@@ -35,7 +34,8 @@
     "remark-gfm": "^3.0.1",
     "source-map-explorer": "^2.5.2",
     "typescript": "^4.6.2",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "dd_server_api_web": "file:../dd_server_api_web"
   },
   "scripts": {
     "start": "craco start",

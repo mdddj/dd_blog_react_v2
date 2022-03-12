@@ -53,26 +53,27 @@ import { navbarMenu } from "./menus"
 import {mode} from '@chakra-ui/theme-tools'
 
 const myTheme = extendTheme({
-    styles: {
-        global: (props:any)=>({
-            body: {
-                bg: mode('#f5f6f9','gray.800')(props)
-            }
-        })
-    },
-    colors: {
-        appbar: {
-            'white': 'white',
-            'dark': 'black'
-        }
-    },
-    components: {
-        Box: {
-            bg: (props: any)=> ({
-                'new_bg': props.colorMode === 'dark' ? 'white' : 'black'
+        styles: {
+            global: (props:any)=>({
+                body: {
+                    bg: mode('#f5f6f9','gray.800')(props)
+                }
             })
+        },
+        colors: {
+            appbar: {
+                'white': 'white',
+                'dark': 'black'
+            },
+        },
+        components: {
+            Box: {
+                default: "white",
+                _dark: {
+                    bg:"dark"
+                }
+            }
         }
-    }
 })
 
 

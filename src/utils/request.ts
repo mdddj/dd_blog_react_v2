@@ -1,22 +1,13 @@
-import DdServerApiByWeb from 'dd_server_api_web/apis';
-import TaokeApi from 'dd_server_api_web/apis/taoke';
-import { Result } from 'dd_server_api_web/src/utils/ResultUtil';
+import { Result } from "dd_server_api_web/apis/utils/ResultUtil";
+import DdServerApiByWeb from "dd_server_api_web/apis";
 
 const MOOSE_REACT_LEARN_ACCESS_TOKEN = 'auth_token';
 
 /// true 表示本地服务器，false表示远程服务器
-let isLocal = false;
+let isLocal = true;
 
 const host = isLocal ? 'http://localhost' : 'https://itbug.shop';
 
-/**
- * 淘客api接口
- */
-export const taokeApi = (): TaokeApi => {
-  const api = TaokeApi.getInstance();
-  api.host = host;
-  return api;
-};
 
 /**
  * 博客api接口

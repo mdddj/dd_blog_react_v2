@@ -8,6 +8,7 @@ import {BlogPreview} from "../components/blog_content";
 import {useSetRecoilState} from "recoil";
 import {appLoading} from "../providers/loading";
 import TwoColumnLayout from "../components/two_column_layout";
+import UserCardWithBlogDetail from "../components/user/user_card";
 
 //博客详情页面
 const BlogPage: React.FC = () => {
@@ -31,9 +32,11 @@ const BlogPage: React.FC = () => {
 
     return <>
 
-        <TwoColumnLayout right={[]}>
+        <TwoColumnLayout right={[
+            <UserCardWithBlogDetail loginNmae={'admin'} />
+        ]}>
             <Fade in={blog !== undefined}>
-                <Box mb={4} mt={4} bg={"white"} p={5}>
+                <Box mb={4} bg={"white"} p={5}>
                     <Heading size={'md'}>{blog?.title}</Heading>
                     <Box color={'gray.600'}>{blog?.dateString}</Box>
                     <Box mt={5}>

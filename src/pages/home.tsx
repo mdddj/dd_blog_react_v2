@@ -56,18 +56,18 @@ const Home: React.FC = () => {
     return <>
 
         <TwoColumnLayout right={[
-            <><AboutMeCard/><ArchiveCard/><CategoryCard/></>
+            <AboutMeCard/>,<ArchiveCard/>,<CategoryCard/>
         ]}>
-            {
-                blogs.length !== 0 &&  <Box borderWidth={1} borderRadius={5} bg={'white'}>
-                    {
-                        blogs.map(value => <BaseBlogCardStyle2 blog={value} key={value.id} />)
-                    }
-                    {
-                        pager && <PagerNextLoad pager={pager} onload={getNextPage} loading={nextPageLoading} />
-                    }
-                </Box>
-            }
+                {
+                    blogs.length !== 0 &&  <Box borderWidth={1} borderRadius={5}>
+                        {
+                            blogs.map(value => <BaseBlogCardStyle2 blog={value} key={value.id} />)
+                        }
+                        {
+                            pager && <PagerNextLoad pager={pager} onload={getNextPage} loading={nextPageLoading} />
+                        }
+                    </Box>
+                }
         </TwoColumnLayout>
     </>
 }
