@@ -1,5 +1,6 @@
 import React, {ReactNode} from "react";
-import {Box, Grid, GridItem, Stack, useMediaQuery} from "@chakra-ui/react";
+import {Grid, GridItem, Stack, useMediaQuery} from "@chakra-ui/react";
+import MyBox from "./box/my_box";
 
 type Props = {
     right: ReactNode[]
@@ -11,9 +12,9 @@ const TwoColumnLayout:React.FC<Props> = ({children,right}) => {
   return <>
       <Grid gap={4} templateColumns='repeat(12, 1fr)'>
           <GridItem colSpan={isDesk ? 9 : 12} >
-              <Box bg={'primary'}>
+              <MyBox>
                   {children}
-              </Box>
+              </MyBox>
           </GridItem>
           <GridItem colSpan={isDesk ? 3 : 12} rowSpan={2}>
                   <Stack spacing={3} >

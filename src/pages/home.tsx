@@ -7,7 +7,6 @@ import BaseBlogCardStyle2 from "../components/blog/base_blog_card_style2";
 import { PagerModel } from "dd_server_api_web/apis/utils/ResultUtil";
 import {useSetRecoilState} from "recoil";
 import {appLoading} from "../providers/loading";
-import {Box} from "@chakra-ui/react";
 import PagerNextLoad from "../components/pager_next_load";
 import TwoColumnLayout from "../components/two_column_layout";
 
@@ -59,14 +58,14 @@ const Home: React.FC = () => {
             <AboutMeCard/>,<ArchiveCard/>,<CategoryCard/>
         ]}>
                 {
-                    blogs.length !== 0 &&  <Box borderWidth={1} borderRadius={5}>
+                    blogs.length !== 0 &&  <>
                         {
                             blogs.map(value => <BaseBlogCardStyle2 blog={value} key={value.id} />)
                         }
                         {
                             pager && <PagerNextLoad pager={pager} onload={getNextPage} loading={nextPageLoading} />
                         }
-                    </Box>
+                    </>
                 }
         </TwoColumnLayout>
     </>

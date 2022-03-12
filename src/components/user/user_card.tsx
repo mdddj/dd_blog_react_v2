@@ -4,6 +4,7 @@ import {blogApi} from "../../utils/request";
 import {User} from "dd_server_api_web/apis/model/UserModel";
 import {Avatar, Box, Divider, Flex, Heading, IconButton, Wrap, WrapItem} from "@chakra-ui/react";
 import {LinkIcon} from "@chakra-ui/icons";
+import MyBox from "../box/my_box";
 
 type Props = {
     userId?: number,
@@ -21,7 +22,7 @@ const UserCardWithBlogDetail: React.FC<Props> = ({userId, loginNmae}) => {
         blogApi().getUserDetail(userId, loginNmae).then(value => setUser(value.data))
     }
 
-    return <Box bg={"white"} p={4}>
+    return <MyBox>
         {
             user && <Box>
                 <Box mb={5} width={'100%'}>
@@ -45,6 +46,6 @@ const UserCardWithBlogDetail: React.FC<Props> = ({userId, loginNmae}) => {
                 </Box>
             </Box>
         }
-    </Box>
+    </MyBox>
 }
 export default UserCardWithBlogDetail

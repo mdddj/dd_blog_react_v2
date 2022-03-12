@@ -23,7 +23,7 @@ import {
     DrawerOverlay,
     DrawerFooter,
     extendTheme,
-    useColorModeValue,
+    useColorModeValue, ComponentStyleConfig,
 } from "@chakra-ui/react"
 import {HamburgerIcon} from '@chakra-ui/icons'
 
@@ -49,31 +49,32 @@ import MoneyModal from "./components/modal/money";
 import MonthPage from "./pages/month";
 import JianliPage from "./pages/me";
 import {ColorModeSwitcher} from "./ColorModeSwitcher";
-import { navbarMenu } from "./menus"
+import {navbarMenu} from "./menus"
 import {mode} from '@chakra-ui/theme-tools'
 
+const BoxStyle: ComponentStyleConfig = {
+    defaultProps: {
+
+    }
+}
+
 const myTheme = extendTheme({
-        styles: {
-            global: (props:any)=>({
-                body: {
-                    bg: mode('#f5f6f9','gray.800')(props)
-                }
-            })
-        },
-        colors: {
-            appbar: {
-                'white': 'white',
-                'dark': 'black'
-            },
-        },
-        components: {
-            Box: {
-                default: "white",
-                _dark: {
-                    bg:"dark"
-                }
+    styles: {
+        global: (props: any) => ({
+            body: {
+                bg: mode('#f5f6f9', 'gray.800')(props)
             }
-        }
+        })
+    },
+    colors: {
+        appbar: {
+            'white': 'white',
+            'dark': 'black'
+        },
+    },
+    components: {
+        Box: BoxStyle
+    }
 })
 
 
@@ -97,62 +98,61 @@ export const App = () => {
     return (
         <ChakraProvider theme={myTheme}>
             <BrowserRouter>
-               <main style={{flexShrink: '0'}}>
-                   <BlogNav/>
+                <main style={{flexShrink: '0'}}>
+                    <BlogNav/>
 
-                   <Container maxW={'container.lg'}>
-                       <AppLoadingWidget/>
-                       <MoneyModal/>
-                       <Routes>
-                           <Route path={'/'} element={<Home/>}>
+                    <Container maxW={'container.lg'}>
+                        <AppLoadingWidget/>
+                        <MoneyModal/>
+                        <Routes>
+                            <Route path={'/'} element={<Home/>}>
 
-                           </Route>
-                           <Route path={'/archive'} element={<Archive/>}/>
-                           <Route path={'/post'} element={<BlogPage/>}>
-                               <Route path={':id'} element={<BlogPage/>}/>
-                           </Route>
-                           <Route path={'/category'} element={<CategoryPage/>}>
-                               <Route path={':id'} element={<CategoryPage/>}/>
-                           </Route>
+                            </Route>
+                            <Route path={'/archive'} element={<Archive/>}/>
+                            <Route path={'/post'} element={<BlogPage/>}>
+                                <Route path={':id'} element={<BlogPage/>}/>
+                            </Route>
+                            <Route path={'/category'} element={<CategoryPage/>}>
+                                <Route path={':id'} element={<CategoryPage/>}/>
+                            </Route>
 
-                           {/*标签页面*/}
-                           <Route path={'tag'} element={<TagsPage/>}>
-                               {/*<Route path={'/tag'} element={<TagsPage/>} />*/}
-                               <Route path={':id'} element={<TagPage/>}/>
-                           </Route>
-                           <Route>
+                            {/*标签页面*/}
+                            <Route path={'tag'} element={<TagsPage/>}>
+                                {/*<Route path={'/tag'} element={<TagsPage/>} />*/}
+                                <Route path={':id'} element={<TagPage/>}/>
+                            </Route>
+                            <Route>
 
-                               {/*    关于我页面*/}
-                               <Route path={'/about'} element={<AboutPage/>}/>
-
-
-                               {/*    友链页面*/}
-                               <Route path={'/friends'} element={<FriendsPage/>}/>
+                                {/*    关于我页面*/}
+                                <Route path={'/about'} element={<AboutPage/>}/>
 
 
-                               {/*    文档页面 */}
-                               <Route path={'/docs'} element={<DocsPage/>}/>
+                                {/*    友链页面*/}
+                                <Route path={'/friends'} element={<FriendsPage/>}/>
 
 
-
-                           </Route>
-
-                           {/*月份归档查看页面*/}
-                           <Route path={'/month'} element={<MonthPage />}>
-                               <Route path={':month'} element={<MonthPage/>} />
-                           </Route>
+                                {/*    文档页面 */}
+                                <Route path={'/docs'} element={<DocsPage/>}/>
 
 
-                           {/*简历页面*/}
-                           <Route path={'/jianli'} element={<JianliPage />} />
+                            </Route>
+
+                            {/*月份归档查看页面*/}
+                            <Route path={'/month'} element={<MonthPage/>}>
+                                <Route path={':month'} element={<MonthPage/>}/>
+                            </Route>
 
 
-                           <Route path={'*'} element={<NotFoundPage/>}/>
-                       </Routes>
-                       <div style={{height: 12}}/>
+                            {/*简历页面*/}
+                            <Route path={'/jianli'} element={<JianliPage/>}/>
 
-                   </Container>
-               </main>
+
+                            <Route path={'*'} element={<NotFoundPage/>}/>
+                        </Routes>
+                        <div style={{height: 12}}/>
+
+                    </Container>
+                </main>
             </BrowserRouter>
 
             <AppFoot/>
@@ -161,61 +161,60 @@ export const App = () => {
 }
 
 
-
 // 手机端的导航条
 const PhoneAppbar: React.FC = () => {
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const {isOpen, onOpen, onClose} = useDisclosure()
     return <>
-    <Flex alignItems={'center'}>
-        <Box p='4'>
-            <Link to={'/'}>梁典典的博客</Link>
-        </Box>
-        <Spacer />
-        <Box p='4'>
-            <IconButton icon={<HamburgerIcon/>} aria-label={""} onClick={onOpen}/>
-        </Box>
-    </Flex>
-    <PhoneMenuDrawer isOpen={isOpen} onClose={onClose} />
+        <Flex alignItems={'center'}>
+            <Box p='4'>
+                <Link to={'/'}>梁典典的博客</Link>
+            </Box>
+            <Spacer/>
+            <Box p='4'>
+                <IconButton icon={<HamburgerIcon/>} aria-label={""} onClick={onOpen}/>
+            </Box>
+        </Flex>
+        <PhoneMenuDrawer isOpen={isOpen} onClose={onClose}/>
     </>
 }
 
-const PhoneMenuDrawer : React.FC<{isOpen: boolean,onClose: ()=>void}> = ({isOpen,onClose}) => {
+const PhoneMenuDrawer: React.FC<{ isOpen: boolean, onClose: () => void }> = ({isOpen, onClose}) => {
     const openMoneyModal = useSetRecoilState(appMoneyModalOpen)
     return <>
-      <Drawer
-        isOpen={isOpen}
-        placement='right'
-        onClose={onClose}
-        size={'xs'}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>梁典典的博客</DrawerHeader>
+        <Drawer
+            isOpen={isOpen}
+            placement='right'
+            onClose={onClose}
+            size={'xs'}
+        >
+            <DrawerOverlay/>
+            <DrawerContent>
+                <DrawerCloseButton/>
+                <DrawerHeader>梁典典的博客</DrawerHeader>
 
-          <DrawerBody>
-           {
-               navbarMenu.map(value=><Link to={value.url} key={value.url} onClick={onClose}>
-                   <Text fontSize='xl' fontWeight='bold'>
-                       {value.title}
-                   </Text>
-               </Link>)
-           }
+                <DrawerBody>
+                    {
+                        navbarMenu.map(value => <Link to={value.url} key={value.url} onClick={onClose}>
+                            <Text fontSize='xl' fontWeight='bold'>
+                                {value.title}
+                            </Text>
+                        </Link>)
+                    }
 
-          </DrawerBody>
-            <DrawerFooter>
-                <ColorModeSwitcher />
-                <Button colorScheme='blue' variant='ghost' onClick={() => {
-                    openMoneyModal(true)
-                    onClose()
-                }
-                }>
-                    打赏
-                </Button>
-            </DrawerFooter>
+                </DrawerBody>
+                <DrawerFooter>
+                    <ColorModeSwitcher/>
+                    <Button colorScheme='blue' variant='ghost' onClick={() => {
+                        openMoneyModal(true)
+                        onClose()
+                    }
+                    }>
+                        打赏
+                    </Button>
+                </DrawerFooter>
 
-        </DrawerContent>
-      </Drawer>
+            </DrawerContent>
+        </Drawer>
     </>
 }
 
@@ -225,10 +224,10 @@ const BlogNav: React.FC = () => {
     const [isDesk] = useMediaQuery('(min-width: 760px)')
     const isPhone = !isDesk
 
-    const value = useColorModeValue('appbar.white','appbar.dark')
+    const value = useColorModeValue('appbar.white', 'appbar.dark')
 
-    if(isPhone){
-        return  <PhoneAppbar />
+    if (isPhone) {
+        return <PhoneAppbar/>
     }
 
     return <Box className={'my-nav-bar'} bg={value}>
@@ -237,13 +236,13 @@ const BlogNav: React.FC = () => {
                 <Box p={2}>
                     <Heading size='md'>梁典典的博客</Heading>
                 </Box>
-                <Spacer />
+                <Spacer/>
                 <HStack spacing={12}>
-                    { navbarMenu.map(value=><NavLink key={value.url} to={value.url}>{value.title}</NavLink>)}
-                
-                    <ColorModeSwitcher />
+                    {navbarMenu.map(value => <NavLink key={value.url} to={value.url}>{value.title}</NavLink>)}
+
+                    <ColorModeSwitcher/>
                 </HStack>
-                <Spacer />
+                <Spacer/>
                 <Box>
                     <Button colorScheme='blue' variant='ghost' onClick={() => openMoneyModal(true)}>
                         打赏
