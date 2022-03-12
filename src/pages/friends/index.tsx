@@ -7,6 +7,7 @@ import {Friend} from "dd_server_api_web/apis/model/friend";
 import {Box, SimpleGrid, Text, Flex, Avatar, Link, useMediaQuery} from "@chakra-ui/react";
 import {useSetRecoilState} from "recoil";
 import {appLoading} from "../../providers/loading";
+import MyBox from "../../components/box/my_box";
 
 //友链页面
 const FriendsPage:React.FC = () => {
@@ -32,25 +33,26 @@ const FriendsPage:React.FC = () => {
   return <>
       <PageHeader title={'友链'} />
 
-      <SimpleGrid columns={isDesk ? 2: 1} spacingX='40px' spacingY='20px'>
-          {
-              friends.map(value => {
-                  return <Link key={value.id} href={value.url} isExternal={true}>
-                      <Box  border={10} borderRadius={5} borderColor={'gray'} p={3} mb={1}>
-                          <Flex>
-                              <Avatar src={value.logo} />
-                              <Box ml='3'>
-                                  <Text fontWeight='bold'>
-                                      {value.name}
-                                  </Text>
-                                  <Text fontSize='sm'>{value.intro}</Text>
-                              </Box>
-                          </Flex>
-                      </Box>
-                  </Link>
-              })
-          }
-      </SimpleGrid>
+
+          <SimpleGrid columns={isDesk ? 2: 1} spacingX='40px' spacingY='20px'>
+              {
+                  friends.map(value => {
+                      return <Link key={value.id} href={value.url} isExternal={true}>
+                          <MyBox>
+                              <Flex>
+                                  <Avatar src={value.logo} />
+                                  <Box ml='3'>
+                                      <Text fontWeight='bold'>
+                                          {value.name}
+                                      </Text>
+                                      <Text fontSize='sm'>{value.intro}</Text>
+                                  </Box>
+                              </Flex>
+                          </MyBox>
+                      </Link>
+                  })
+              }
+          </SimpleGrid>
   </>
 }
 export default FriendsPage

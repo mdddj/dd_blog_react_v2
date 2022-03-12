@@ -36,13 +36,11 @@ const BlogPage: React.FC = () => {
             <UserCardWithBlogDetail loginNmae={'admin'} />
         ]}>
             <Fade in={blog !== undefined}>
-                <Box mb={4} bg={"white"} p={5}>
                     <Heading size={'md'}>{blog?.title}</Heading>
                     <Box color={'gray.600'}>{blog?.dateString}</Box>
                     <Box mt={5}>
                         {blog && <BlogPreview content={blog!.content}/>}
                     </Box>
-                </Box>
             </Fade>
         </TwoColumnLayout>
 

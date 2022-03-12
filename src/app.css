@@ -1,4 +1,8 @@
 
+.markdown-body {
+    background-color: transparent !important;
+}
+
 code {
     font-family:  "Fira Code",sans-serif !important;
     text-align: left;
@@ -11,7 +15,13 @@ code {
     hyphens: none;
 }
 
-
+.markdown-body pre div{
+    border: none !important;
+    background-color: transparent !important;
+}
+.markdown-body pre {
+    background-color: transparent !important;
+}
 /*
  * Footer
  */

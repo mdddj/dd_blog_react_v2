@@ -7,6 +7,7 @@ import PagerNextLoad from "./pager_next_load";
 import BaseBlogCardStyle2 from "./blog/base_blog_card_style2";
 import {useSetRecoilState} from "recoil";
 import {appLoading} from "../providers/loading";
+import MyBox from "./box/my_box";
 
 type Props = {
     api: (page: number) => Promise<Result<Page<BlogData>>>
@@ -80,7 +81,7 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
         load(nt)
     }
 
-    return <>
+    return <MyBox>
 
         {
             blogs.map(value => {
@@ -92,7 +93,7 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
         {
             pager && <PagerNextLoad pager={pager} onload={nextPage} loading={loading}/>
         }
-    </>
+    </MyBox>
 }
 
 export default BlogListLoad

@@ -7,6 +7,7 @@ import {Box, Heading} from "@chakra-ui/react";
 import dayjs from "dayjs";
 import PageHeader from "../components/page_header";
 import NothingWidget from "../components/nothing";
+import MyBox from "../components/box/my_box";
 
 const Archive: React.FC = () => {
 
@@ -18,9 +19,11 @@ const Archive: React.FC = () => {
 
         <PageHeader title={'归档'}/>
         <NothingWidget nothing={archives.length === 0} />
-        {
-            archives.map(value => <MonthGroup monthItem={value} key={value.months}/>)
-        }
+        <MyBox>
+            {
+                archives.map(value => <MonthGroup monthItem={value} key={value.months}/>)
+            }
+        </MyBox>
 
     </>
 }
