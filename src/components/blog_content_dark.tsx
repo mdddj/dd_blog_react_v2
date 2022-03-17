@@ -2,22 +2,21 @@ import ReactMarkdown from 'react-markdown';
 import React from 'react';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import {vs, a11yDark} from 'react-syntax-highlighter/dist/esm/styles/prism';
-import 'github-markdown-css/github-markdown-light.css'
+import {a11yDark} from 'react-syntax-highlighter/dist/esm/styles/prism';
+import 'github-markdown-css/github-markdown-dark.css'
 import {useColorMode} from "@chakra-ui/react";
 
 /**
- * 博客预览组件
+ * 博客预览组件 (暗夜模式)
  * @param content 预览的内容 markdown 文本
  * @constructor
  */
-export const BlogPreview: React.FC<{ content: string; }> = ({content}) => {
+export const BlogPreviewDark: React.FC<{ content: string; }> = ({content}) => {
     const model = useColorMode()
-    const codeStyle = model.colorMode === 'light' ? vs : a11yDark
     return (
         <>
             <ReactMarkdown
-                className={'markdown-body'}
+                className={model.colorMode === 'dark' ? 'markdown-body' : ''}
                 children={content}
                 remarkPlugins={[remarkGfm]}
                 components={{
@@ -27,7 +26,7 @@ export const BlogPreview: React.FC<{ content: string; }> = ({content}) => {
                             // @ts-ignore
                                 <SyntaxHighlighter
                                     children={String(children).replace(/\n$/, '')}
-                                    style={codeStyle}
+                                    style={a11yDark}
                                     language={match[1]}
                                     PreTag="div"
                                     customStyle={{

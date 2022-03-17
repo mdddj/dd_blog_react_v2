@@ -3,12 +3,12 @@ import {blogApi} from "../utils/request";
 import {useMount} from "react-use";
 import {TextModel} from "dd_server_api_web/apis/model/TextModel";
 import {successResultHandle} from "dd_server_api_web/apis/utils/ResultUtil";
-import {BlogPreview} from "./blog_content";
 import {useSetRecoilState} from "recoil";
 import {appLoading} from "../providers/loading";
 import {Result} from "dd_server_api_web/src/utils/ResultUtil";
 import {Box, Button, Input, useBoolean, useToast} from "@chakra-ui/react";
 import Nothing from "./nothing";
+import MarkdownView from "./MarkdownView";
 type Props = {
     keyText: string
 }
@@ -78,7 +78,7 @@ const KeyPage:React.FC<Props> = ({keyText}) => {
       }
 
       {
-          model && <BlogPreview content={model.context}/>
+          model && <MarkdownView content={model.context}/>
       }
   </>
 }

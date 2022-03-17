@@ -14,7 +14,7 @@ import {appMoneyModalOpen, appMoneyTextModel} from "../../providers/modal";
 import {useMount} from "react-use";
 import {blogApi} from "../../utils/request";
 import {successResultHandle} from "dd_server_api_web/apis/utils/ResultUtil";
-import {BlogPreview} from "../blog_content";
+import MarkdownView from "../MarkdownView";
 
 const MoneyModal: React.FC = () => {
     const [isOpen, setIsOpen] = useRecoilState(appMoneyModalOpen)
@@ -44,7 +44,7 @@ const MoneyModal: React.FC = () => {
                     <ModalBody>
                         {loading && <Spinner/>}
                         {moneyTextModel && <AspectRatio maxW={500} maxH={600}>
-                            <BlogPreview content={moneyTextModel.context}/>
+                            <MarkdownView content={moneyTextModel.context}/>
                             </AspectRatio>}
                     </ModalBody>
                     <ModalFooter>

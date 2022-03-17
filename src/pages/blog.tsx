@@ -4,11 +4,11 @@ import {blogApi} from "../utils/request";
 import {useMount} from "react-use";
 import {BlogData} from "dd_server_api_web/apis/model/result/BlogPushNewResultData";
 import {Box, Fade, Heading} from "@chakra-ui/react";
-import {BlogPreview} from "../components/blog_content";
 import {useSetRecoilState} from "recoil";
 import {appLoading} from "../providers/loading";
 import TwoColumnLayout from "../components/two_column_layout";
 import UserCardWithBlogDetail from "../components/user/user_card";
+import MarkdownView from "../components/MarkdownView";
 
 //博客详情页面
 const BlogPage: React.FC = () => {
@@ -39,7 +39,7 @@ const BlogPage: React.FC = () => {
                     <Heading size={'md'}>{blog?.title}</Heading>
                     <Box color={'gray.600'}>{blog?.dateString}</Box>
                     <Box mt={5}>
-                        {blog && <BlogPreview content={blog!.content}/>}
+                        {blog && <MarkdownView content={blog!.content}/>}
                     </Box>
             </Fade>
         </TwoColumnLayout>
