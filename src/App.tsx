@@ -51,11 +51,10 @@ import JianliPage from "./pages/me";
 import {ColorModeSwitcher} from "./ColorModeSwitcher";
 import {navbarMenu} from "./menus"
 import {mode} from '@chakra-ui/theme-tools'
+import DynamicPage from "./pages/dynamic/dynamic";
 
 const BoxStyle: ComponentStyleConfig = {
-    defaultProps: {
-
-    }
+    defaultProps: {}
 }
 
 const myTheme = extendTheme({
@@ -133,6 +132,10 @@ export const App = () => {
 
                                 {/*    文档页面 */}
                                 <Route path={'/docs'} element={<DocsPage/>}/>
+
+
+                                {/* 说说页面 */}
+                                <Route path={'/ss'} element={<DynamicPage/>}/>
 
 
                             </Route>
