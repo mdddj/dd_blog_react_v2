@@ -79,9 +79,23 @@ const DynamicCard: React.FC<{ res: ResourceModel }> = ({res}) => {
     if (res.type === 'doc-post') {
         return <DocDynamicCard res={res}/>
     }
-    return <>
+    if(res.type==='simple-text')
+    return <SingleTextCard res={res} />
 
-    </>
+    return <></>
+}
+
+
+/// 简单文本类型
+const SingleTextCard: React.FC<{res: ResourceModel}> = ({res}) => {
+  return <Box  rounded='md' mb={4}>
+      <Box as='time' fontSize={12} color={'grey'}>
+          记录  &bull; 梁典典发布于{formatDateUtil(res.createDate)}
+      </Box>
+      <Box>
+          {res.content}
+      </Box>
+  </Box>
 }
 
 
