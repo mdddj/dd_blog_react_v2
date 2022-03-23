@@ -17,12 +17,13 @@ const ResourceComponents: React.FC<Props> = ({resourceCategoryName}) => {
 
     const [resCate, setResCate] = useState<ResCategory | undefined>(undefined)
     const [list, setList] = useState<ResourceModel[]>([])
+    const [rescategoryList,setRescategoryList] = useState<ResCategory[]>([])
 
-    // 加载全部的分类
+    // 加载全部资源分类
     const getAllRescategory = () => {
       blogApi().getResourceCategoryAll().then(value => {
           successResultHandle(value,data => {
-              console.log(data)
+              setRescategoryList(data)
           })
       })
     }
@@ -55,7 +56,12 @@ const ResourceComponents: React.FC<Props> = ({resourceCategoryName}) => {
         <TwoColumnLayout right={[
             <Button colorScheme='teal' variant='outline'>
                 发布动态
-            </Button>
+            </Button>,
+            <>
+                {rescategoryList.map(value => <Box key={value.id} bg={'white'} mb={2} p={2} borderRadius={15}>
+                    {value.name}
+                </Box>)}
+            </>
         ]}>
             {
                 list.map(value => {
