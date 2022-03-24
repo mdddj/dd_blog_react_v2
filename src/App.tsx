@@ -53,6 +53,7 @@ import {navbarMenu} from "./menus"
 import {mode} from '@chakra-ui/theme-tools'
 import DynamicPage from "./pages/dynamic/dynamic";
 import DocDetailPage from "./pages/doc/detail";
+import LoginComponent from "./components/login";
 
 const BoxStyle: ComponentStyleConfig = {
     defaultProps: {}
@@ -162,6 +163,7 @@ export const App = () => {
             </BrowserRouter>
 
             <AppFoot/>
+            <LoginComponent />
         </ChakraProvider>
     )
 }

@@ -25,7 +25,6 @@ const DocDetailPage: React.FC = () => {
     let result = await blogApi().getResourceSubObject(parseInt(id!!))
     setLoading(false)
     successResultHandle(result,data => {
-      console.log(data)
       setTreedata(data)
     })
   }
