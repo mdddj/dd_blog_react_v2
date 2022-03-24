@@ -54,3 +54,45 @@ code {
     display: flex;
     flex-direction: column;
 }
+
+
+/*文档页面布局*/
+
+/* Style the side navigation */
+.sidenav {
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    z-index: 1;
+    top: 80px;
+    left: 0;
+    overflow-x: hidden;
+    padding: 12px;
+}
+
+
+.sidenav .item {
+    margin-bottom: 12px;
+}
+
+/* Side navigation links */
+.sidenav a {
+    color: white;
+    padding: 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color on hover */
+.sidenav a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+/* Style the content */
+.content {
+    margin-left: 200px;
+    padding-left: 20px;
+}
+
+/*文档页面布局end*/

@@ -52,6 +52,7 @@ import {ColorModeSwitcher} from "./ColorModeSwitcher";
 import {navbarMenu} from "./menus"
 import {mode} from '@chakra-ui/theme-tools'
 import DynamicPage from "./pages/dynamic/dynamic";
+import DocDetailPage from "./pages/doc/detail";
 
 const BoxStyle: ComponentStyleConfig = {
     defaultProps: {}
@@ -104,10 +105,10 @@ export const App = () => {
                         <AppLoadingWidget/>
                         <MoneyModal/>
                         <Routes>
-                            <Route path={'/'} element={<Home/>}>
+                            <Route path={'/'} element={<Home/>} />
 
-                            </Route>
                             <Route path={'/archive'} element={<Archive/>}/>
+
                             <Route path={'/post'} element={<BlogPage/>}>
                                 <Route path={':id'} element={<BlogPage/>}/>
                             </Route>
@@ -120,6 +121,13 @@ export const App = () => {
                                 {/*<Route path={'/tag'} element={<TagsPage/>} />*/}
                                 <Route path={':id'} element={<TagPage/>}/>
                             </Route>
+
+
+                            {/*    文档页面 */}
+                            <Route path={'/docs'} element={<DocsPage/>}>
+                            </Route>
+                            <Route path={'/docs/:id'} element={<DocDetailPage/>} />
+
                             <Route>
 
                                 {/*    关于我页面*/}
@@ -128,11 +136,6 @@ export const App = () => {
 
                                 {/*    友链页面*/}
                                 <Route path={'/friends'} element={<FriendsPage/>}/>
-
-
-                                {/*    文档页面 */}
-                                <Route path={'/docs'} element={<DocsPage/>}/>
-
 
                                 {/* 说说页面 */}
                                 <Route path={'/ss'} element={<DynamicPage/>}/>
@@ -210,8 +213,7 @@ const PhoneMenuDrawer: React.FC<{ isOpen: boolean, onClose: () => void }> = ({is
                     <Button colorScheme='blue' variant='ghost' onClick={() => {
                         openMoneyModal(true)
                         onClose()
-                    }
-                    }>
+                    }}>
                         打赏
                     </Button>
                 </DrawerFooter>
