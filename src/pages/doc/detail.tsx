@@ -30,7 +30,6 @@ const DocDetailPage: React.FC = () => {
     })
   }
 
-
   //页面挂载
   useMount(async()=>{
     if(id){
@@ -42,16 +41,13 @@ const DocDetailPage: React.FC = () => {
     return <>缺少参数</>
   }
 
-
+  //选中某个文档
   const onSelect = (res: ResourceModel) => {
     setSelectDoc(res)
   }
 
-
-  return <>
+  return <Box>
     {loading && <Spinner/>}
-
-
     {treeData && <DocLayout sidenav={<DocSidenav treeData={treeData} onSelect={onSelect} />} >
       {selectDoc && <Heading>{selectDoc.title}</Heading>}
       <Box height={2}/>
@@ -59,52 +55,35 @@ const DocDetailPage: React.FC = () => {
         { selectDoc && <BlogPreviewLight content={selectDoc.content} />}
       </MyBox>
     </DocLayout>}
-  </>
+  </Box>
 }
-
-
 // 文档导航区域
 const DocSidenav: React.FC<{treeData:ResourceTreeModel,onSelect: (res: ResourceModel)=> void }> = ({treeData,onSelect}) => {
-
   const root = treeData.folders
-  return <>
-
-    <TreeFolderLayout folder={[root]} onSelect={onSelect} />
-  </>
+  return <TreeFolderLayout folder={[root]} onSelect={onSelect} />
 }
-
-
+// 递归子文件夹
 const TreeFolderLayout: React.FC<{folder: TreeFolders[],onSelect: (res: ResourceModel)=> void}> = ({folder,onSelect}) => {
   return <Box>
-    {
-      folder.map(value => {
+    {folder.map(value => {
         return <Box key={value.id}>
-
           <Icon as={AiFillFolder} /> {value.title}
-
           {/*文件夹*/}
           <Box ml={4}>
               { value.children && value.hasChildren && <TreeFolderLayout folder={value.children}  onSelect={onSelect}/> }
           </Box>
-
-
           {/*文章*/}
           <Box ml={4}>
-            {
-              value.resources.map(value => {
+            {value.resources.map(value => {
                 return <div key={value.id} onClick={()=>{
                   onSelect(value)
                 }}>
                   <Icon as={AiOutlineProfile} /> {value.title}
                 </div>
-              })
-            }
+              })}
           </Box>
         </Box>
-      })
-    }
-
+      })}
   </Box>
 }
-
 export default DocDetailPage
