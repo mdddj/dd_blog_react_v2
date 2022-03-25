@@ -54,6 +54,7 @@ import {mode} from '@chakra-ui/theme-tools'
 import DynamicPage from "./pages/dynamic/dynamic";
 import DocDetailPage from "./pages/doc/detail";
 import LoginComponent from "./components/login";
+import AddPostPage from "./pages/add/post";
 
 const BoxStyle: ComponentStyleConfig = {
     defaultProps: {}
@@ -110,6 +111,7 @@ export const App = () => {
 
                             <Route path={'/archive'} element={<Archive/>}/>
 
+
                             <Route path={'/post'} element={<BlogPage/>}>
                                 <Route path={':id'} element={<BlogPage/>}/>
                             </Route>
@@ -155,15 +157,22 @@ export const App = () => {
 
 
                             <Route path={'*'} element={<NotFoundPage/>}/>
+
+
+
+                           {/*    需要登录的页面*/}
+                            <Route path={'/add-post'} element={<AddPostPage />} />
+
                         </Routes>
                         <div style={{height: 12}}/>
 
                     </Container>
+                    <LoginComponent />
                 </main>
             </BrowserRouter>
 
             <AppFoot/>
-            <LoginComponent />
+
         </ChakraProvider>
     )
 }

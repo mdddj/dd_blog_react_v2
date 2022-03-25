@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {
-    Box, Button, Heading, Input,
-    Popover,
+    Box, Button, Heading, Icon, IconButton, Input,
+    Popover, PopoverArrow,
     PopoverContent,
     PopoverTrigger, Stack, useDisclosure
 } from "@chakra-ui/react";
@@ -10,6 +10,8 @@ import {Result} from "dd_server_api_web/src/utils/ResultUtil";
 import {useRecoilState} from "recoil";
 import {userProvider} from "../providers/user";
 import {useMount} from "react-use";
+import {MdEditNote} from "react-icons/md";
+import {useNavigate} from "react-router-dom";
 
 
 const LoginComponent: React.FC = () => {
@@ -21,6 +23,7 @@ const LoginComponent: React.FC = () => {
     const [username, setUserName] = useState('admin') //用户名
     const [password, setPassword] = useState('123456') //密码
     const [result, setResult] = useState<Result<string>>()
+    let navigateFunction = useNavigate();
 
 
     useMount(() => fetchUserData())
@@ -59,14 +62,17 @@ const LoginComponent: React.FC = () => {
             onOpen={onOpen}
             onClose={onClose}
             placement='right'
-            closeOnBlur={false}
+            closeOnBlur={true}
         >
+            <PopoverArrow />
             <PopoverTrigger>
                 <div style={{position: 'fixed', bottom: '10px', right: '10px', fontSize: 10, color: 'grey'}}>
                     {!user && <span>登录</span>}
+                    {user && <IconButton aria-label={'user-actions'} icon={<Icon as={MdEditNote} />} /> }
                 </div>
             </PopoverTrigger>
             <PopoverContent p={5} m={5}>
+                {/*未登录*/}
                 {!user && <Box>
                     <Stack spacing={4}>
                         <Heading as={'h4'} size={'md'}>登录</Heading>
@@ -77,6 +83,15 @@ const LoginComponent: React.FC = () => {
                         <Button onClick={login}>登录</Button>
                     </Stack>
                 </Box>}
+
+                {/*已登录*/}
+                {user && <Box>
+                    <Button onClick={()=>{
+                        navigateFunction('/add-post')
+                        onClose()
+                    }
+                    }>发布博客</Button>
+                </Box> }
             </PopoverContent>
         </Popover>
     </>
