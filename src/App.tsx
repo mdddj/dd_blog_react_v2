@@ -48,7 +48,6 @@ import {appMoneyModalOpen} from "./providers/modal";
 import MoneyModal from "./components/modal/money";
 import MonthPage from "./pages/month";
 import JianliPage from "./pages/me";
-import {ColorModeSwitcher} from "./ColorModeSwitcher";
 import {navbarMenu} from "./menus"
 import {mode} from '@chakra-ui/theme-tools'
 import DynamicPage from "./pages/dynamic/dynamic";
@@ -220,7 +219,7 @@ const PhoneMenuDrawer: React.FC<{ isOpen: boolean, onClose: () => void }> = ({is
 
                 </DrawerBody>
                 <DrawerFooter>
-                    <ColorModeSwitcher/>
+                    {/*<ColorModeSwitcher/>*/}
                     <Button colorScheme='blue' variant='ghost' onClick={() => {
                         openMoneyModal(true)
                         onClose()
@@ -256,7 +255,7 @@ const BlogNav: React.FC = () => {
                 <HStack spacing={12}>
                     {navbarMenu.map(value => <NavLink key={value.url} to={value.url}>{value.title}</NavLink>)}
 
-                    <ColorModeSwitcher/>
+                    {/*<ColorModeSwitcher/>*/}
                 </HStack>
                 <Spacer/>
                 <Box>

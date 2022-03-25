@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Button, Heading, Input, Select, Stack, useDisclosure} from "@chakra-ui/react";
+import {Box, Button, Heading, Input, Select, Stack, useDisclosure} from "@chakra-ui/react";
 import MyBox from "../../components/box/my_box";
 import MdEditor from 'react-markdown-editor-lite';
 // import style manually
@@ -39,8 +39,12 @@ const AddPostPage: React.FC = () => {
             <Heading as={'h5'} size={'sm'}>添加标签 <span style={{color: 'grey',fontSize: 12}}>已选择{tags.length}个</span></Heading>
             <Button onClick={()=>onOpen()}>选择</Button>
 
+
           </Stack>
       }
+      <Box textAlign={'right'} >
+        <Button colorScheme={'blue'}>发布</Button>
+      </Box>
     </Stack>
 
     {/*选择标签的弹窗*/}
