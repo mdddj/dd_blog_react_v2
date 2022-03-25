@@ -10,7 +10,7 @@
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
     "dayjs": "^1.11.0",
-    "dd_server_api_web": "^1.8.0",
+    "dd_server_api_web": "file:.yalc/dd_server_api_web",
     "esbuild-loader": "^2.18.0",
     "framer-motion": "^6.2.8",
     "github-markdown-css": "^5.1.0",
