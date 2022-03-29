@@ -46,6 +46,7 @@ const MoneyModal: React.FC = () => {
                         {moneyTextModel && <AspectRatio maxW={500} maxH={600}>
                             <MarkdownView content={moneyTextModel.context}/>
                             </AspectRatio>}
+                            {!moneyTextModel && <span style={{color: 'red'}}>404 或者 资源已被删除</span>}
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme='blue' mr={3} onClick={onClose}>

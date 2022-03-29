@@ -2,9 +2,9 @@ import React, {useState} from "react";
 import {useMount} from "react-use";
 import {blogApi} from "../../utils/request";
 import {User} from "dd_server_api_web/apis/model/UserModel";
-import {Avatar, Box, Divider, Flex, Heading, IconButton, Wrap, WrapItem} from "@chakra-ui/react";
-import {LinkIcon} from "@chakra-ui/icons";
+import {Avatar, Box, Divider, Flex, Heading, Icon, IconButton, Stack,} from "@chakra-ui/react";
 import MyBox from "../box/my_box";
+import {BsGithub} from "react-icons/bs";
 
 type Props = {
     userId?: number,
@@ -38,11 +38,9 @@ const UserCardWithBlogDetail: React.FC<Props> = ({userId, loginNmae}) => {
 
                 {/*社交账号*/}
                 <Box mt={5}>
-                    <Wrap>
-                        <WrapItem>
-                            <IconButton aria-label='github' icon={<LinkIcon/>}/>
-                        </WrapItem>
-                    </Wrap>
+                    <Stack>
+                        <IconButton aria-label='github' icon={<Icon as={BsGithub} />} onClick={()=>window.open('https://github.com/mdddj','_blank')} />
+                    </Stack>
                 </Box>
             </Box>
         }

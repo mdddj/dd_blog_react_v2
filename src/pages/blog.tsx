@@ -1,20 +1,21 @@
-import React, {useState} from "react";
-import {useParams} from "react-router-dom";
-import {blogApi} from "../utils/request";
-import {useMount} from "react-use";
-import {BlogData} from "dd_server_api_web/apis/model/result/BlogPushNewResultData";
-import {Box, Fade, Heading} from "@chakra-ui/react";
-import {useSetRecoilState} from "recoil";
-import {appLoading} from "../providers/loading";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import { blogApi } from "../utils/request";
+import { useMount } from "react-use";
+import { BlogData } from "dd_server_api_web/apis/model/result/BlogPushNewResultData";
+import { Box, Fade, Heading } from "@chakra-ui/react";
+import { useSetRecoilState } from "recoil";
+import { appLoading } from "../providers/loading";
 import TwoColumnLayout from "../components/two_column_layout";
 import UserCardWithBlogDetail from "../components/user/user_card";
 import MarkdownView from "../components/MarkdownView";
+import CommentComponent from "../components/comment_component";
 
 //博客详情页面
 const BlogPage: React.FC = () => {
 
 
-    let {id} = useParams<{ id: string }>()
+    let { id } = useParams<{ id: string }>()
     const [blog, setBlog] = useState<BlogData>()
     const setLoading = useSetRecoilState(appLoading)
 
@@ -24,7 +25,6 @@ const BlogPage: React.FC = () => {
     const getBlogDetail = () => {
         setLoading(true)
         id && blogApi().getBlogDetailById(parseInt(id)).then(r => {
-            console.log(r)
             setLoading(false)
             setBlog(r.data)
         })
@@ -34,16 +34,22 @@ const BlogPage: React.FC = () => {
 
         <TwoColumnLayout right={[
             <UserCardWithBlogDetail loginNmae={'admin'} />
-        ]}>
+        ]} bottomComponent={
+            <>{blog && <CommentComponent type={"blog"} id={blog.id} isBlogComment />} </>
+        }>
             <Fade in={blog !== undefined}>
-                    <Heading size={'md'}>{blog?.title}</Heading>
-                    <Box color={'gray.600'}>{blog?.dateString}</Box>
-                    <Box mt={5}>
-                        {blog && <MarkdownView content={blog!.content}/>}
-                    </Box>
+                <Heading>{blog?.title}</Heading>
+                <Box color={'gray.600'}>{blog?.dateString}</Box>
+                <Box mt={5}>
+                    {blog && <MarkdownView content={blog!.content} />}
+                </Box>
             </Fade>
+
         </TwoColumnLayout>
 
     </>
 }
+
+
+
 export default BlogPage

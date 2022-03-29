@@ -1,7 +1,16 @@
 import React from "react";
+import {useRecoilValue} from "recoil";
+import {userProvider} from "../providers/user";
 
-const UserWidget: React.FC = () => {
+type Props = {}
+
+const UserWidget: React.FC<Props> = ({children}) => {
+ const user = useRecoilValue(userProvider)
+ if(!user){
+  return <></>
+ }
  return <>
+  {children}
  </>
 }
 
