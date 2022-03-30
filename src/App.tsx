@@ -8,9 +8,6 @@ import {
     Flex,
     Heading,
     Spacer,
-    Tag,
-    Wrap,
-    WrapItem,
     HStack,
     useMediaQuery,
     IconButton,
@@ -54,6 +51,8 @@ import DynamicPage from "./pages/dynamic/dynamic";
 import DocDetailPage from "./pages/doc/detail";
 import LoginComponent from "./components/login";
 import AddPostPage from "./pages/add/post";
+import { successResultHandle } from "dd_server_api_web/apis/utils/ResultUtil"
+import { systemAvatars } from "./providers/avatars"
 
 const BoxStyle: ComponentStyleConfig = {
     defaultProps: {}
@@ -82,12 +81,25 @@ const myTheme = extendTheme({
 export const App = () => {
 
     const setArchives = useSetRecoilState(archivesDataState)
+    const setAvatars = useSetRecoilState(systemAvatars)
 
 
     //组件被挂载后执行的方法
     useMount(() => {
         getCategoryData()
+        fetchAvatars()
     })
+
+
+    // 加载系统预设头像
+    const fetchAvatars = () => {
+        blogApi().getPics(1).then(value => {
+            successResultHandle(value, data => {
+                setAvatars(data)
+
+            })
+        })
+    }
 
     ///加载分类和归档等数据
     const getCategoryData = () => {
@@ -272,29 +284,14 @@ const AppFoot: React.FC = () => {
     return <>
         <footer className="blog-footer mt-auto">
             <p> © 2022 <button>@梁典典的博客</button>.</p>
-            <Box p={2}>
-                <Wrap spacing='12px' justify='center'>
-                    <WrapItem>
-                        <Tag>Springboot</Tag>
-                    </WrapItem>
-                    <WrapItem>
-                        <Tag>React</Tag>
-                    </WrapItem>
-                    <WrapItem>
-                        <Tag>Mysql8.0</Tag>
-                    </WrapItem>
-                    <WrapItem>
-                        <Tag>Redius</Tag>
-                    </WrapItem>
-                    <WrapItem>
-                        <Tag>Bootstrap</Tag>
-                    </WrapItem>
-                </Wrap>
+            <Box p={2} fontSize={13}>
+               本站由springboot+typescript强力驱动,本站已开源<a style={{color: 'blue'}} href="https://github.com/mdddj/dd_blog_react_v2">GITHUB</a>
             </Box>
 
-            <p>
-                <button>回到顶部</button>
-            </p>
+        
+        <Box fontSize={12}>
+            赣ICP备17011549号-1
+        </Box>
         </footer>
     </>
 }
