@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Divider, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, Flex, Heading, Input, InputGroup, InputLeftAddon, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, SimpleGrid, Spacer, Stack, Textarea, useDisclosure, useToast, Wrap, WrapItem } from "@chakra-ui/react";
+import { Avatar, Box, Button, Container, Divider, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, Flex, Heading, Input, InputGroup, InputLeftAddon, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, SimpleGrid, Spacer, Stack, Textarea, useDisclosure, useToast, Wrap, WrapItem } from "@chakra-ui/react";
 import { Comment } from "dd_server_api_web/apis/model/Comment";
 import { successResultHandle } from "dd_server_api_web/apis/utils/ResultUtil";
 import React, { FunctionComponent, useState } from "react";
@@ -24,16 +24,20 @@ interface CommentFormProps {
         content: string,
         avatarUrl: string,
 
-    ) => void
+    ) => void,
+    parentComment?: Comment
+
 }
 
 // 博客评论的组件
-const CommentComponent: FunctionComponent<CommentComponentProps> = ({ type, id, isBlogComment }) => {
+const CommentComponent: FunctionComponent<CommentComponentProps> = ({ type, id }) => {
 
 
     const toast = useToast()
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
     const [commmentList, setCommmentList] = useState<Comment[]>([])// 评论列表
+    const [replyComment, setReplyComment] = useState<Comment>()
 
 
 
@@ -56,17 +60,17 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({ type, id, 
 
 
     // 成功提示
-    const successMsg = (msg: string,sts?: "success" | "info" | "warning" | "error" | undefined) => {
+    const successMsg = (msg: string, sts?: "success" | "info" | "warning" | "error" | undefined) => {
         toast.closeAll()
         toast({
             title: msg,
-            status: sts??'success',
+            status: sts ?? 'success',
             duration: 3000
         })
     }
 
     //提交留言
-    const submit = (name: string,email: string,url: string,content: string,avatarUrl: string) => {
+    const submit = (name: string, email: string, url: string, content: string, avatarUrl: string) => {
 
 
         //提交
@@ -79,14 +83,22 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({ type, id, 
                 "type": type,
                 "findKey": id,
                 "avatarUrl": avatarUrl,
-                "isBlog": isBlogComment ?? false
+                "parentCommentId": replyComment?.id
             }
         ).then(v => {
             console.log(v)
-            successResultHandle(v,data=>{
+            successResultHandle(v, data => {
                 successMsg(v.message)
-            },msg=>successMsg(msg,'error'))
+            }, msg => successMsg(msg, 'error'))
         })
+    }
+
+
+    // 回复
+    const onReply = (comment: Comment) => {
+        onOpen()
+        setReplyComment(comment)
+
     }
 
     return (<div style={{ marginTop: 12 }}>
@@ -100,8 +112,25 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({ type, id, 
         {/* 加载评论列表 */}
         <Divider mt={5} mb={5} />
         {
-            commmentList.map(v => <CommentLayout key={v.id} comment={v} />)
+            commmentList.map(v => <CommentLayout key={v.id} comment={v} onReply={onReply} />)
         }
+        {/* 回复的弹窗 */}
+        <Drawer placement={'bottom'} onClose={onClose} isOpen={isOpen}>
+            <DrawerOverlay />
+            <DrawerContent>
+                <DrawerHeader borderBottomWidth='1px'>回复</DrawerHeader>
+                <DrawerBody>
+                    <Container maxW={'container.lg'} p={5}>
+                        <Stack spacing={5}>
+                            {replyComment && <span>回复{replyComment.name} : {replyComment.content}</span>}
+
+                            <CommentForm onSubmit={submit} />
+                        </Stack>
+                    </Container>
+                </DrawerBody>
+            </DrawerContent>
+        </Drawer>
+
 
     </div>);
 }
@@ -207,10 +236,10 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
 }
 
 
-// 评论展示布局
-const CommentLayout: React.FC<{ comment: Comment }> = ({ comment }) => {
+// 评论列表
+const CommentLayout: React.FC<{ comment: Comment, onReply?: (comment: Comment) => void }> = ({ comment, onReply }) => {
 
-    const { isOpen, onOpen, onClose } = useDisclosure()
+
 
     return <div style={{ marginBottom: 12, marginTop: 12 }}>
         <Flex>
@@ -221,24 +250,29 @@ const CommentLayout: React.FC<{ comment: Comment }> = ({ comment }) => {
                 <Box mt={2}>
                     {comment.content}
                 </Box>
-                <Box>
-                    <span style={{ cursor: 'pointer', color: 'blue', fontSize: 12 }}
-                        onClick={onOpen}>回复</span>
+                <Box mt={5}>
+                    <Flex>
+                        {
+                            comment.childComment.length !== 0 ?
+                                <span style={{
+                                    cursor: 'pointer',
+                                    color: 'gray',
+                                    fontSize: 12
+                                }}>查看{comment.childComment.length}条回复</span>
+                                :
+                                <span></span>
+                        }
+                        <Spacer />
+                        <span style={{ cursor: 'pointer', color: 'blue', fontSize: 12 }}
+                            onClick={() => {
+                                onReply && onReply(comment)
+                            }}>回复</span>
+                    </Flex>
                 </Box>
             </div>
         </Flex>
 
 
-        {/* 回复的弹窗 */}
-        <Drawer placement={'bottom'} onClose={onClose} isOpen={isOpen}>
-            <DrawerOverlay />
-            <DrawerContent>
-                <DrawerHeader borderBottomWidth='1px'>回复</DrawerHeader>
-                <DrawerBody>
-
-                </DrawerBody>
-            </DrawerContent>
-        </Drawer>
 
 
     </div>

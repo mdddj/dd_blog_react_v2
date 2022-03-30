@@ -7,10 +7,10 @@ export interface Comment {
     findKey: string;
     name: string;
     code: null;
-    parentComment: null;
+    parentComment: Comment | undefined;
     type: string;
     blog: BlogData | undefined;
-    childComment: null;
+    childComment: Comment[];
     createDate: number;
     avatarUrl: string | undefined;
     likeUsers: null;

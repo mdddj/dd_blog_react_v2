@@ -1,6 +1,6 @@
 {
   "name": "dd_server_api_web",
-  "version": "1.8.5",
+  "version": "1.8.6",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
@@ -11,5 +11,5 @@
   "dependencies": {
     "umi-request": "^1.4.0"
   },
-  "yalcSig": "76bd72f4d32e81ad925b0e0431fc86f1"
+  "yalcSig": "af6da9c8a27e81af8c84d077391d07fe"
 }
