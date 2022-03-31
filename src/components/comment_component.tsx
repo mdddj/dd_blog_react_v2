@@ -42,6 +42,8 @@ import {systemAvatars} from "../providers/avatars";
 import {formatDateUtil} from "../utils/DateUtil";
 import {blogApi} from "../utils/request";
 import {successMessageProvider} from "../providers/modal/success_modal";
+import {PagerModel} from "dd_server_api_web/src/utils/ResultUtil";
+import PagerNextLoad from "./pager_next_load";
 
 // 评论组件的参数
 interface CommentComponentProps {
@@ -71,7 +73,9 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({type, id}) 
     const {isOpen, onOpen, onClose} = useDisclosure()
 
     const [commmentList, setCommmentList] = useState<Comment[]>([])// 评论列表
-    const [replyComment, setReplyComment] = useState<Comment>()
+    const [replyComment, setReplyComment] = useState<Comment>() // 回复对象
+    const [pager,setPager] = useState<PagerModel|undefined>(undefined)
+    const [nextPageLoading,setNextPageLoading] = useState(false)
 
 
     //组件被挂载
@@ -81,6 +85,7 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({type, id}) 
 
     //加载评论列表
     const fetchCommentList = async (page: number) => {
+        setNextPageLoading(true)
         let result = await blogApi().findComment({
             page: page,
             findKey: `${id}`,
@@ -88,7 +93,9 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({type, id}) 
         });
         successResultHandle(result, data => {
             setCommmentList([...commmentList, ...data.list ?? []])
+            setPager(data.page)
         })
+        setNextPageLoading(false)
     }
 
 
@@ -163,6 +170,11 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({type, id}) 
             </DrawerContent>
         </Drawer>
 
+        {
+            pager && <PagerNextLoad pager={pager} onload={async ()=>{
+                await fetchCommentList(pager.currentPage+1)
+            }} loading={nextPageLoading} />
+        }
 
     </div>);
 }

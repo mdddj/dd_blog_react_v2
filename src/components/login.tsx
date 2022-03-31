@@ -5,13 +5,15 @@ import {
     PopoverContent,
     PopoverTrigger, Stack, useDisclosure
 } from "@chakra-ui/react";
-import {blogApi, getAccessToken, saveAccessToken} from "../utils/request";
+import {blogApi, getAccessToken, removeAccessToken, saveAccessToken} from "../utils/request";
 import {Result} from "dd_server_api_web/src/utils/ResultUtil";
-import {useRecoilState} from "recoil";
+import {useRecoilState, useSetRecoilState} from "recoil";
 import {userProvider} from "../providers/user";
 import {useMount} from "react-use";
 import {MdEditNote} from "react-icons/md";
 import {useNavigate} from "react-router-dom";
+import {successResultHandle} from "dd_server_api_web/apis/utils/ResultUtil";
+import {successMessageProvider} from "../providers/modal/success_modal";
 
 
 const LoginComponent: React.FC = () => {
@@ -24,6 +26,7 @@ const LoginComponent: React.FC = () => {
     const [password, setPassword] = useState('123456') //密码
     const [result, setResult] = useState<Result<string>>()
     let navigateFunction = useNavigate();
+    const setMsg = useSetRecoilState(successMessageProvider)
 
 
     useMount(() => fetchUserData())
@@ -85,12 +88,25 @@ const LoginComponent: React.FC = () => {
                 </Box>}
 
                 {/*已登录*/}
-                {user && <Box>
-                    <Button onClick={()=>{
-                        navigateFunction('/add-post')
-                        onClose()
-                    }
-                    }>发布博客</Button>
+                {user && <Box w={'100%'}>
+                   <Stack direction={'column'}>
+                       <Button w={'100%'} onClick={()=>{
+                           navigateFunction('/add-post')
+                           onClose()
+                       }
+                       }>发布博客</Button>
+                       <Button w={'100%'} onClick={()=>{
+                           blogApi().logout().then(value => {
+                               successResultHandle(value,data => {
+                                   setMsg(data)
+                                   removeAccessToken()
+                                   setUser(undefined)
+                               })
+                           })
+                           onClose()
+                       }
+                       }>退出登录</Button>
+                   </Stack>
                 </Box> }
             </PopoverContent>
         </Popover>
