@@ -738,6 +738,16 @@ class DdServerApiByWeb {
             page: PagerModel
         }>>('/api/comment/find',params,'GET')
     }
+
+
+    /**
+     * 删除某条评论
+     * 需要管理员权限
+     * @param id 主键
+     */
+    async removeComment(id : number) : Promise<Result<string>> {
+        return this.requestT<Result<string>>('/api/auth/comment/remove',{id},'DELETE')
+    }
 }
 
 export default DdServerApiByWeb

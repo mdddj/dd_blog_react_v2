@@ -898,6 +898,18 @@ var DdServerApiByWeb = /** @class */ (function () {
             });
         });
     };
+    /**
+     * 删除某条评论
+     * 需要管理员权限
+     * @param id 主键
+     */
+    DdServerApiByWeb.prototype.removeComment = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.requestT('/api/auth/comment/remove', { id: id }, 'DELETE')];
+            });
+        });
+    };
     return DdServerApiByWeb;
 }());
 exports.default = DdServerApiByWeb;

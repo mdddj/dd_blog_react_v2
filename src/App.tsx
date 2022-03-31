@@ -56,6 +56,7 @@ import { systemAvatars } from "./providers/avatars"
 import PubSub from "pubsub-js";
 import {errorResponseProvider} from "./providers/modal/error_response";
 import ResponseErrorModal from "./components/modal/ResponseErrorModal";
+import AppSuccessModel from "./components/modal/AppSuccessModel";
 
 const BoxStyle: ComponentStyleConfig = {
     defaultProps: {}
@@ -142,6 +143,7 @@ export const App = () => {
                         <AppLoadingWidget/>
                         <MoneyModal/>
                         <ResponseErrorModal/>
+                        <AppSuccessModel />
                         <Routes>
                             <Route path={'/'} element={<Home/>} />
 

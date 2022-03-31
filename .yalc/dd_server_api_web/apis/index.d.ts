@@ -429,5 +429,11 @@ declare class DdServerApiByWeb {
         list: Comment[];
         page: PagerModel;
     }>>;
+    /**
+     * 删除某条评论
+     * 需要管理员权限
+     * @param id 主键
+     */
+    removeComment(id: number): Promise<Result<string>>;
 }
 export default DdServerApiByWeb;
