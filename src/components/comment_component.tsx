@@ -42,8 +42,8 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({ type, id }
 
 
     //组件被挂载
-    useMount(() => {
-        fetchCommentList(0)
+    useMount(async () => {
+        await fetchCommentList(0)
     })
 
     //加载评论列表
@@ -86,8 +86,7 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({ type, id }
                 "parentCommentId": replyComment?.id
             }
         ).then(v => {
-            console.log(v)
-            successResultHandle(v, data => {
+            successResultHandle(v, _ => {
                 successMsg(v.message)
             }, msg => successMsg(msg, 'error'))
         })
@@ -186,23 +185,23 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
             <Box>
                 <InputGroup>
                     <InputLeftAddon children='昵称' />
-                    <Input type='text' placeholder='请输入昵称' onChange={e => setName(e.target.value)} value={name} />
+                    <Input type='text' style={{ fontSize: 12 }} placeholder='请输入昵称' onChange={e => setName(e.target.value)} value={name} />
                 </InputGroup>
             </Box>
             <Box>
                 <InputGroup>
                     <InputLeftAddon children='邮箱' />
-                    <Input type='tel' placeholder='请输入邮箱' onChange={e => setEmail(e.target.value)} value={email} />
+                    <Input type='tel' style={{ fontSize: 12 }} placeholder='请输入邮箱' onChange={e => setEmail(e.target.value)} value={email} />
                 </InputGroup>
             </Box>
             <Box>
                 <InputGroup>
                     <InputLeftAddon children='网址' />
-                    <Input type='url' placeholder='链接网址' onChange={e => setUrl(e.target.value)} value={url} />
+                    <Input type='url' style={{ fontSize: 12 }} placeholder='链接网址' onChange={e => setUrl(e.target.value)} value={url} />
                 </InputGroup>
             </Box>
         </SimpleGrid>
-        <Textarea placeholder='说点什么吧' mt={2} onChange={e => setContent(e.target.value)} value={content} />
+        <Textarea placeholder='说点什么吧' style={{ fontSize: 12 }} mt={2} onChange={e => setContent(e.target.value)} value={content} />
         <Flex mt={2} alignItems={'center'}>
             <Popover isOpen={open} onClose={() => setOpen(false)}>
                 <PopoverTrigger>
@@ -237,45 +236,73 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
 
 
 // 评论列表
-const CommentLayout: React.FC<{ comment: Comment, onReply?: (comment: Comment) => void }> = ({ comment, onReply }) => {
+//@params comment 评论模型
+//@params onReply 回复事件
+//@params isChildComment 是否为回复的评论
+const CommentLayout: React.FC<{ comment: Comment, onReply?: (comment: Comment) => void, isChildComment?: boolean }> = ({ comment, onReply, isChildComment }) => {
 
 
 
     return <div style={{ marginBottom: 12, marginTop: 12 }}>
         <Flex>
             <Avatar src={comment.avatarUrl} />
-            <Box w={2}></Box>
+            <Box w={2} />
             <div>
-                <span style={{ fontSize: 12, color: 'grey', marginRight: 12 }}>{comment.name}</span>  <span style={{ fontSize: 12, color: 'grey' }}>{formatDateUtil(comment.createDate)}</span>
-                <Box mt={2}>
+                <span style={{ fontSize: 12, color: 'grey', marginRight: 12 }}>{comment.name}</span> {
+                    isChildComment && <span><span style={{ fontSize: 12, color: 'grey', marginRight: 6 }}>回复</span> <span style={{ fontSize: 12, color: 'black', marginRight: 6 }}>{comment.parentComment?.name}</span></span>
+                }  <span style={{ fontSize: 12, color: 'grey' }}>{formatDateUtil(comment.createDate)}</span>
+
+
+                {/* 主评论显示区域 */}
+                <Box mt={2} >
                     {comment.content}
+
+
+                    {/* 如果是回复类型的评论,需要展示,回复父评论的那句话 */}
+                    {
+                        isChildComment && <Box mt={2} bg={'gray.200'} fontSize={10} p={2} borderRadius={5} style={{
+                            textOverflow: 'ellipsis',
+                            display: 'block',
+                            WebkitLineClamp: 2,
+                            overflow: 'hidden',
+                            WebkitBoxOrient: 'vertical'
+                        }}>
+                            {comment.parentComment?.name + ': ' + comment.parentComment?.content}
+                        </Box>
+                    }
                 </Box>
+
+
+                {/* 操作区域: 回复按钮 */}
                 <Box mt={5}>
-                    <Flex>
-                        {
-                            comment.childComment.length !== 0 ?
-                                <span style={{
-                                    cursor: 'pointer',
-                                    color: 'gray',
-                                    fontSize: 12
-                                }}>查看{comment.childComment.length}条回复</span>
-                                :
-                                <span></span>
-                        }
-                        <Spacer />
-                        <span style={{ cursor: 'pointer', color: 'blue', fontSize: 12 }}
-                            onClick={() => {
-                                onReply && onReply(comment)
-                            }}>回复</span>
-                    </Flex>
+                    <span style={{ cursor: 'pointer', color: 'blue', fontSize: 12 }}
+                        onClick={() => {
+                            onReply && onReply(comment)
+                        }}>回复</span>
                 </Box>
+
+                {/* 渲染子评论 */}
+                {
+                    !isChildComment && <ChildCommentNode childs={comment.childComment} onReply={onReply} />
+                }
+
             </div>
         </Flex>
-
-
-
-
+        {
+            isChildComment && <ChildCommentNode childs={comment.childComment} onReply={onReply} />
+        }
     </div>
+}
+
+
+// 子评论渲染
+const ChildCommentNode: React.FC<{ childs: Comment[], onReply?: (comment: Comment) => void }> = ({ childs, onReply }) => {
+
+    return <>
+        {
+            childs.map(value => <CommentLayout comment={value} key={value.id} onReply={onReply} isChildComment />)
+        }
+    </>
 }
 
 export default CommentComponent;

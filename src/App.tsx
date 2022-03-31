@@ -26,7 +26,7 @@ import {HamburgerIcon} from '@chakra-ui/icons'
 
 import {BrowserRouter, Routes, Route, NavLink, Link} from "react-router-dom"
 import Home from "./pages/home"
-import {blogApi} from "./utils/request";
+import {blogApi, ErrorData} from "./utils/request";
 import {useMount} from "react-use";
 import {useSetRecoilState} from "recoil";
 import {archivesDataState} from "./providers/archives";
@@ -53,6 +53,9 @@ import LoginComponent from "./components/login";
 import AddPostPage from "./pages/add/post";
 import { successResultHandle } from "dd_server_api_web/apis/utils/ResultUtil"
 import { systemAvatars } from "./providers/avatars"
+import PubSub from "pubsub-js";
+import {errorResponseProvider} from "./providers/modal/error_response";
+import ResponseErrorModal from "./components/modal/ResponseErrorModal";
 
 const BoxStyle: ComponentStyleConfig = {
     defaultProps: {}
@@ -82,12 +85,14 @@ export const App = () => {
 
     const setArchives = useSetRecoilState(archivesDataState)
     const setAvatars = useSetRecoilState(systemAvatars)
+    const setErrorResponse = useSetRecoilState(errorResponseProvider)
 
 
     //组件被挂载后执行的方法
     useMount(() => {
         getCategoryData()
         fetchAvatars()
+        monitorResponseMsg()
     })
 
 
@@ -108,6 +113,25 @@ export const App = () => {
         });
     }
 
+    /// 监听请求失败的处理
+    const monitorResponseMsg = ()=>{
+        PubSub.subscribe('response-error',(k,data)=>{
+            let error = data as ErrorData
+            switch (error.code) {
+                /// 参数验证不通过的异常
+                case 508:
+                    setErrorResponse(error)
+                    break
+                /// 没有权限的异常
+                case 401:
+                    setErrorResponse(error)
+                    break
+                default:
+                    break
+            }
+        })
+    }
+
     return (
         <ChakraProvider theme={myTheme}>
             <BrowserRouter>
@@ -117,6 +141,7 @@ export const App = () => {
                     <Container maxW={'container.lg'}>
                         <AppLoadingWidget/>
                         <MoneyModal/>
+                        <ResponseErrorModal/>
                         <Routes>
                             <Route path={'/'} element={<Home/>} />
 

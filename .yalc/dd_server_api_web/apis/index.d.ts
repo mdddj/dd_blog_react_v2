@@ -15,6 +15,9 @@ import { ResourceCategoryType } from "./model/ResourceCategoryType";
 import { VersionSelectParamModel } from "./model/VersionSelectParamModel";
 import { SelectCommentParams } from "./model/param/SelectCommentParams";
 import { Comment } from "./model/Comment";
+interface ErrorHandle {
+    error: (errorCode: number, errorMessage: string, data: any) => void;
+}
 /**
  * 接口访问类
  */
@@ -28,6 +31,9 @@ declare class DdServerApiByWeb {
     get host(): string;
     set token(v: string | undefined);
     get token(): string | undefined;
+    _errorHandle: ErrorHandle | undefined;
+    set errHandle(handle: ErrorHandle);
+    get getErrHandle(): ErrorHandle | undefined;
     /**
      * 私有化类构造
      * @constructor

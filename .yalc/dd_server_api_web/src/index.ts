@@ -19,6 +19,11 @@ import { SelectCommentParams } from "./model/param/SelectCommentParams";
 import { Comment } from "./model/Comment";
 
 
+
+interface ErrorHandle {
+    error: (errorCode: number, errorMessage: string, data: any) => void
+}
+
 interface TokenHandle {
     tokenGen(): string | undefined;
 }
@@ -52,13 +57,21 @@ class DdServerApiByWeb {
         return this._token
     }
 
+    _errorHandle : ErrorHandle | undefined
+
+    set errHandle(handle:  ErrorHandle){
+        this._errorHandle = handle
+    }
+    get getErrHandle(): ErrorHandle | undefined {
+        return this._errorHandle
+    }
+
     /**
      * 私有化类构造
      * @constructor
      * @private
      */
-    private DdTaokeSdk() {
-    }
+    private DdTaokeSdk() {}
 
     public static _instance: DdServerApiByWeb
 
@@ -72,17 +85,30 @@ class DdServerApiByWeb {
 
     createClient() {
         let client = extend({});
+        let interceptors = client.interceptors
         if (this.token) {
             const authHeader = {
                 Authorization: this.token,
             };
-            client.interceptors.request.use((url: any, options: any) => {
+            interceptors.request.use((url: any, options: any) => {
                 return {
                     url,
                     options: {...options, headers: authHeader, interceptors: true,}
                 }
             }, {global: false})
+
         }
+        interceptors.response.use(async response => {
+            if(response.ok){
+                //请求成功
+                let data = await response.clone().json() as Result<any>
+                if(data.state!==200){
+                    console.log(data)
+                    this._errorHandle && this._errorHandle.error(data.state,data.message,data.data)
+                }
+            }
+            return response;
+        },{global : false})
         return client;
     }
 

@@ -79,13 +79,26 @@ var DdServerApiByWeb = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(DdServerApiByWeb.prototype, "errHandle", {
+        set: function (handle) {
+            this._errorHandle = handle;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(DdServerApiByWeb.prototype, "getErrHandle", {
+        get: function () {
+            return this._errorHandle;
+        },
+        enumerable: false,
+        configurable: true
+    });
     /**
      * 私有化类构造
      * @constructor
      * @private
      */
-    DdServerApiByWeb.prototype.DdTaokeSdk = function () {
-    };
+    DdServerApiByWeb.prototype.DdTaokeSdk = function () { };
     /**
      * 接口实例
      */
@@ -94,18 +107,38 @@ var DdServerApiByWeb = /** @class */ (function () {
         return (_a = this._instance) !== null && _a !== void 0 ? _a : new DdServerApiByWeb();
     };
     DdServerApiByWeb.prototype.createClient = function () {
+        var _this = this;
         var client = (0, umi_request_1.extend)({});
+        var interceptors = client.interceptors;
         if (this.token) {
             var authHeader_1 = {
                 Authorization: this.token,
             };
-            client.interceptors.request.use(function (url, options) {
+            interceptors.request.use(function (url, options) {
                 return {
                     url: url,
                     options: __assign(__assign({}, options), { headers: authHeader_1, interceptors: true })
                 };
             }, { global: false });
         }
+        interceptors.response.use(function (response) { return __awaiter(_this, void 0, void 0, function () {
+            var data;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!response.ok) return [3 /*break*/, 2];
+                        return [4 /*yield*/, response.clone().json()];
+                    case 1:
+                        data = _a.sent();
+                        if (data.state !== 200) {
+                            console.log(data);
+                            this._errorHandle && this._errorHandle.error(data.state, data.message, data.data);
+                        }
+                        _a.label = 2;
+                    case 2: return [2 /*return*/, response];
+                }
+            });
+        }); }, { global: false });
         return client;
     };
     /**
