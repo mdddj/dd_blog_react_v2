@@ -13,7 +13,7 @@ const TwoColumnLayout:React.FC<Props> = ({children,right,bottomComponent}) => {
   return <>
       <Grid gap={4} templateColumns='repeat(12, 1fr)'>
           <GridItem colSpan={isDesk ? 9 : 12} >
-              <MyBox>
+              <MyBox skeleton>
                   {children}
               </MyBox>
               <Box mt={2} />

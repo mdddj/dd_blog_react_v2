@@ -14,6 +14,7 @@ import {MdEditNote} from "react-icons/md";
 import {useNavigate} from "react-router-dom";
 import {successResultHandle} from "dd_server_api_web/apis/utils/ResultUtil";
 import {successMessageProvider} from "../providers/modal/success_modal";
+import {showPasswordModal} from "../providers/setting";
 
 
 const LoginComponent: React.FC = () => {
@@ -22,12 +23,13 @@ const LoginComponent: React.FC = () => {
     const {onOpen, onClose, isOpen} = useDisclosure()
     const [user, setUser] = useRecoilState(userProvider)
     const firstFieldRef = React.useRef(null)
-    const [username, setUserName] = useState('admin') //用户名
-    const [password, setPassword] = useState('123456') //密码
+    const [username, setUserName] = useState('') //用户名
+    const [password, setPassword] = useState('') //密码
     const [result, setResult] = useState<Result<string>>()
     let navigateFunction = useNavigate();
-    const setMsg = useSetRecoilState(successMessageProvider)
 
+    const setMsg = useSetRecoilState(successMessageProvider)
+    const passModal = useSetRecoilState(showPasswordModal)
 
     useMount(() => fetchUserData())
 
@@ -38,6 +40,8 @@ const LoginComponent: React.FC = () => {
             blogApi().getUserInfo(token).then(value => {
                 if (value.state === 200) {
                     setUser(value.data)
+                }else{
+                    removeAccessToken()
                 }
             })
         }
@@ -46,6 +50,7 @@ const LoginComponent: React.FC = () => {
     //执行登录
     const login = () => {
         if (username.length === 0 || password.length === 0) {
+            setMsg('请输入账号和密码')
             return;
         }
         blogApi().login(username, password).then(value => {
@@ -95,6 +100,11 @@ const LoginComponent: React.FC = () => {
                            onClose()
                        }
                        }>发布博客</Button>
+                       <Button w={'100%'} onClick={()=>{
+                           passModal(true)
+                           onClose()
+                       }
+                       }>修改密码</Button>
                        <Button w={'100%'} onClick={()=>{
                            blogApi().logout().then(value => {
                                successResultHandle(value,data => {

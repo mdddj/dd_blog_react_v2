@@ -57,6 +57,7 @@ import PubSub from "pubsub-js";
 import {errorResponseProvider} from "./providers/modal/error_response";
 import ResponseErrorModal from "./components/modal/ResponseErrorModal";
 import AppSuccessModel from "./components/modal/AppSuccessModel";
+import UpdatePasswordModal from "./components/modal/UpdatePasswordModal";
 
 const BoxStyle: ComponentStyleConfig = {
     defaultProps: {}
@@ -144,6 +145,7 @@ export const App = () => {
                         <MoneyModal/>
                         <ResponseErrorModal/>
                         <AppSuccessModel />
+                        <UpdatePasswordModal/>
                         <Routes>
                             <Route path={'/'} element={<Home/>} />
 
@@ -292,7 +294,7 @@ const BlogNav: React.FC = () => {
                 </Box>
                 <Spacer/>
                 <HStack spacing={12}>
-                    {navbarMenu.map(value => <NavLink key={value.url} to={value.url}>{value.title}</NavLink>)}
+                    {navbarMenu.map(v => <NavLink key={v.url} to={v.url}>{v.title}</NavLink>)}
 
                     {/*<ColorModeSwitcher/>*/}
                 </HStack>
@@ -312,12 +314,14 @@ const AppFoot: React.FC = () => {
         <footer className="blog-footer mt-auto">
             <p> © 2022 <button>@梁典典的博客</button>.</p>
             <Box p={2} fontSize={13}>
-               本站由springboot+typescript强力驱动,本站已开源<a style={{color: 'blue'}} href="https://github.com/mdddj/dd_blog_react_v2">GITHUB</a>
+               本站由springboot+typescript强力驱动,博客已开源<a style={{color: 'blue'}} href="https://github.com/mdddj/dd_blog_react_v2">GITHUB</a>
             </Box>
 
         
         <Box fontSize={12}>
-            赣ICP备17011549号-1
+            赣ICP备17011549号-1 <a href={'https://github.com/mdddj/dd_server_api_web'} style={{
+                color : 'red'
+        }}>开放API</a>
         </Box>
         </footer>
     </>

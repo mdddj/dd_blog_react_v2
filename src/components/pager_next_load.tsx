@@ -20,7 +20,7 @@ const PagerNextLoad: React.FC<Props> = ({pager, onload, loading}) => {
                 loadingText='加载中'
                 onClick={onload}
             >
-                加载下一页
+                查看更多
             </Button>
         }
         {

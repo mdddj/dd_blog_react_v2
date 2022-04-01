@@ -186,7 +186,7 @@ var DdServerApiByWeb = /** @class */ (function () {
     DdServerApiByWeb.prototype.login = function (loginNumber, password, imageCode) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, this.requestT('/api/user/login', { loginNumber: loginNumber, password: password, imageCode: imageCode }, 'POST', 'form')];
+                return [2 /*return*/, this.requestT('/api/user-public/login', { loginNumber: loginNumber, password: password, imageCode: imageCode }, 'POST', 'form')];
             });
         });
     };
@@ -833,7 +833,7 @@ var DdServerApiByWeb = /** @class */ (function () {
     DdServerApiByWeb.prototype.getUserDetail = function (id, loginNumber) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, this.requestT('/api/user/detail', { id: id, loginNumber: loginNumber })];
+                return [2 /*return*/, this.requestT('/api/user-public/detail', { id: id, loginNumber: loginNumber })];
             });
         });
     };

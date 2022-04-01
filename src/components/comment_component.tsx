@@ -44,6 +44,7 @@ import {blogApi} from "../utils/request";
 import {successMessageProvider} from "../providers/modal/success_modal";
 import {PagerModel} from "dd_server_api_web/src/utils/ResultUtil";
 import PagerNextLoad from "./pager_next_load";
+import UserWidget from "./user_widget";
 
 // 评论组件的参数
 interface CommentComponentProps {
@@ -275,7 +276,6 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
             <span style={{marginLeft: 12, color: 'gray', fontSize: 12}} onClick={() => setOpen(true)}>切换头像</span>
             <Spacer/>
             <Stack direction={'row'}>
-                <Button>预览</Button>
                 <Button colorScheme={'blue'} onClick={submit}>发布</Button>
             </Stack>
         </Flex>
@@ -336,14 +336,16 @@ const CommentLayout: React.FC<{ comment: Comment, onReply?: (comment: Comment) =
                           onClick={() => {
                               onReply && onReply(comment)
                           }} >回复</span>
-                    <span style={
-                        {
-                            fontSize: 12,
-                            color: 'grey',
-                            marginLeft: 12,
-                            cursor: 'pointer'
-                        }
-                    } onClick={()=>onOpen()}>删除</span>
+                    <UserWidget>
+                        <span style={
+                            {
+                                fontSize: 12,
+                                color: 'grey',
+                                marginLeft: 12,
+                                cursor: 'pointer'
+                            }
+                        } onClick={()=>onOpen()}>删除</span>
+                    </UserWidget>
                 </Box>
 
                 {/* 渲染子评论 */}

@@ -9,6 +9,7 @@ import {Result} from "dd_server_api_web/src/utils/ResultUtil";
 import {Box, Button, Input, useBoolean, useToast} from "@chakra-ui/react";
 import Nothing from "./nothing";
 import MarkdownView from "./MarkdownView";
+import CommentComponent from "./comment_component";
 type Props = {
     keyText: string
 }
@@ -79,6 +80,10 @@ const KeyPage:React.FC<Props> = ({keyText}) => {
 
       {
           model && <MarkdownView content={model.context}/>
+      }
+
+      {
+          model && <CommentComponent type={"text"} id={model.id} />
       }
   </>
 }

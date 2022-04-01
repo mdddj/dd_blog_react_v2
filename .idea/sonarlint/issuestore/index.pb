@@ -11,7 +11,15 @@ L
 src/providers/modal/index.ts,9/c/9c62162ec23a91f3ea00e9d01dc45d5eccaa7330
 <
 package.json,7/0/7030d0b2f71b999ff89a343de08c414af32fc93a
-T
-$.yalc/dd_server_api_web/src/index.ts,6/f/6f1ffd62f5114dd28b5a7ec0efe9465711a8ab03
 G
 src/models/app_model.ts,8/9/89d2bd7a1cdf3ccf46ff8e51eff6cc090218e362
+B
+src/pages/blog.tsx,d/b/db48336bc72ea1f827847622a6a16eededdbe4f3
+K
+src/pages/friends/index.tsx,d/9/d9cad3645ecf42fb3479e479ba7da7ef53a3353d
+N
+src/components/modal/money.tsx,7/1/715ada1f987193ea5b0e8e4727ba3eeb51ceb67d
+U
+%src/providers/modal/error_response.ts,d/c/dc012505aca1b1cfd460c16ce30b5ebd6d390dd8
+Q
+!src/components/user/user_card.tsx,8/8/88f151861790d230c4f4b67c6d7e308c8e69b3cc

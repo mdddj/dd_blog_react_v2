@@ -151,7 +151,7 @@ class DdServerApiByWeb {
      * @param imageCode 图片验证码
      */
     async login(loginNumber: string, password: string, imageCode?: string): Promise<Result<string>> {
-        return this.requestT<Result<string>>('/api/user/login', {loginNumber, password, imageCode}, 'POST', 'form');
+        return this.requestT<Result<string>>('/api/user-public/login', {loginNumber, password, imageCode}, 'POST', 'form');
     }
 
     /**
@@ -684,7 +684,7 @@ class DdServerApiByWeb {
      * @param loginNumber 用户登录名
      */
     async getUserDetail(id?: number, loginNumber?: string): Promise<Result<User | undefined>> {
-        return this.requestT<Result<User | undefined>>('/api/user/detail', {id, loginNumber})
+        return this.requestT<Result<User | undefined>>('/api/user-public/detail', {id, loginNumber})
     }
 
     /**
