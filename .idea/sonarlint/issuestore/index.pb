@@ -31,8 +31,6 @@ R
 "src/components/pager_next_load.tsx,5/5/55ee5ef9b1d48425a7b4d6a7d921cc2e0489e704
 [
 +src/components/modal/ResponseErrorModal.tsx,c/9/c98ae130760607099aba7e8f3ce75b373509082f
-T
-$src/components/comment_component.tsx,2/2/22f115803358053e439fd6be4f5359beabec4595
 N
 src/components/page_header.tsx,6/e/6e3b1bda0ec9628c77009881a84d9bb9b3583873
 D

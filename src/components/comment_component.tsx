@@ -187,9 +187,9 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
 
     const toast = useToast()
 
-    const [name, setName] = useState('梁典典') //昵称
-    const [email, setEmail] = useState('413153189@qq.com') //邮箱
-    const [url, setUrl] = useState('https://itbug.shop') // 网站链接
+    const [name, setName] = useState('') //昵称
+    const [email, setEmail] = useState('') //邮箱
+    const [url, setUrl] = useState('') // 网站链接
     const [content, setContent] = useState('') //评论内容
     const [avatarUrl, setAvatarUrl] = useState('') //用户头像
     const [open, setOpen] = useState(false) //是否显示选择头像的组件
