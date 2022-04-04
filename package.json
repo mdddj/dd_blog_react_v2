@@ -13,6 +13,7 @@
     "dayjs": "^1.11.0",
     "dd_server_api_web": "file:.yalc/dd_server_api_web",
     "esbuild-loader": "^2.18.0",
+    "formik": "^2.2.9",
     "framer-motion": "^6.2.8",
     "github-markdown-css": "^5.1.0",
     "markdown-it": "^12.3.2",

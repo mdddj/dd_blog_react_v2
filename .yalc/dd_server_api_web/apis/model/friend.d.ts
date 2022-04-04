@@ -1,10 +1,10 @@
 export interface Friend {
-    id: number;
+    id?: number;
     name: string;
     url: string;
     intro: string;
     logo: string;
-    state: number;
-    createDate: number;
+    state?: number;
+    createDate?: number;
     email?: string;
 }

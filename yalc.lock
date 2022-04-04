@@ -2,7 +2,7 @@
   "version": "v1",
   "packages": {
     "dd_server_api_web": {
-      "signature": "f0b0c5fc58654883baec5328c9e4f8df",
+      "signature": "cf83e70801ecd7665fb8fa7b453a80a5",
       "file": true
     }
   }
