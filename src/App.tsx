@@ -58,6 +58,7 @@ import {errorResponseProvider} from "./providers/modal/error_response";
 import ResponseErrorModal from "./components/modal/ResponseErrorModal";
 import AppSuccessModel from "./components/modal/AppSuccessModel";
 import UpdatePasswordModal from "./components/modal/UpdatePasswordModal";
+import FriendsList from "./components/user/FriendsList"
 
 const BoxStyle: ComponentStyleConfig = {
     defaultProps: {}
@@ -207,7 +208,9 @@ export const App = () => {
                         <div style={{height: 12}}/>
 
                     </Container>
+                    <FriendsList />
                     <LoginComponent />
+                   
                 </main>
             </BrowserRouter>
 
