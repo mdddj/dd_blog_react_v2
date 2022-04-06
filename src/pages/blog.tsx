@@ -43,8 +43,11 @@ const BlogPage: React.FC = () => {
                 <Box mt={5}>
                     {blog && <MarkdownView content={blog!.content} />}
                 </Box>
-                <Box>
-                    <Link to={'/add-post?id='+blog?.id}>编辑</Link>
+                <Box mt={2}>
+                    <Link style={{
+                        fontSize: 12,
+                        color: 'grey'
+                    }} to={'/add-post?id='+blog?.id}>编辑博客</Link>
                 </Box>
             </Fade>
 
