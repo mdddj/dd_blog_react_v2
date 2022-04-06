@@ -29,14 +29,17 @@ import CommentComponent from "./comment_component";
 import { BlogPreviewLight } from "./blog_content_light";
 import { onImageUpload } from "../utils/EditImageFileUpload";
 import { successMessageProvider } from "../providers/modal/success_modal";
+import { useSearchParams } from "react-router-dom";
 type Props = {
   keyText: string;
 };
 ///字典组件
 const KeyPage: React.FC<Props> = ({ keyText }) => {
   const toast = useToast();
+  const [params] = useSearchParams()
+  const urlPass = params.get('view-password') ?? ''
   const [verifyLoading, setVerifyLoading] = useBoolean();
-  const [inputPassword, setInputPassword] = useState<string>("");
+  const [inputPassword, setInputPassword] = useState<string>(urlPass);
   const [model, setModel] = useState<TextModel>();
   const [result, setResult] = useState<Result<any> | undefined>(undefined);
   const setLoading = useSetRecoilState(appLoading);
@@ -45,9 +48,12 @@ const KeyPage: React.FC<Props> = ({ keyText }) => {
 
   const hasPassword = result && result.state === 303;
 
+  
+
   // 组件挂载
   useMount(() => {
     fetchData();
+
   });
 
   // 执行修改
@@ -145,7 +151,7 @@ const KeyPage: React.FC<Props> = ({ keyText }) => {
 
       {/* 新建或者修改弹窗 */}
       {
-          !on && <CreateT
+          !on  && <CreateT
           showUpdateOrCreateModal={showUpdateOrCreateModal}
           onClose={() => setShowUpdateOrCreateModal(false)}
           model= {model}
