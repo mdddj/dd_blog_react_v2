@@ -21,6 +21,7 @@ import { useSetRecoilState } from "recoil";
 import { appLoading } from "../../providers/loading";
 import MyBox from "../../components/box/my_box";
 import { Field, FieldProps, Form, Formik, FormikHelpers, FormikProps } from "formik";
+import CommentComponent from "../../components/comment_component";
 
 //友链页面
 const FriendsPage: React.FC = () => {
@@ -78,6 +79,9 @@ const FriendsPage: React.FC = () => {
                 })
             }
         </SimpleGrid>
+
+
+        <CommentComponent type={"friend"} id={0} />
 
         <Modal isOpen={showModal} onClose={() => setShowModal(false)} >
             <ModalOverlay />

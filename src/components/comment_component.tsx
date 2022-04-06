@@ -141,9 +141,8 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({type, id}) 
 
     }
 
-    return (<div style={{marginTop: 12}}>
-        <Heading>评论</Heading>
-        <Divider mt={2} mb={2}/>
+    return (<Box mt={35} p={2} >
+        <Heading mb={5}>评论</Heading>
 
         {/* 发布评论表单 */}
         <CommentForm onSubmit={submit}/>
@@ -177,7 +176,7 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({type, id}) 
             }} loading={nextPageLoading} />
         }
 
-    </div>);
+    </Box>);
 }
 
 
@@ -226,7 +225,9 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
         props.onSubmit(name, email, url, content, avatarUrl);
     }
 
-    return <>
+    return <div style={{
+        marginTop: 22
+    }}>
         <SimpleGrid columns={[2, null, 3]} spacing='12px'>
             <Box>
                 <InputGroup>
@@ -280,7 +281,7 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
             </Stack>
         </Flex>
 
-    </>
+    </div>
 }
 
 
