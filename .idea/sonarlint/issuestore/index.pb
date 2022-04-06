@@ -61,9 +61,5 @@ D
 src/utils/request.ts,4/f/4f98643a765bda61eec19aa34030baf0b5226849
 <
 package.json,7/0/7030d0b2f71b999ff89a343de08c414af32fc93a
-T
-$.yalc/dd_server_api_web/src/index.ts,6/f/6f1ffd62f5114dd28b5a7ec0efe9465711a8ab03
 [
 +.yalc/dd_server_api_web/src/model/friend.ts,6/b/6b851681ed742f6018a1a28a08dcfd0b0a562676
-K
-src/pages/friends/index.tsx,d/9/d9cad3645ecf42fb3479e479ba7da7ef53a3353d

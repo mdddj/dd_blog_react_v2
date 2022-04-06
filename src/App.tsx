@@ -202,6 +202,8 @@ export const App = () => {
 
 
                            {/*    需要登录的页面*/}
+
+                           {/* 发布博客的页面 */}
                             <Route path={'/add-post'} element={<AddPostPage />} />
 
                         </Routes>

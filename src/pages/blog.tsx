@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { blogApi } from "../utils/request";
 import { useMount } from "react-use";
 import { BlogData } from "dd_server_api_web/apis/model/result/BlogPushNewResultData";
@@ -42,6 +42,9 @@ const BlogPage: React.FC = () => {
                 <Box color={'gray.600'}>{blog?.dateString}</Box>
                 <Box mt={5}>
                     {blog && <MarkdownView content={blog!.content} />}
+                </Box>
+                <Box>
+                    <Link to={'/add-post?id='+blog?.id}>编辑</Link>
                 </Box>
             </Fade>
 
