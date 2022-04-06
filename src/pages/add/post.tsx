@@ -23,6 +23,7 @@ import { useSearchParams } from "react-router-dom";
 import { useMount, useToggle } from "react-use";
 import { successMessageProvider } from "../../providers/modal/success_modal";
 import { BlogData } from "dd_server_api_web/apis/model/result/BlogPushNewResultData";
+import { onImageUpload } from "../../utils/EditImageFileUpload";
 
 // 发布博客页面
 const AddPostPage: React.FC = () => {
@@ -115,6 +116,9 @@ const AddPostPage: React.FC = () => {
           onChange={(data) => {
             setContent(data.text);
           }}
+          onImageUpload={onImageUpload}
+        
+          
         />
 
         {archives && (
@@ -124,6 +128,7 @@ const AddPostPage: React.FC = () => {
             </Heading>
             <Select
               placeholder="文章分类"
+              value={updateBlog ?  categoryId : undefined}
               onChange={(e) => setCategoryId(parseInt(e.target.value))}
             >
               {archives.categoryList.map((value) => (
