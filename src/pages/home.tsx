@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useMount } from "react-use";
 import { blogApi } from "../utils/request";
 import { BlogData } from "dd_server_api_web/apis/model/result/BlogPushNewResultData";
-import {AboutMeCard, ArchiveCard, CategoryCard} from "../components/about_me";
+import {AboutMeCard, ArchiveCard, CategoryCard, TagCard} from "../components/about_me";
 import BaseBlogCardStyle2 from "../components/blog/base_blog_card_style2";
 import { PagerModel } from "dd_server_api_web/apis/utils/ResultUtil";
 import {useSetRecoilState} from "recoil";
@@ -55,7 +55,7 @@ const Home: React.FC = () => {
     return <>
 
         <TwoColumnLayout right={[
-            <AboutMeCard/>,<ArchiveCard/>,<CategoryCard/>
+            <AboutMeCard/>,<ArchiveCard/>,<CategoryCard/>,<TagCard />
         ]}>
                 {
                     blogs.length !== 0 &&  <>

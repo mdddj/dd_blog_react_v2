@@ -141,7 +141,7 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({type, id}) 
 
     }
 
-    return (<Box mt={35} p={2} >
+    return (<Box p={2} >
         <Heading mb={5}>评论</Heading>
 
         {/* 发布评论表单 */}

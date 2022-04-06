@@ -52,4 +52,24 @@ const CategoryCard: React.FC = () => {
     </MyBox>
 }
 
-export {AboutMeCard, ArchiveCard, CategoryCard}
+
+//标签卡片
+const TagCard: React.FC = () => {
+    const tags = useRecoilValue(archivesDataState)?.tags ?? [];
+    return <MyBox>
+        <Heading as={'h4'} mb={2}>标签</Heading>
+        {tags.length === 0 && <span>空空如也~</span>}
+
+        <UnorderedList>
+            {
+                tags.map(value => {
+                    return <ListItem key={value.id}><Link color={'teal.500'} href={'/tag/' + value.id}>{value.name}
+                        <ExternalLinkIcon mx='2px'/></Link></ListItem>
+                })
+            }
+        </UnorderedList>
+
+    </MyBox>
+}
+
+export {AboutMeCard, ArchiveCard, CategoryCard,TagCard}
