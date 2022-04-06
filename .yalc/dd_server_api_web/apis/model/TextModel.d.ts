@@ -1,5 +1,5 @@
 export interface TextModel {
-    id: number;
+    id?: number;
     name: string;
     context: string;
     intro?: string;

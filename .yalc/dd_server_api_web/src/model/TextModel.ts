@@ -1,5 +1,5 @@
 export interface TextModel {
-  id: number; // 主键ID
+  id?: number; // 主键ID
   name: string; // 查询key
   context: string; // 正文内容
   intro?: string; // 备注

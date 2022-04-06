@@ -1,13 +1,8 @@
-
-
-
-
 # 梁典典的博客
 
-预览: https://itbug.shop
+预览：https://itbug.shop
 
-
-上传文件api
+上传文件 api
 
 ```ts
 
