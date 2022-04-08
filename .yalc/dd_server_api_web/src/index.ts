@@ -637,8 +637,8 @@ class DdServerApiByWeb {
     /**
      * 获取全部ResourceCategory的已存在类型
      */
-    async getResourceCategoryTypes(): Promise<Result<ResourceCategoryType>> {
-        return this.requestT<Result<ResourceCategoryType>>('/api/rc/types', {}, 'GET')
+    async getResourceCategoryTypes(): Promise<Result<ResourceCategoryType[]>> {
+        return this.requestT<Result<ResourceCategoryType[]>>('/api/rc/types', {}, 'GET')
     }
 
     /**

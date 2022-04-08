@@ -360,7 +360,7 @@ declare class DdServerApiByWeb {
     /**
      * 获取全部ResourceCategory的已存在类型
      */
-    getResourceCategoryTypes(): Promise<Result<ResourceCategoryType>>;
+    getResourceCategoryTypes(): Promise<Result<ResourceCategoryType[]>>;
     /**
      * 获取版本号列表
      * @param pageParam 分页参数,必填

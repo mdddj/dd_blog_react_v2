@@ -10,6 +10,7 @@
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@types/pubsub-js": "^1.8.3",
+    "browser-fs-access": "^0.26.1",
     "dayjs": "^1.11.0",
     "dd_server_api_web": "file:.yalc/dd_server_api_web",
     "esbuild-loader": "^2.18.0",

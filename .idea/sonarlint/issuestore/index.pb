@@ -57,8 +57,6 @@ H
 src/providers/setting.ts,1/c/1cf909e1a1ebfa3172a7ef4393637118ad3a0124
 T
 $src/components/two_column_layout.tsx,1/3/1342eafbb63c62c950c01165699b7a4947430f51
-D
-src/utils/request.ts,4/f/4f98643a765bda61eec19aa34030baf0b5226849
 <
 package.json,7/0/7030d0b2f71b999ff89a343de08c414af32fc93a
 [

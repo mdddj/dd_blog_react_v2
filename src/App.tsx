@@ -47,7 +47,7 @@ import MonthPage from "./pages/month";
 import JianliPage from "./pages/me";
 import {navbarMenu} from "./menus"
 import {mode} from '@chakra-ui/theme-tools'
-import DynamicPage from "./pages/dynamic/dynamic";
+import DynamicPage from "./pages/dynamic/DynamicPage";
 import DocDetailPage from "./pages/doc/detail";
 import LoginComponent from "./components/login";
 import AddPostPage from "./pages/add/post";
