@@ -59,6 +59,7 @@ import ResponseErrorModal from "./components/modal/ResponseErrorModal";
 import AppSuccessModel from "./components/modal/AppSuccessModel";
 import UpdatePasswordModal from "./components/modal/UpdatePasswordModal";
 import FriendsList from "./components/user/FriendsList"
+import DynamicListPage from "./pages/dynamic/DynamicListPage";
 
 const BoxStyle: ComponentStyleConfig = {
     defaultProps: {}
@@ -181,8 +182,11 @@ export const App = () => {
                                 {/*    友链页面*/}
                                 <Route path={'/friends'} element={<FriendsPage/>}/>
 
-                                {/* 说说页面 */}
+                                {/* 相册页面 */}
                                 <Route path={'/ss'} element={<DynamicPage/>}/>
+
+                                {/* 相册详情页面页面 */}
+                                <Route path={'/pics'} element={<DynamicListPage />}/>
 
 
                             </Route>

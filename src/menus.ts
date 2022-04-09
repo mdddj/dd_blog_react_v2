@@ -12,7 +12,7 @@ const navbarMenu: AppMenu[] = [
         type: 'base'
     },
     {
-        title: '说说',
+        title: '相册',
         url: '/ss',
         type: 'base'
     },

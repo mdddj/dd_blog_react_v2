@@ -9,7 +9,7 @@ import {ResourceModel} from "dd_server_api_web/apis/model/ResourceModel";
 import {formatDateUtil} from "../utils/DateUtil";
 
 type Props = {
-    resourceCategoryName: String //动态分类的名字
+    resourceCategoryName: string //动态分类的名字
 }
 
 //动态小页面
@@ -35,14 +35,12 @@ const ResourceComponents: React.FC<Props> = ({resourceCategoryName}) => {
             setResCate(data)
             fetchList(0, data?.id)
         })
-        getAllRescategory()
     })
 
     //加载列表
     const fetchList = async (page: number, id?: number) => {
-        // let categoryId = id ?? resCate?.id
         let pager = {page: page, pageSize: 20}
-        let result = await blogApi().getResourceList(pager, undefined, {},)
+        let result = await blogApi().getResourceList(pager, id, {},)
         successResultHandle(result, data => {
             let newArray = [...list, ...data.list]
             setList(newArray)
@@ -53,7 +51,7 @@ const ResourceComponents: React.FC<Props> = ({resourceCategoryName}) => {
         {
             resCate && <Heading size={'sm'}>{resCate.name}</Heading>
         }
-        <TwoColumnLayout right={[
+        <TwoColumnLayout  right={[
             <Button colorScheme='teal' variant='outline'>
                 发布动态
             </Button>,

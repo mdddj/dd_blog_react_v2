@@ -1,4 +1,4 @@
-import React, {ReactNode} from "react";
+import React, {PropsWithChildren, ReactNode} from "react";
 import {Box, Grid, GridItem, Stack, useMediaQuery} from "@chakra-ui/react";
 import MyBox from "./box/my_box";
 
@@ -8,7 +8,7 @@ type Props = {
 }
 
 ///两列的基本布局
-const TwoColumnLayout:React.FC<Props> = ({children,right,bottomComponent}) => {
+const TwoColumnLayout:React.FC<PropsWithChildren<Props>> = ({children,right,bottomComponent}) => {
     const [isDesk] = useMediaQuery('(min-width: 760px)')
   return <>
       <Grid gap={4} templateColumns='repeat(12, 1fr)'>

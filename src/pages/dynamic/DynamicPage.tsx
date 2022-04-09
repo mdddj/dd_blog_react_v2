@@ -2,7 +2,7 @@ import { AddIcon } from "@chakra-ui/icons";
 import {
   AspectRatio,
   Box,
-  Button,
+  Button, Grid, GridItem,
   IconButton,
   Image,
   Input,
@@ -12,10 +12,10 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay, SimpleGrid,
+  ModalOverlay,
   Spinner,
   Stack,
-  Textarea
+  Textarea, useMediaQuery
 } from "@chakra-ui/react";
 import { ResCategory } from "dd_server_api_web/apis/model/ResCategory";
 import { successResultHandle } from "dd_server_api_web/apis/utils/ResultUtil";
@@ -26,12 +26,18 @@ import {fileOpen} from "browser-fs-access";
 import {ResourceCategoryType} from "dd_server_api_web/apis/model/ResourceCategoryType";
 import {useSetRecoilState} from "recoil";
 import {successMessageProvider} from "../../providers/modal/success_modal";
+import {useNavigate} from "react-router-dom";
 
 //动态页面
 const DynamicPage: React.FC = () => {
+
+
+
+  const navigation = useNavigate()
   const [initLoading, setInitLoading] = useState(true); // 初始化中
   const [plotoAlbums, setPlotoAlbums] = useState<ResCategory[]>([]) // 相册列表
   const [showCreateModal, setShowCreateModal] = useState(false) //显示创建弹窗
+  const [isDesk] = useMediaQuery('(min-width: 760px)')
 
   useMount(async () => {
     await fetchPhotoAlbum();
@@ -52,11 +58,12 @@ const DynamicPage: React.FC = () => {
     });
   };
 
-  console.log(plotoAlbums);
+
+
 
   return (
     <>
-      <Box textAlign={"end"}>
+      <Box textAlign={"end"} position={'absolute'} bottom={'20%'} left={'50%'}>
         <IconButton
           colorScheme="blue"
           aria-label="Search database"
@@ -72,9 +79,11 @@ const DynamicPage: React.FC = () => {
 
 
 
-      <SimpleGrid  columns={{sm: 2, md: 4}} spacing='40px'>
+      <Grid  templateColumns='repeat(4, 1fr)' gap={6}>
         {
-          plotoAlbums.map(value => <Box key={value.id} height={'150px'} cursor={'pointer'}>
+          plotoAlbums.map(value => <GridItem key={value.id} colSpan={isDesk? 1 : 4} cursor={'pointer'} onClick={()=>{
+            navigation('/pics?name='+value.name)
+          }}>
             <Box position={'relative'}>
               <AspectRatio ratio={1} >
                 <Image src={value.logo} borderRadius={15} fit={'contain'}/>
@@ -86,10 +95,10 @@ const DynamicPage: React.FC = () => {
            <Box mt={2}>
              <span>{value.name}</span>
            </Box>
-          </Box>)
+          </GridItem>)
         }
 
-      </SimpleGrid>
+      </Grid>
 
 
 
