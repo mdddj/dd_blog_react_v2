@@ -44,7 +44,7 @@ import AppLoadingWidget from "./components/app_loading_widget";
 import {appMoneyModalOpen} from "./providers/modal";
 import MoneyModal from "./components/modal/money";
 import MonthPage from "./pages/month";
-import JianliPage from "./pages/me";
+import JianliPage from "./pages/JianliPage";
 import {navbarMenu} from "./menus"
 import {mode} from '@chakra-ui/theme-tools'
 import DynamicPage from "./pages/dynamic/DynamicPage";

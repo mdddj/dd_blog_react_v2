@@ -17,16 +17,7 @@ const ResourceComponents: React.FC<Props> = ({resourceCategoryName}) => {
 
     const [resCate, setResCate] = useState<ResCategory | undefined>(undefined)
     const [list, setList] = useState<ResourceModel[]>([])
-    const [rescategoryList,setRescategoryList] = useState<ResCategory[]>([])
 
-    // 加载全部资源分类
-    const getAllRescategory = () => {
-      blogApi().getResourceCategoryAll().then(value => {
-          successResultHandle(value,data => {
-              setRescategoryList(data)
-          })
-      })
-    }
 
     //组件挂载
     useMount(async () => {
@@ -54,12 +45,7 @@ const ResourceComponents: React.FC<Props> = ({resourceCategoryName}) => {
         <TwoColumnLayout  right={[
             <Button colorScheme='teal' variant='outline'>
                 发布动态
-            </Button>,
-            <>
-                {rescategoryList.map(value => <Box key={value.id} bg={'white'} mb={2} p={2} borderRadius={15}>
-                    {value.name}
-                </Box>)}
-            </>
+            </Button>
         ]}>
             {
                 list.map(value => {

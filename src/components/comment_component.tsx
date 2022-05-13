@@ -259,7 +259,6 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
                     {
                         avatarUrl === '' ? <Avatar/> : <Avatar src={avatarUrl}/>
                     }
-
                 </PopoverTrigger>
                 <PopoverContent>
                     <PopoverArrow/>
