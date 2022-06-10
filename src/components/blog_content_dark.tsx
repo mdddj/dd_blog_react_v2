@@ -26,7 +26,7 @@ export const BlogPreviewDark: React.FC<{ content: string; }> = ({content}) => {
                             // @ts-ignore
                                 <SyntaxHighlighter
                                     children={String(children).replace(/\n$/, '')}
-                                    style={a11yDark}
+                                    // style={a11yDark}
                                     language={match[1]}
                                     PreTag="div"
                                     customStyle={{

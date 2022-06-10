@@ -26,7 +26,7 @@ export const BlogPreviewLight: React.FC<{ content: string; }> = ({content}) => {
                             // @ts-ignore
                                 <SyntaxHighlighter
                                     children={String(children).replace(/\n$/, '')}
-                                    style={vs}
+                                    // style={vs}
                                     language={match[1]}
                                     PreTag="div"
                                     customStyle={{

@@ -18,7 +18,6 @@ const TwoColumnBlogCard: React.FC<BlogCardProps> = ({ blog}) => {
                 fontWeight='semibold'
                 as='h4'
                 lineHeight='tight'
-                isTruncated
             >
                 {blog.title}
             </Box>

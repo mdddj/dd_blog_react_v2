@@ -76,7 +76,6 @@ const DocsPage:React.FC = () => {
                 fontWeight='semibold'
                 as='h4'
                 lineHeight='tight'
-                isTruncated
             >
              <Link to={'/docs/'+property.id}> {property.name}</Link>
             </Box>
