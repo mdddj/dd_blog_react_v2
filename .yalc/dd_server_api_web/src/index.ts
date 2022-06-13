@@ -151,7 +151,7 @@ class DdServerApiByWeb {
      * @param imageCode 图片验证码
      */
     async login(loginNumber: string, password: string, imageCode?: string): Promise<Result<string>> {
-        return this.requestT<Result<string>>('/api/user-public/login', {loginNumber, password, imageCode}, 'POST', 'form');
+        return this.requestT<Result<string>>('/api/user-public/login', {loginNumber, password, imageCode}, 'POST');
     }
 
     /**

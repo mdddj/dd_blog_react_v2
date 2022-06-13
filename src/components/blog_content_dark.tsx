@@ -3,7 +3,6 @@ import React from 'react';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import {a11yDark} from 'react-syntax-highlighter/dist/esm/styles/prism';
-// import 'github-markdown-css/github-markdown-dark.css'
 import {useColorMode} from "@chakra-ui/react";
 
 /**
@@ -22,11 +21,11 @@ export const BlogPreviewDark: React.FC<{ content: string; }> = ({content}) => {
                 components={{
                     code({ node, inline, className, children, ...props }) {
                         const match = /language-(\w+)/.exec(className || '');
+                        // @ts-ignore
                         return !inline && match ? (
                             // @ts-ignore
                                 <SyntaxHighlighter
                                     children={String(children).replace(/\n$/, '')}
-                                    // style={a11yDark}
                                     language={match[1]}
                                     PreTag="div"
                                     customStyle={{
@@ -35,6 +34,8 @@ export const BlogPreviewDark: React.FC<{ content: string; }> = ({content}) => {
                                         lineHeight: 1.5,
                                         margin: 0,
                                     }}
+                                    showLineNumbers={true}
+                                    showInlineLineNumbers={true}
                                     {...props}
                                 />
                         ) : (
