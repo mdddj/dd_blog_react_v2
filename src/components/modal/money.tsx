@@ -1,6 +1,7 @@
 import React from "react";
 import {
     AspectRatio,
+    Box,
     Button,
     Modal,
     ModalBody, ModalCloseButton,
@@ -43,9 +44,9 @@ const MoneyModal: React.FC = () => {
                     <ModalCloseButton/>
                     <ModalBody>
                         {loading && <Spinner/>}
-                        {moneyTextModel && <AspectRatio maxW={500} maxH={600}>
+                        {moneyTextModel && <Box>
                             <MarkdownView content={moneyTextModel.context}/>
-                            </AspectRatio>}
+                            </Box>}
                             {!moneyTextModel && <span style={{color: 'red'}}>404 或者 资源已被删除</span>}
                     </ModalBody>
                     <ModalFooter>

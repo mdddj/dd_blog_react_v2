@@ -1,0 +1,6 @@
+
+Htypescript:S1186J"%Unexpected empty method 'DdTaokeSdk'.(ó’•î8î´¸Î€0
+\typescript:S1854…"9Remove this useless assignment to variable "requestType".(Š÷8î´¸Î€0
+`typescript:S1121…"=Extract the assignment of "requestType" from this expression.(Š÷8î´¸Î€0
+ftypescript:S1533õ"BReplace this "String" wrapper object with primitive type "string".(Üª»ó8î´¸Î€0
+Œtypescript:S1172¹"cRemove the unused function parameter "params" or rename it to "_params" to make intention explicit.(¹½µùşÿÿÿÿ8ï´¸Î€0
