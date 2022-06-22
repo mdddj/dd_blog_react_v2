@@ -113,7 +113,8 @@ const DynamicPage: React.FC = () => {
 /// 新建的弹窗
 const AddPhoneAlbumsForm: React.FC<{show: boolean,onClose: ()=> void}> = ({show,onClose}) => {
 
-  const [logo,setLogo] = useState('http://duodob.oss-cn-shenzhen.aliyuncs.com/other%2Fedit%2Favatar.jpeg') // logo
+  ///http://duodob.oss-cn-shenzhen.aliyuncs.com/other%2Fedit%2Favatar.jpeg
+  const [logo,setLogo] = useState('') // logo
 
   const [name,setName] = useState('') //名称
   const [intro,setIntro] = useState('') //

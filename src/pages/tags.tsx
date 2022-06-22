@@ -3,7 +3,6 @@ import { useRecoilValue } from "recoil";
 import { archivesDataState } from "../providers/archives";
 import {
   Box,
-  Tab,
   Tag,
   Wrap,
   WrapItem,
