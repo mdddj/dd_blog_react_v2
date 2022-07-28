@@ -9,4 +9,7 @@ interface CreateOrUpdateDocDirectoryParam {
 
     //如果是修改,需要设置这个参数,修改的ID
     updateId?: number
+
+    //描述
+    description: string
 }
