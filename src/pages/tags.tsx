@@ -1,46 +1,32 @@
 import React from "react";
-import { useRecoilValue } from "recoil";
-import { archivesDataState } from "../providers/archives";
+import {useRecoilValue} from "recoil";
+import {archivesDataState} from "../providers/archives";
 import {
-  Box,
-  Tag,
-  Wrap,
-  WrapItem,
+    Tag,
 } from "@chakra-ui/react";
-import { Link, Outlet } from "react-router-dom";
-import PageHeader from "../components/page_header";
+import {Link, Outlet} from "react-router-dom";
+import {LeftMenuLayout} from "../components/LeftMenuLayout";
 
 //标签列表页面
 const TagsPage: React.FC = () => {
-  const tags = useRecoilValue(archivesDataState)?.tags ?? [];
-  return (
-    <>
-      <PageHeader title={"标签"} />
-      <Wrap>
-      {tags.map((value) => {
-        return (
-          <WrapItem>
-            <Tag key={value.id}>
-            <Link to={"/tag/" + value.id}>{value.name}</Link>
-          </Tag>
-          </WrapItem>
-        );
-      })}
-      </Wrap>
-      <Box p={12} border={1} width={"100%"}>
-        {/*<Wrap spacing={4} mt={4}>*/}
-        {/*  {*/}
-        {/*    tags.map(value => {*/}
-        {/*      return <Button key={value.id}><Link to={'/tag/'+value.id}>{value.name}</Link></Button>*/}
-        {/*    })*/}
-        {/*  }*/}
-        {/*</Wrap>*/}
-        <div style={{ marginTop: 20 }}>
-          <Outlet />
-        </div>
-      </Box>
-    </>
-  );
+    const tags = useRecoilValue(archivesDataState)?.tags ?? [];
+
+    return <LeftMenuLayout left={[
+        (<div>
+                {tags.map((value) => {
+                    return (
+                            <div key={value.id} style={{
+                                marginTop: '0.5rem',
+                                lineHeight: 1.625
+                            }}>
+                                <Link to={"/tag/" + value.id}>{value.name}</Link>
+                            </div>
+                    );
+                })}
+        </div>)
+    ]}>
+        <Outlet/>
+    </LeftMenuLayout>
 };
 
 export default TagsPage;
