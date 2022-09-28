@@ -3,10 +3,10 @@ import {useMount} from "react-use";
 import {blogApi} from "../utils/request";
 import {ResCategory} from "dd_server_api_web/apis/model/ResCategory";
 import {successResultHandle} from "dd_server_api_web/apis/utils/ResultUtil";
-import {Box, Button, Divider, Heading, LinkBox, LinkOverlay} from "@chakra-ui/react";
-import TwoColumnLayout from "./two_column_layout";
+import {Box, Divider, Heading, LinkBox, LinkOverlay} from "@chakra-ui/react";
 import {ResourceModel} from "dd_server_api_web/apis/model/ResourceModel";
 import {formatDateUtil} from "../utils/DateUtil";
+import { Link } from "react-router-dom";
 
 type Props = {
     resourceCategoryName: string //动态分类的名字
@@ -39,21 +39,20 @@ const ResourceComponents: React.FC<Props> = ({resourceCategoryName}) => {
     }
 
     return <>
+        
+        <Box>
         {
             resCate && <Heading size={'sm'}>{resCate.name}</Heading>
         }
-        <TwoColumnLayout  right={[
-            <Button colorScheme='teal' variant='outline'>
-                发布动态
-            </Button>
-        ]}>
+
+        <Link to={"/add-res"}>发布</Link>
             {
                 list.map(value => {
                     console.log(value.type)
                     return <DynamicCard key={value.id} res={value}/>
                 })
             }
-        </TwoColumnLayout>
+        </Box>
     </>
 }
 

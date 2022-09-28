@@ -60,6 +60,7 @@ import AppSuccessModel from "./components/modal/AppSuccessModel";
 import UpdatePasswordModal from "./components/modal/UpdatePasswordModal";
 import FriendsList from "./components/user/FriendsList"
 import DynamicListPage from "./pages/dynamic/DynamicListPage";
+import AddResPage from "./pages/add/add_res_page"
 
 const BoxStyle: ComponentStyleConfig = {
     defaultProps: {}
@@ -152,6 +153,8 @@ export const App = () => {
                             <Route path={'/'} element={<Home/>} />
 
                             <Route path={'/archive'} element={<Archive/>}/>
+
+                            <Route path={'/add-res'} element={<AddResPage />} />
 
 
                             <Route path={'/post'} element={<BlogPage/>}>
@@ -296,7 +299,7 @@ const BlogNav: React.FC = () => {
     }
 
     return <Box className={'my-nav-bar'} bg={value}>
-        <Container maxW={'container.lg'} className={'border-bottom app-bar'}>
+        <Container className={'border-bottom app-bar'} maxW={'container.lg'}>
             <Flex alignItems={'center'}>
                 <Box p={2}>
                     <Heading size='md'>梁典典的博客</Heading>
