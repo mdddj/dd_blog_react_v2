@@ -3,7 +3,6 @@ import {
   Button,
   Textarea,
   Image,
-  SimpleGrid,
   Grid,
   GridItem,
   HStack,
