@@ -1,12 +1,12 @@
 import React, {useState} from "react";
 import {useMount} from "react-use";
 import {blogApi} from "../utils/request";
-import {ResCategory} from "dd_server_api_web/apis/model/ResCategory";
-import {successResultHandle} from "dd_server_api_web/apis/utils/ResultUtil";
-import {Box, Divider, Heading, LinkBox, LinkOverlay} from "@chakra-ui/react";
-import {ResourceModel} from "dd_server_api_web/apis/model/ResourceModel";
 import {formatDateUtil} from "../utils/DateUtil";
 import { Link } from "react-router-dom";
+import {Box, Divider, Typography} from "@mui/material";
+import { ResCategory } from "dd_server_api_web/dist/model/ResCategory";
+import { ResourceModel } from "dd_server_api_web/dist/model/ResourceModel";
+import { Result, successResultHandle, PagerModel } from "dd_server_api_web/dist/utils/ResultUtil";
 
 type Props = {
     resourceCategoryName: string //动态分类的名字
@@ -21,7 +21,7 @@ const ResourceComponents: React.FC<Props> = ({resourceCategoryName}) => {
 
     //组件挂载
     useMount(async () => {
-        let result = await blogApi().getResourceCategory({name: resourceCategoryName} as any);
+        let result:Result<ResCategory | undefined> = await blogApi().getResourceCategory({name: resourceCategoryName} as any);
         successResultHandle(result, data => {
             setResCate(data)
             fetchList(0, data?.id)
@@ -31,7 +31,7 @@ const ResourceComponents: React.FC<Props> = ({resourceCategoryName}) => {
     //加载列表
     const fetchList = async (page: number, id?: number) => {
         let pager = {page: page, pageSize: 20}
-        let result = await blogApi().getResourceList(pager, id, {},)
+        let result:Result<{ page: PagerModel, list: ResourceModel[] }> = await blogApi().getResourceList(pager, id, {},)
         successResultHandle(result, data => {
             let newArray = [...list, ...data.list]
             setList(newArray)
@@ -42,7 +42,7 @@ const ResourceComponents: React.FC<Props> = ({resourceCategoryName}) => {
         
         <Box>
         {
-            resCate && <Heading size={'sm'}>{resCate.name}</Heading>
+            resCate && <Typography>{resCate.name}</Typography>
         }
 
         <Link to={"/add-res"}>发布</Link>
@@ -71,8 +71,8 @@ const DynamicCard: React.FC<{ res: ResourceModel }> = ({res}) => {
 
 /// 简单文本类型
 const SingleTextCard: React.FC<{res: ResourceModel}> = ({res}) => {
-  return <Box  rounded='md' mb={4}>
-      <Box as='time' fontSize={12} color={'grey'}>
+  return <Box >
+      <Box>
           记录  &bull; 梁典典发布于{formatDateUtil(res.createDate)}
       </Box>
       <Box>
@@ -85,21 +85,19 @@ const SingleTextCard: React.FC<{res: ResourceModel}> = ({res}) => {
 ///文档卡片
 const DocDynamicCard: React.FC<{ res: ResourceModel }> = ({res}) => {
 
-    return <LinkBox as='article' rounded='md' mb={4}>
-        <Box as='time' fontSize={12} color={'grey'}>
+    return <Box>
+        <Box >
             文档  &bull; 梁典典发布于{formatDateUtil(res.createDate)}
         </Box>
-        <Heading size='md' my='2'>
-            <LinkOverlay href='#' color={'teal.400'}>
-                {res.title}
-            </LinkOverlay>
-        </Heading>
+        <Typography>
+            {res.title}
+        </Typography>
         <Box>
             {res.category && <span >
             <span style={{fontSize: 10, color: 'grey'}}>{res.category.name}</span></span>}
         </Box>
         <Divider/>
-    </LinkBox>
+    </Box>
 }
 
 export default ResourceComponents

@@ -4,8 +4,8 @@
 
 import React from "react";
 import {useSearchParams} from "react-router-dom";
-import {Box} from "@chakra-ui/react";
 import ResourceComponents from "../../components/resource_components";
+import {Box} from "@mui/material";
 
 
 //动态列表的组件

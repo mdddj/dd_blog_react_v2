@@ -1,26 +1,19 @@
 import React from "react";
 import { BlogCardProps } from "./props";
 import { Link } from "react-router-dom";
-import {Box, Tag} from "@chakra-ui/react";
+import {Box, Chip, Typography} from "@mui/material";
 
 
 /// 两列展示的博客卡片
 const TwoColumnBlogCard: React.FC<BlogCardProps> = ({ blog}) => {
     return <>
         <Box borderRadius='lg' overflow='hidden' p={6} mb={2}>
-            <Tag  px='2'>
-                {blog.category.name}
-            </Tag>
+            <Chip label={blog.category.name} />
 
 
-            <Box
-                mt='1'
-                fontWeight='semibold'
-                as='h4'
-                lineHeight='tight'
-            >
+            <Typography variant={'h1'}>
                 {blog.title}
-            </Box>
+            </Typography>
 
             <Box display='flex' alignItems='baseline'>
                 <Box

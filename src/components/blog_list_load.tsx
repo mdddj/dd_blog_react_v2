@@ -1,13 +1,12 @@
 import React, {RefObject, useImperativeHandle, useState} from "react";
-import {Page, PagerModel, Result} from "dd_server_api_web/src/utils/ResultUtil";
-import {BlogData} from "dd_server_api_web/src/model/result/BlogPushNewResultData";
-import {useBoolean, useToast} from "@chakra-ui/react";
 import {useMount} from "react-use";
 import PagerNextLoad from "./pager_next_load";
 import BaseBlogCardStyle2 from "./blog/base_blog_card_style2";
 import {useSetRecoilState} from "recoil";
 import {appLoading} from "../providers/loading";
 import MyBox from "./box/my_box";
+import { BlogData } from "dd_server_api_web/dist/model/result/BlogPushNewResultData";
+import { Result, Page, PagerModel } from "dd_server_api_web/dist/utils/ResultUtil";
 
 type Props = {
     api: (page: number) => Promise<Result<Page<BlogData>>>
@@ -19,10 +18,8 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
 
 
     const [page, setPage] = useState(1)
-    const [loading, setLoading] = useBoolean()
     const [blogs, setBlogs] = useState<BlogData[]>([])
     const [pager, setPager] = useState<PagerModel>()
-    const toast = useToast()
     const appLoadingSet=  useSetRecoilState(appLoading)
 
     useMount(() => load(page))
@@ -34,21 +31,18 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
     })
 
     const load = (p: number) => {
-        setLoading.on()
         if(p===1){
             appLoadingSet(true)
         }
         api(p).then(value => {
             let bs = blogs;
             if (p === 1) bs = []
-            setLoading.off()
             let b = value.data?.list ?? []
             setBlogs([...bs, ...b])
             setPager(value.data?.page)
             setPage(p)
             appLoadingSet(false)
             if(value.data?.page){
-                showSuccessMsg('找到'+value.data?.page.total+'篇文章.')
             }
 
         });
@@ -56,23 +50,12 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
 
     const refresh = () => {
         setPage(1)
-        setLoading.on()
         setPager(undefined)
         setBlogs([])
         appLoadingSet(true)
         load(1)
     }
 
-    const showSuccessMsg = (msg: string) => {
-        toast.closeAll()
-        toast({
-            title: '查询成功.',
-            description: msg,
-            status: 'success',
-            duration: 2000,
-            isClosable: true,
-        })
-    }
 
 
 
@@ -91,7 +74,7 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
 
 
         {
-            pager && <PagerNextLoad pager={pager} onload={nextPage} loading={loading}/>
+            pager && <PagerNextLoad pager={pager} onload={nextPage} loading/>
         }
     </MyBox>
 }

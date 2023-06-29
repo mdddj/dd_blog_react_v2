@@ -1,37 +1,25 @@
-import { AddIcon } from "@chakra-ui/icons";
-import {
-  AspectRatio,
-  Box,
-  Button,
-  Center,
-  Grid,
-  GridItem,
-  HStack,
-  IconButton,
-  Image,
-  Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Spinner,
-  Stack,
-  Textarea,
-  useMediaQuery,
-} from "@chakra-ui/react";
-import { ResCategory } from "dd_server_api_web/apis/model/ResCategory";
-import { successResultHandle } from "dd_server_api_web/apis/utils/ResultUtil";
 import React, { useState } from "react";
 import { useMount } from "react-use";
 import { blogApi } from "../../utils/request";
 import { fileOpen } from "browser-fs-access";
-import { ResourceCategoryType } from "dd_server_api_web/apis/model/ResourceCategoryType";
 import { useSetRecoilState } from "recoil";
 import { successMessageProvider } from "../../providers/modal/success_modal";
 import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Dialog, DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid, Input,
+  Stack, TextField,
+  useMediaQuery
+} from "@mui/material";
+import {AspectRatio} from "@mui/icons-material";
+import { ResCategory } from "dd_server_api_web/dist/model/ResCategory";
+import { ResourceCategoryType } from "dd_server_api_web/dist/model/ResourceCategoryType";
+import { Result, PagerModel, successResultHandle } from "dd_server_api_web/dist/utils/ResultUtil";
 
 //动态页面
 const DynamicPage: React.FC = () => {
@@ -39,7 +27,7 @@ const DynamicPage: React.FC = () => {
   const [initLoading, setInitLoading] = useState(true); // 初始化中
   const [plotoAlbums, setPlotoAlbums] = useState<ResCategory[]>([]); // 相册列表
   const [showCreateModal, setShowCreateModal] = useState(false); //显示创建弹窗
-  const [isDesk] = useMediaQuery("(min-width: 760px)");
+  const isDesk = useMediaQuery("(min-width: 760px)");
 
   useMount(async () => {
     await fetchPhotoAlbum();
@@ -48,7 +36,10 @@ const DynamicPage: React.FC = () => {
 
   // 加载相册类型的分类
   const fetchPhotoAlbum = async () => {
-    let result = await blogApi().getResourceCategoryList(
+    let result: Result<{
+      page: PagerModel;
+      list: ResCategory[];
+    }> = await blogApi().getResourceCategoryList(
       {
         page: 0,
         pageSize: 1000,
@@ -70,21 +61,18 @@ const DynamicPage: React.FC = () => {
   return (
     <>
       <Box textAlign={"end"} position={"absolute"} bottom={"20%"} left={"50%"}>
-        <IconButton
-          colorScheme="blue"
-          aria-label="Search database"
+        <Button
           onClick={() => setShowCreateModal(true)}
-          icon={<AddIcon />}
-        />
+        >新增</Button>
       </Box>
 
-      {initLoading && <Spinner />}
+      {initLoading && <CircularProgress />}
 
       {/* 动态组件 */}
       {/* <ResourceComponents resourceCategoryName={'典典面基经历'} /> */}
 
       {plotoAlbums.length === 0 && !initLoading && (
-        <Center>
+        <Box>
           暂无相册,快去
           <Button
             onClick={() => {
@@ -94,35 +82,24 @@ const DynamicPage: React.FC = () => {
             创建
           </Button>
           一个吧.
-        </Center>
+        </Box>
       )}
 
-      <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+      <Grid>
         {plotoAlbums.map((value) => (
-          <GridItem
+          <Box
             key={value.id}
-            colSpan={isDesk ? 1 : 4}
-            cursor={"pointer"}
             onClick={() => {
               navigation("/pics?name=" + value.name);
             }}
           >
             <Box position={"relative"}>
-              <AspectRatio ratio={1}>
-                <Image
+              <AspectRatio >
+                <img
                   src={getImage(value)}
-                  fit={"contain"}
-                  borderRadius={12}
                 />
               </AspectRatio>
               <Box
-                position={"absolute"}
-                bottom={"12px"}
-                left={"12px"}
-                color={"white"}
-                bg={"blackAlpha.400"}
-                p={1}
-                borderRadius={5}
               >
                 {value.description}
               </Box>
@@ -130,7 +107,7 @@ const DynamicPage: React.FC = () => {
             <Box mt={2}>
               <span>{value.name}</span>
             </Box>
-          </GridItem>
+          </Box>
         ))}
       </Grid>
 
@@ -160,7 +137,7 @@ const AddPhoneAlbumsForm: React.FC<{ show: boolean; onClose: () => void }> = ({
   useMount(() => {
     blogApi()
       .getResourceCategoryTypes()
-      .then((value) => {
+      .then((value: Result<ResourceCategoryType[]>) => {
         successResultHandle(value, (data) => {
           setRcts(data);
         });
@@ -181,12 +158,10 @@ const AddPhoneAlbumsForm: React.FC<{ show: boolean; onClose: () => void }> = ({
   };
 
   return (
-    <Modal isOpen={show} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>新建相册</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
+    <Dialog open={show} onClose={onClose}>
+      <DialogTitle>新建相册</DialogTitle>
+      <DialogContent>
+
           <Stack direction={"column"} spacing={5}>
             <Input
               placeholder="名称"
@@ -207,7 +182,7 @@ const AddPhoneAlbumsForm: React.FC<{ show: boolean; onClose: () => void }> = ({
                   console.log(blob);
                   let form = new FormData();
                   form.append("file", blob);
-                  let result = await blogApi().uploadFileWithSingle(form);
+                  let result: Result<string> = await blogApi().uploadFileWithSingle(form);
                   successResultHandle(result, (data) => {
                     setLogo(data);
                   });
@@ -219,7 +194,7 @@ const AddPhoneAlbumsForm: React.FC<{ show: boolean; onClose: () => void }> = ({
               选择封面图上传
             </Button>
 
-            {logo.length !== 0 && <Image src={logo} />}
+            {logo.length !== 0 && <img src={logo} />}
 
             <Input
               placeholder={"类型"}
@@ -230,7 +205,6 @@ const AddPhoneAlbumsForm: React.FC<{ show: boolean; onClose: () => void }> = ({
             <Box>
               {rcts.map((value) => (
                 <Button
-                  variant={"ghost"}
                   key={value.type}
                   onClick={() => setType(value.type)}
                 >
@@ -239,15 +213,14 @@ const AddPhoneAlbumsForm: React.FC<{ show: boolean; onClose: () => void }> = ({
               ))}
             </Box>
 
-            <Textarea
+            <TextField
+                multiline={true}
               placeholder="介绍"
               value={intro}
               onChange={(event) => setIntro(event.target.value)}
             />
           </Stack>
-        </ModalBody>
-        <ModalFooter>
-          <HStack>
+        <DialogActions>
             <Button
               onClick={() => {
                 setType("images");
@@ -255,13 +228,12 @@ const AddPhoneAlbumsForm: React.FC<{ show: boolean; onClose: () => void }> = ({
             >
               相册类型
             </Button>
-            <Button colorScheme={"blue"} onClick={submit}>
+            <Button onClick={submit}>
               创建
             </Button>
-          </HStack>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+        </DialogActions>
+      </DialogContent>
+    </Dialog>
   );
 };
 

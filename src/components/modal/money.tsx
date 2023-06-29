@@ -1,60 +1,44 @@
 import React from "react";
-import {
-    Box,
-    Button,
-    Modal,
-    ModalBody, ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay, Spinner, useBoolean,
-} from "@chakra-ui/react";
+
 import {useRecoilState} from "recoil";
 import {appMoneyModalOpen, appMoneyTextModel} from "../../providers/modal";
 import {useMount} from "react-use";
 import {blogApi} from "../../utils/request";
-import {successResultHandle} from "dd_server_api_web/apis/utils/ResultUtil";
 import MarkdownView from "../MarkdownView";
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
+import { TextModel } from "dd_server_api_web/dist/model/TextModel";
+import { Result, successResultHandle } from "dd_server_api_web/dist/utils/ResultUtil";
 
 const MoneyModal: React.FC = () => {
     const [isOpen, setIsOpen] = useRecoilState(appMoneyModalOpen)
     const [moneyTextModel,setMoneyTextModel] = useRecoilState(appMoneyTextModel)
     const onClose = () => setIsOpen(false)
-    const [loading,setLoading] = useBoolean()
 
     useMount(()=>{
         if(!moneyTextModel){
-            setLoading.on()
-            blogApi().getTextByName('blog-ds').then(value => {
+            blogApi().getTextByName('blog-ds').then((value: Result<TextModel>) => {
                 successResultHandle(value,data => {
                     setMoneyTextModel(data)
                 })
-                setLoading.off()
             })
         }
     })
 
     return (
         <>
-            <Modal isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay/>
-                <ModalContent>
-                    <ModalHeader>打赏</ModalHeader>
-                    <ModalCloseButton/>
-                    <ModalBody>
-                        {loading && <Spinner/>}
-                        {moneyTextModel && <Box>
-                            <MarkdownView content={moneyTextModel.context}/>
-                            </Box>}
-                            {!moneyTextModel && <span style={{color: 'red'}}>404 或者 资源已被删除</span>}
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={onClose}>
-                            关闭
-                        </Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
+            <Dialog open={isOpen} onClose={onClose}>
+                <DialogTitle>打赏</DialogTitle>
+                <DialogContent>
+                    {
+                        moneyTextModel &&  <MarkdownView content={moneyTextModel.context}/>
+                    }
+                </DialogContent>
+                <DialogActions>
+                    <Button  onClick={onClose}>
+                        关闭
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </>
     )
 }

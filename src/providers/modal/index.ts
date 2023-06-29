@@ -1,5 +1,5 @@
+import { TextModel } from "dd_server_api_web/dist/model/TextModel";
 import {atom} from "recoil";
-import {TextModel} from "dd_server_api_web/apis/model/TextModel";
 
 //打赏的窗口开关
 const appMoneyModalOpen = atom<boolean>({

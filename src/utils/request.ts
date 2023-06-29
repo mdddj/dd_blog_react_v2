@@ -1,5 +1,5 @@
-import { Result } from "dd_server_api_web/apis/utils/ResultUtil";
-import DdServerApiByWeb from "dd_server_api_web/apis";
+import DdServerApiByWeb from 'dd_server_api_web';
+import { Result } from 'dd_server_api_web/dist/utils/ResultUtil';
 import PubSub from 'pubsub-js'
 const MOOSE_REACT_LEARN_ACCESS_TOKEN = 'auth_token';
 
@@ -7,7 +7,7 @@ const MOOSE_REACT_LEARN_ACCESS_TOKEN = 'auth_token';
 /// true 表示本地服务器，false表示远程服务器
 let isLocal = false;
 
-const host = isLocal ? 'http://localhost' : 'https://itbug.shop';
+const host = isLocal ? 'http://localhost' : 'https://itbug.shop:9445';
 
 
 export type ErrorData = {

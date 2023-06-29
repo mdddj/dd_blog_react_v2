@@ -1,4 +1,4 @@
-import { successResultHandle } from "dd_server_api_web/apis/utils/ResultUtil";
+import { successResultHandle } from "dd_server_api_web/dist/utils/ResultUtil";
 import { blogApi } from "./request";
 
 // 编辑器图片上传

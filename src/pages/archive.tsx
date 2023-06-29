@@ -1,13 +1,13 @@
 import React from "react";
 import {useRecoilState} from "recoil";
 import {archivesDataState} from "../providers/archives";
-import {MonthsCount} from "dd_server_api_web/apis/model/ArchiveModel";
 import {Link} from "react-router-dom";
-import {Box, Heading} from "@chakra-ui/react";
 import dayjs from "dayjs";
 import PageHeader from "../components/page_header";
 import NothingWidget from "../components/nothing";
 import MyBox from "../components/box/my_box";
+import {Box, Typography} from "@mui/material";
+import { MonthsCount } from "dd_server_api_web/dist/model/ArchiveModel";
 
 const Archive: React.FC = () => {
 
@@ -34,9 +34,9 @@ const MonthGroup: React.FC<{ monthItem: MonthsCount }> = ({monthItem}) => {
     const blogs = monthItem.blogs ?? []
 
 
-    return <Box mb={5}>
+    return <Box>
         <Box mb={5}>
-            <Heading as={'h3'}>{monthItem.months}</Heading>
+            <Typography>{monthItem.months}</Typography>
         </Box>
         <ul style={{listStyle: 'none'}}>
             {

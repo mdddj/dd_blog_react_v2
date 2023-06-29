@@ -1,7 +1,7 @@
-import {Box, Button} from "@chakra-ui/react"
-import {PagerModel} from "dd_server_api_web/src/utils/ResultUtil"
 import React from "react";
 import NothingWidget from "./nothing";
+import {Box, Button} from "@mui/material";
+import { PagerModel } from "dd_server_api_web/dist/utils/ResultUtil";
 
 
 type Props = {
@@ -11,13 +11,10 @@ type Props = {
 }
 
 const PagerNextLoad: React.FC<Props> = ({pager, onload, loading}) => {
-    return <Box w={'100%'} display={'block'}>
+    return <Box display={'block'}>
         {/*    加载下一页  */}
         {
             !pager.paged && <Button
-                w={'100%'}
-                isLoading={loading}
-                loadingText='加载中'
                 onClick={onload}
             >
                 查看更多

@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { blogApi } from "../utils/request";
 import { useMount } from "react-use";
-import { BlogData } from "dd_server_api_web/apis/model/result/BlogPushNewResultData";
-import { Box, Fade, Heading } from "@chakra-ui/react";
 import { useSetRecoilState } from "recoil";
 import { appLoading } from "../providers/loading";
 import TwoColumnLayout from "../components/two_column_layout";
 import UserCardWithBlogDetail from "../components/user/user_card";
 import MarkdownView from "../components/MarkdownView";
 import CommentComponent from "../components/comment_component";
+import {Box, Typography} from "@mui/material";
+import { BlogData } from "dd_server_api_web/dist/model/result/BlogPushNewResultData";
+import { Result } from "dd_server_api_web/dist/utils/ResultUtil";
 
 //博客详情页面
 const BlogPage: React.FC = () => {
@@ -24,7 +25,7 @@ const BlogPage: React.FC = () => {
 
     const getBlogDetail = () => {
         setLoading(true)
-        id && blogApi().getBlogDetailById(parseInt(id)).then(r => {
+        id && blogApi().getBlogDetailById(parseInt(id)).then((r:Result<BlogData>) => {
             setLoading(false)
             setBlog(r.data)
         })
@@ -37,9 +38,8 @@ const BlogPage: React.FC = () => {
         ]} bottomComponent={
             <>{blog && <CommentComponent type={"blog"} id={blog.id} isBlogComment />} </>
         }>
-            <Fade in={blog !== undefined}>
-                <Heading>{blog?.title}</Heading>
-                <Box color={'gray.600'}>{blog?.dateString}</Box>
+                <Typography>{blog?.title}</Typography>
+                <Box >{blog?.dateString}</Box>
                 <Box mt={5}>
                     {blog && <MarkdownView content={blog!.content} />}
                 </Box>
@@ -49,7 +49,6 @@ const BlogPage: React.FC = () => {
                         color: 'grey'
                     }} to={'/add-post?id='+blog?.id}>编辑博客</Link>
                 </Box>
-            </Fade>
 
         </TwoColumnLayout>
 

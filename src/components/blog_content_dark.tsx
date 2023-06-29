@@ -2,7 +2,6 @@ import ReactMarkdown from 'react-markdown';
 import React from 'react';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import {useColorMode} from "@chakra-ui/react";
 
 /**
  * 博客预览组件 (暗夜模式)
@@ -10,11 +9,9 @@ import {useColorMode} from "@chakra-ui/react";
  * @constructor
  */
 export const BlogPreviewDark: React.FC<{ content: string; }> = ({content}) => {
-    const model = useColorMode()
     return (
         <>
             <ReactMarkdown
-                className={model.colorMode === 'dark' ? 'markdown-body' : ''}
                 children={content}
                 remarkPlugins={[remarkGfm]}
                 components={{
@@ -55,15 +52,6 @@ export const BlogPreviewDark: React.FC<{ content: string; }> = ({content}) => {
                             </code>
                         );
                     },
-                    // a: ({ node, className, children, ...props }) => {
-                    //     const match =
-                    //         props.href &&
-                    //         props.href.indexOf('https://pub.dev/packages/') == 0;
-                    //     if (match) {
-                    //         return <FlutterLink href={props.href!} />;
-                    //     }
-                    //     return <Button >{children}</Button>;
-                    // },
                 }}
             />
         </>

@@ -1,4 +1,3 @@
-import { ColorModeScript } from "@chakra-ui/react"
 import * as React from "react"
 import { App } from "./App"
 import reportWebVitals from "./reportWebVitals"
@@ -11,7 +10,6 @@ const container = document.getElementById('root')!!;
 const root = createRoot(container)
 root.render(
   <React.StrictMode>
-    <ColorModeScript />
     <RecoilRoot>
         <App />
     </RecoilRoot>

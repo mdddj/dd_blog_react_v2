@@ -1,15 +1,4 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  Heading,
-  Input,
-  Select,
-  Spinner,
-  Stack,
-  useDisclosure,
-  useToast,
-} from "@chakra-ui/react";
 import MyBox from "../../components/box/my_box";
 import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
@@ -18,12 +7,13 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { archivesDataState } from "../../providers/archives";
 import AddPostTagModal from "./add_post_tag_modal";
 import { blogApi } from "../../utils/request";
-import { successResultHandle } from "dd_server_api_web/apis/utils/ResultUtil";
 import { useSearchParams } from "react-router-dom";
 import { useMount, useToggle } from "react-use";
 import { successMessageProvider } from "../../providers/modal/success_modal";
-import { BlogData } from "dd_server_api_web/apis/model/result/BlogPushNewResultData";
 import { onImageUpload } from "../../utils/EditImageFileUpload";
+import {Box, Button, CircularProgress, Select, Stack, TextField, Typography} from "@mui/material";
+import { Result, successResultHandle } from "dd_server_api_web/dist/utils/ResultUtil";
+import { BlogData, BlogPushNewResultData } from "dd_server_api_web/dist/model/result/BlogPushNewResultData";
 
 // 发布博客页面
 const AddPostPage: React.FC = () => {
@@ -32,9 +22,7 @@ const AddPostPage: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
   const [categoryId, setCategoryId] = useState<number>(0);
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [on, toggle] = useToggle(false);
-  const toast = useToast();
   const setMsg = useSetRecoilState(successMessageProvider)
 
 //   修改博客的对象
@@ -51,7 +39,7 @@ const AddPostPage: React.FC = () => {
         toggle(true)
       blogApi()
         .getBlogDetailById(parseInt(id))
-        .then((r) => {
+        .then((r: Result<BlogData>) => {
             toggle(false)
             successResultHandle(r,d=>{
                 setUpdateBlog(d)
@@ -75,23 +63,13 @@ const AddPostPage: React.FC = () => {
         categoryId: categoryId,
         id: updateBlog?.id
       })
-      .then((value) => {
+      .then((value : BlogPushNewResultData) => {
         console.log(value);
         successResultHandle(
           value,
           (data) => {
-            toast({
-              title: "发布成功",
-              status: "success",
-              isClosable: true,
-            });
           },
           (message) => {
-            toast({
-              title: `${message}`,
-              status: "error",
-              isClosable: true,
-            });
           }
         );
       });
@@ -99,12 +77,12 @@ const AddPostPage: React.FC = () => {
 
   return (
     <MyBox>
-      {on && <Spinner />}
+      {on && <CircularProgress />}
       <Stack direction={"column"} spacing={5}>
-        <Heading as={"h4"} size={"md"}>
+        <Typography>
           发布博客
-        </Heading>
-        <Input
+        </Typography>
+        <TextField
           placeholder={"输入标题"}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -123,13 +101,13 @@ const AddPostPage: React.FC = () => {
 
         {archives && (
           <Stack direction={"column"} spacing={2}>
-            <Heading as={"h5"} size={"sm"}>
+            <Typography>
               文章分类
-            </Heading>
+            </Typography>
             <Select
               placeholder="文章分类"
               value={updateBlog ?  categoryId : undefined}
-              onChange={(e) => setCategoryId(parseInt(e.target.value))}
+              onChange={(e) => setCategoryId(e.target.value as number)}
             >
               {archives.categoryList.map((value) => (
                 <option value={value.id} key={value.id}>
@@ -138,17 +116,17 @@ const AddPostPage: React.FC = () => {
               ))}
             </Select>
 
-            <Heading as={"h5"} size={"sm"}>
+            <Typography>
               添加标签{" "}
               <span style={{ color: "grey", fontSize: 12 }}>
                 已选择{tags.length}个
               </span>
-            </Heading>
-            <Button onClick={() => onOpen()}>选择</Button>
+            </Typography>
+            <Button onClick={()=>{}}>选择</Button>
           </Stack>
         )}
-        <Box textAlign={"right"}>
-          <Button colorScheme={"blue"} onClick={submit}>
+        <Box>
+          <Button  onClick={submit}>
             {
                 updateBlog ? '提交修改' : '发布'
             }
@@ -158,13 +136,12 @@ const AddPostPage: React.FC = () => {
 
       {/*选择标签的弹窗*/}
       <AddPostTagModal
-        show={isOpen}
-        onClose={onClose}
+        show={true}
         onOk={(values) => {
           setTags(values);
         }}
         initVal={tags}
-      />
+       onClose={()=>{}}/>
     </MyBox>
   );
 };

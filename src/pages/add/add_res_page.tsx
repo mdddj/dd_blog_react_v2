@@ -1,15 +1,8 @@
-import {
-  Box,
-  Button,
-  Textarea,
-  Image,
-  Grid,
-  GridItem,
-  HStack,
-} from "@chakra-ui/react";
+
 import PageHeader from "../../components/page_header";
 import React, { useEffect, useState } from "react";
 import { fileOpen } from "browser-fs-access";
+import {Box, Button, Grid, Stack, TextField} from "@mui/material";
 
 const AddResPage: React.FC = () => {
   const [files, setFiles] = useState<File[]>([]);
@@ -26,23 +19,22 @@ const AddResPage: React.FC = () => {
   return (
     <Box>
       <PageHeader title="发布动态" />
-      <Box bg={"gray.200"} p={4}>
-        <Textarea
+      <Box>
+        <TextField
+            multiline={true}
           placeholder="说点什么吧"
-          border={"none"}
-          focusBorderColor={"gray.200"}
         />
 
-        <Grid mt={4} templateColumns="repeat(10, 1fr)" gap={2}>
+        <Grid>
           {files.map((value, index) => (
             <BlobFileView key={index} blob={value} />
           ))}
         </Grid>
       </Box>
-      <HStack mt={4}>
-        <Button colorScheme={"blue"}>发布</Button>
+      <Stack>
+        <Button>发布</Button>
         <Button onClick={selectImage}>添加图片</Button>
-      </HStack>
+      </Stack>
     </Box>
   );
 };
@@ -74,17 +66,15 @@ const BlobFileView: React.FC<{ blob: Blob }> = ({ blob }) => {
   };
 
   return (
-    <GridItem>
+    <Box>
       {url && (
-        <Image
+        <img
           src={url}
-          fit={"cover"}
           width={'80px'}
           height={'80px'}
-          borderRadius={8}
-        />
+         alt={''}/>
       )}
-    </GridItem>
+    </Box>
   );
 };
 export default AddResPage;

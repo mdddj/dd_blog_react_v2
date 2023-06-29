@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useMount } from "react-use";
 import { blogApi } from "../utils/request";
-import { BlogData } from "dd_server_api_web/apis/model/result/BlogPushNewResultData";
 import {AboutMeCard, ArchiveCard, CategoryCard, TagCard} from "../components/about_me";
 import BaseBlogCardStyle2 from "../components/blog/base_blog_card_style2";
-import { PagerModel } from "dd_server_api_web/apis/utils/ResultUtil";
 import {useSetRecoilState} from "recoil";
 import {appLoading} from "../providers/loading";
 import PagerNextLoad from "../components/pager_next_load";
 import TwoColumnLayout from "../components/two_column_layout";
+import { BlogData, BlogListData } from "dd_server_api_web/dist/model/result/BlogPushNewResultData";
+import { PagerModel, Result } from "dd_server_api_web/dist/utils/ResultUtil";
 
 //首页
 const Home: React.FC = () => {
@@ -41,7 +41,7 @@ const Home: React.FC = () => {
         if(page===1){
             setAppLoading(true)
         }
-        blogApi().getBlogList(page, 20).then(value => {
+        blogApi().getBlogList(page, 20).then((value: Result<BlogListData>) => {
             if(page===1){
                 setAppLoading(false)
             }

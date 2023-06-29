@@ -1,4 +1,4 @@
-import { BlogData } from "dd_server_api_web/apis/model/result/BlogPushNewResultData";
+import { BlogData } from "dd_server_api_web/dist/model/result/BlogPushNewResultData"
 
 export type BlogCardProps = {
     blog: BlogData,

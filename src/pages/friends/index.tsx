@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import PageHeader from "../../components/page_header";
 import { blogApi } from "../../utils/request";
 import { useMount } from "react-use";
-import { successResultHandle } from "dd_server_api_web/apis/utils/ResultUtil";
-import { Friend } from "dd_server_api_web/apis/model/friend";
-import * as react from "@chakra-ui/react";
 import { useSetRecoilState } from "recoil";
 import { appLoading } from "../../providers/loading";
 import MyBox from "../../components/box/my_box";
@@ -18,10 +15,25 @@ import {
 } from "formik";
 import CommentComponent from "../../components/comment_component";
 import { successMessageProvider } from "../../providers/modal/success_modal";
+import {
+    Avatar,
+    Box, Button,
+    Dialog,
+    DialogContent,
+    DialogTitle, FormControl,
+    Grid,
+    Input,
+    Link,
+    Stack,
+    Typography,
+    useMediaQuery
+} from "@mui/material";
+import { Friend } from "dd_server_api_web/dist/model/friend";
+import { Result, successResultHandle } from "dd_server_api_web/dist/utils/ResultUtil";
 
 //友链页面
 const FriendsPage: React.FC = () => {
-  const [isDesk] = react.useMediaQuery("(min-width: 760px)");
+  const isDesk = useMediaQuery("(min-width: 760px)");
   const setLoading = useSetRecoilState(appLoading);
   const [friends, setFriends] = useState<Friend[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -33,7 +45,7 @@ const FriendsPage: React.FC = () => {
     setLoading(true);
     blogApi()
       .getFriends({ state: "1" })
-      .then((value) => {
+      .then((value:Result<Friend[]>) => {
         setLoading(false);
         successResultHandle(value, (data) => {
           setFriends(data);
@@ -63,39 +75,32 @@ const FriendsPage: React.FC = () => {
         自助申请友链
       </span>
 
-      <react.SimpleGrid columns={isDesk ? 2 : 1} spacingX="40px" spacingY="20px">
+      <Grid>
         {friends.map((value) => {
           return (
-            <react.Link key={value.id} href={value.url} isExternal={true}>
+            <Link key={value.id} href={value.url}>
               <MyBox>
-                <react.Flex>
-                  <react.Avatar src={value.logo} />
-                  <react.Box ml="3">
-                    <react.Text fontWeight="bold">{value.name}</react.Text>
-                    <react.Text fontSize="sm">{value.intro}</react.Text>
-                  </react.Box>
-                </react.Flex>
+                  <Avatar src={value.logo} />
+                  <Box>
+                    <Typography fontWeight="bold">{value.name}</Typography>
+                    <Typography fontSize="sm">{value.intro}</Typography>
+                  </Box>
               </MyBox>
-            </react.Link>
+            </Link>
           );
         })}
-      </react.SimpleGrid>
+      </Grid>
 
-      <react.Box bg="white" borderRadius={5} p={3} mt={12}>
+      <Box>
         <CommentComponent type={"friend"} id={0} />
-      </react.Box>
+      </Box>
 
-      <react.Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-        <react.ModalOverlay />
-        <react.ModalContent>
-          <react.ModalHeader>自助申请友链</react.ModalHeader>
-          <react.ModalCloseButton />
-          <react.ModalBody>
+      <Dialog open={showModal} onClose={() => setShowModal(false)}>
+          <DialogTitle>自助申请友链</DialogTitle>
+        <DialogContent>
             <AddFriendsForm />
-          </react.ModalBody>
-          <react.ModalFooter />
-        </react.ModalContent>
-      </react.Modal>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
@@ -109,7 +114,7 @@ const AddFriendsForm: React.FC = () => {
   const submit = (values: Friend, _: FormikHelpers<Friend>) => {
     blogApi()
       .saveFriendsLink(values)
-      .then((r) => {
+      .then((r: Result<any>) => {
         successResultHandle(r,msg=>{
           setMsg(msg)
         },err=>{
@@ -154,88 +159,59 @@ const AddFriendsForm: React.FC = () => {
           console.log(errors);
           return (
             <Form>
-              <react.Stack direction={"column"} spacing={5}>
+              <Stack direction={"column"} spacing={5}>
                 <Field name={"name"}>
                   {({ field, form }: FieldProps<any, Friend>) => {
                     return (
-                      <react.FormControl
-                        isInvalid={
-                          form.values.name === "" && errors.name !== undefined
-                        }
-                        isRequired={true}
-                      >
-                        <react.FormLabel htmlFor="name">网站名</react.FormLabel>
-                        <react.Input {...field} id="name" />
-                        <react.FormErrorMessage>{errors.name}</react.FormErrorMessage>
-                      </react.FormControl>
+                      <FormControl>
+                        <Input {...field} id="name" />
+                      </FormControl>
                     );
                   }}
                 </Field>
                 <Field name={"url"} type="url">
                   {({ field, form }: FieldProps<any, Friend>) => {
                     return (
-                      <react.FormControl
-                        isInvalid={
-                          form.values.url === "" && errors.url !== undefined
-                        }
-                        isRequired={true}
+                      <FormControl
                       >
-                        <react.FormLabel htmlFor="urlId">链接</react.FormLabel>
-                        <react.Input {...field} id="urlId" />
-                        <react.FormErrorMessage>{errors.url}</react.FormErrorMessage>
-                      </react.FormControl>
+                        <Input {...field} id="urlId" />
+                      </FormControl>
                     );
                   }}
                 </Field>
                 <Field name={"intro"}>
                   {({ field, form }: FieldProps<any, Friend>) => {
                     return (
-                      <react.FormControl
-                        isInvalid={
-                          form.values.intro === "" && errors.intro !== undefined
-                        }
-                        isRequired={true}
+                      <FormControl
                       >
-                        <react.FormLabel htmlFor="introId">一句话介绍</react.FormLabel>
-                        <react.Input {...field} id="introId" />
-                        <react.FormErrorMessage>{errors.intro}</react.FormErrorMessage>
-                      </react.FormControl>
+                        <Input {...field} id="introId" />
+                      </FormControl>
                     );
                   }}
                 </Field>
                 <Field name={"logo"} type="url">
                   {({ field, form }: FieldProps<any, Friend>) => {
                     return (
-                      <react.FormControl
-                        isInvalid={
-                          form.values.logo === "" && errors.logo !== undefined
-                        }
-                        isRequired={true}
+                      <FormControl
                       >
-                        <react.FormLabel htmlFor="logoId">Logo</react.FormLabel>
-                        <react.Input {...field} id="logoId" />
-                        <react.FormErrorMessage>{errors.logo}</react.FormErrorMessage>
-                      </react.FormControl>
+                        <Input {...field} id="logoId" />
+                      </FormControl>
                     );
                   }}
                 </Field>
                 <Field name={"email"} type="email">
                   {({ field }: FieldProps<any, Friend>) => {
                     return (
-                      <react.FormControl isRequired={false}>
-                        <react.FormLabel htmlFor="emailId">邮箱</react.FormLabel>
-                        <react.Input {...field} id="emailId" />
-                        <react.FormHelperText>
-                          邮箱信息仅用来接收审核结果通知,不会被用作其他用途.
-                        </react.FormHelperText>
-                      </react.FormControl>
+                      <FormControl >
+                        <Input {...field} id="emailId" />
+                      </FormControl>
                     );
                   }}
                 </Field>
-                <react.Button type={"submit"} mt={5}>
+                <Button type={"submit"}>
                   提交数据
-                </react.Button>
-              </react.Stack>
+                </Button>
+              </Stack>
             </Form>
           );
         }}

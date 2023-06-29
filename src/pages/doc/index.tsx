@@ -1,15 +1,15 @@
 import React, {useState} from "react";
 import {blogApi} from "../../utils/request";
 import {useMount} from "react-use";
-import {successResultHandle} from "dd_server_api_web/apis/utils/ResultUtil";
-import {ResCategory} from "dd_server_api_web/apis/model/ResCategory";
-import {AspectRatio, Badge, Box, Image, SimpleGrid} from "@chakra-ui/react";
 import {useSetRecoilState} from "recoil";
 import {appLoading} from "../../providers/loading";
 import NothingWidget from "../../components/nothing";
-import {PagerModel} from "dd_server_api_web/src/utils/ResultUtil";
 import PageHeader from "../../components/page_header";
 import {Link} from "react-router-dom";
+import {Box, Chip, Grid} from "@mui/material";
+import {AspectRatio} from "@mui/icons-material";
+import { ResCategory } from "dd_server_api_web/dist/model/ResCategory";
+import { PagerModel, Result, successResultHandle } from "dd_server_api_web/dist/utils/ResultUtil";
 
 //文档列表页面
 const DocsPage:React.FC = () => {
@@ -28,7 +28,10 @@ const DocsPage:React.FC = () => {
       pageSize: 1000
     },{
      type: 'doc'
-    } as any).then(value => {
+    } as any).then( (value: Result<{
+      page: PagerModel;
+      list: ResCategory[];
+    }>) => {
       setLoading(false)
       successResultHandle(value,data => {
         console.log(data)
@@ -47,19 +50,18 @@ const DocsPage:React.FC = () => {
   return <>
     <PageHeader title={'文档'} />
     <NothingWidget nothing={ pager && pager.total === 0 } />
-    <SimpleGrid columns={4} spacing={10}>
+    <Grid columns={4} spacing={10}>
       {
-        docs.map(property =>  <Box key={property.id} borderWidth='1px' borderRadius='lg' overflow='hidden'>
+        docs.map(property =>  <Box key={property.id}>
 
-          <AspectRatio ratio={4 / 3}>
-            <Image src={property.logo} alt={property.name} />
+          <AspectRatio>
+            <img src={property.logo} alt={property.name}/>
           </AspectRatio>
 
           <Box p='6'>
             <Box display='flex' alignItems='baseline'>
-              <Badge borderRadius='full' px='2' colorScheme='teal'>
-                {property.type}
-              </Badge>
+              <Chip  label={property.type} />
+
               <Box
                   color='gray.500'
                   fontWeight='semibold'
@@ -71,12 +73,7 @@ const DocsPage:React.FC = () => {
               </Box>
             </Box>
 
-            <Box
-                mt='1'
-                fontWeight='semibold'
-                as='h4'
-                lineHeight='tight'
-            >
+            <Box>
              <Link to={'/docs/'+property.id}> {property.name}</Link>
             </Box>
 
@@ -86,7 +83,7 @@ const DocsPage:React.FC = () => {
           </Box>
         </Box>)
       }
-    </SimpleGrid>
+    </Grid>
   </>
 }
 export default DocsPage

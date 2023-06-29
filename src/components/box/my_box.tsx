@@ -1,14 +1,13 @@
 import React, {PropsWithChildren} from "react";
-import {Box, Skeleton, Stack, useColorModeValue} from "@chakra-ui/react";
 import {useRecoilValue} from "recoil";
 import {appLoading} from "../../providers/loading";
+import {Box, Skeleton, Stack} from "@mui/material";
 
 ///重构box
 const MyBox: React.FunctionComponent<PropsWithChildren<{ skeleton?: boolean }>> = (props) => {
-    const color = useColorModeValue('white', 'black')
     const loading = useRecoilValue(appLoading)
 
-    return <Box bg={color} borderWidth={1} p={5} borderRadius={5} >
+    return <Box>
         {
             loading && props.skeleton && <Stack>
                 <Skeleton height='20px'/>

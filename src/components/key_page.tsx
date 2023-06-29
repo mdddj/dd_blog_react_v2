@@ -1,28 +1,9 @@
 import React, { useState } from "react";
 import { blogApi } from "../utils/request";
 import { useMount, useToggle } from "react-use";
-import { TextModel } from "dd_server_api_web/apis/model/TextModel";
-import { successResultHandle } from "dd_server_api_web/apis/utils/ResultUtil";
 import { useSetRecoilState } from "recoil";
 import { appLoading } from "../providers/loading";
 import MdEditor from "react-markdown-editor-lite";
-import { Result } from "dd_server_api_web/src/utils/ResultUtil";
-import {
-  Box,
-  Button,
-  Checkbox,
-  Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Stack,
-  useBoolean,
-  useToast,
-} from "@chakra-ui/react";
 import Nothing from "./nothing";
 import MarkdownView from "./MarkdownView";
 import CommentComponent from "./comment_component";
@@ -30,15 +11,26 @@ import { BlogPreviewLight } from "./blog_content_light";
 import { onImageUpload } from "../utils/EditImageFileUpload";
 import { successMessageProvider } from "../providers/modal/success_modal";
 import { useSearchParams } from "react-router-dom";
+import {
+    Box,
+    Button,
+    Checkbox,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle, FormControlLabel, FormGroup,
+    Stack,
+    TextField
+} from "@mui/material";
+import { TextModel } from "dd_server_api_web/dist/model/TextModel";
+import { Result, successResultHandle } from "dd_server_api_web/dist/utils/ResultUtil";
 type Props = {
   keyText: string;
 };
 ///字典组件
 const KeyPage: React.FC<Props> = ({ keyText }) => {
-  const toast = useToast();
   const [params] = useSearchParams()
   const urlPass = params.get('view-password') ?? ''
-  const [verifyLoading, setVerifyLoading] = useBoolean();
   const [inputPassword, setInputPassword] = useState<string>(urlPass);
   const [model, setModel] = useState<TextModel>();
   const [result, setResult] = useState<Result<any> | undefined>(undefined);
@@ -64,28 +56,19 @@ const KeyPage: React.FC<Props> = ({ keyText }) => {
   //   加载数据
   const fetchData = () => {
     if (hasPassword && inputPassword.length !== 0) {
-      setVerifyLoading.on();
     } else {
     }
     if (hasPassword && inputPassword.length === 0) {
-      toast.closeAll();
-      toast({
-        title: `请输入密码`,
-        status: "error",
-        isClosable: true,
-        duration: 2000,
-      });
       return;
     }
     setLoading(true);
     blogApi()
       .getTextByName(keyText, inputPassword)
-      .then((value) => {
+      .then((value:Result<TextModel>) => {
         setLoading(false);
         setToggle(false)
         setResult(value);
         if (inputPassword.length !== 0) {
-          setVerifyLoading.off();
         }
         successResultHandle(
           value,
@@ -93,12 +76,6 @@ const KeyPage: React.FC<Props> = ({ keyText }) => {
             setModel(data);
           },
           (message) => {
-            toast.closeAll();
-            toast({
-              title: message,
-              status: "error",
-              duration: 3000,
-            });
           }
         );
       });
@@ -115,14 +92,12 @@ const KeyPage: React.FC<Props> = ({ keyText }) => {
       {hasPassword && (
         <Box>
           <Box mb={2}>{result?.message}</Box>
-          <Input
+          <TextField
             placeholder="请输入密码"
             onChange={(event) => setInputPassword(event.target.value)}
           />
           <Box mt={4}>
             <Button
-              colorScheme="blue"
-              isLoading={verifyLoading}
               onClick={fetchData}
             >
               确认
@@ -205,7 +180,7 @@ const CreateT: React.FC<{
         intro: intro,
         id: model?.id
       })
-      .then((r) => {
+      .then((r:Result<TextModel>) => {
         successResultHandle(
           r,
           (d) => {
@@ -218,14 +193,12 @@ const CreateT: React.FC<{
 
   return (
     <>
-      <Modal isOpen={showUpdateOrCreateModal} onClose={onClose} size="full">
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>编辑字典</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
+      <Dialog open={showUpdateOrCreateModal} onClose={onClose}>
+          <DialogTitle>编辑字典</DialogTitle>
+        <DialogContent>
+
             <Stack direction={"column"}>
-              <Input
+              <TextField
                 placeholder="关键字"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -239,30 +212,29 @@ const CreateT: React.FC<{
                 }}
                 onImageUpload={onImageUpload}
               />
-              <Input
+              <TextField
                 placeholder="备注"
                 value={intro}
                 onChange={(e) => setIntro(e.target.value)}
               />
-              <Checkbox
-                name="isEncryptionText"
-                isChecked={isPass}
-                onChange={(e) => setIsPass(!isPass)}
-              >
-                是否加密文本
-              </Checkbox>
-              <Input
+                <FormGroup>
+                    <FormControlLabel control={<Checkbox
+                        name="isEncryptionText"
+                        checked={isPass}/>} label={"加密"} />
+                </FormGroup>
+
+              <TextField
                 placeholder="查看密码"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Stack>
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={onSubmit}>提交</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+
+        </DialogContent>
+          <DialogActions>
+              <Button onClick={onSubmit}>提交</Button>
+          </DialogActions>
+      </Dialog>
     </>
   );
 };

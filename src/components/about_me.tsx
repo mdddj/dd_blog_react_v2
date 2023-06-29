@@ -1,14 +1,13 @@
 import React from "react";
-import {Heading, Link, ListItem, UnorderedList} from "@chakra-ui/react";
 import {useRecoilValue} from "recoil";
 import {archivesDataState} from "../providers/archives";
-import {ExternalLinkIcon} from "@chakra-ui/icons";
 import MyBox from "./box/my_box";
+import {ListItem, Typography,Link} from "@mui/material";
 
 //关于我的卡片
 const AboutMeCard: React.FC = () => {
     return <MyBox>
-        <Heading as={'h3'} mb={2}>关于</Heading>
+        <Typography variant={'h1'} component={'h2'} >关于</Typography>
         <p className="mb-0">欢迎来到典典的博客</p>
     </MyBox>
 }
@@ -21,14 +20,12 @@ const ArchiveCard: React.FC = () => {
     }
     let months = archives.monthsCounts
     return <MyBox>
-        <Heading as={'h4'} mb={2}>归档</Heading>
-        <UnorderedList>
+        <Typography variant={'h4'}>归档</Typography>
             {
                 months.map(value => <ListItem key={value.months}><Link color={'teal.500'}
                                                                        href={'/month/' + value.months}>{value.months}
-                    <ExternalLinkIcon mx='2px'/></Link> <span>({value.count})</span></ListItem>)
+                   </Link> <span>({value.count})</span></ListItem>)
             }
-        </UnorderedList>
     </MyBox>
 }
 
@@ -37,17 +34,15 @@ const ArchiveCard: React.FC = () => {
 const CategoryCard: React.FC = () => {
     const categorys = useRecoilValue(archivesDataState)?.categoryList ?? [];
     return <MyBox>
-        <Heading as={'h4'} mb={2}>分类</Heading>
+        <Typography variant={'h4'}>分类</Typography>
         {categorys.length === 0 && <span>空空如也~</span>}
 
-        <UnorderedList>
             {
                 categorys.map(value => {
                     return <ListItem key={value.id}><Link color={'teal.500'} href={'/category/' + value.id}>{value.name}
-                        <ExternalLinkIcon mx='2px'/></Link></ListItem>
+                        </Link></ListItem>
                 })
             }
-        </UnorderedList>
 
     </MyBox>
 }
@@ -57,17 +52,15 @@ const CategoryCard: React.FC = () => {
 const TagCard: React.FC = () => {
     const tags = useRecoilValue(archivesDataState)?.tags ?? [];
     return <MyBox>
-        <Heading as={'h4'} mb={2}>标签</Heading>
+        <Typography variant={'h4'}>标签</Typography>
         {tags.length === 0 && <span>空空如也~</span>}
 
-        <UnorderedList>
             {
                 tags.map(value => {
                     return <ListItem key={value.id}><Link color={'teal.500'} href={'/tag/' + value.id}>{value.name}
-                        <ExternalLinkIcon mx='2px'/></Link></ListItem>
+                        </Link></ListItem>
                 })
             }
-        </UnorderedList>
 
     </MyBox>
 }

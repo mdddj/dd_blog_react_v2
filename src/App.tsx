@@ -1,30 +1,6 @@
 import * as React from "react"
-import {
-    Box,
-    Button,
-    ChakraProvider,
-    Text,
-    Container,
-    Flex,
-    Heading,
-    Spacer,
-    HStack,
-    useMediaQuery,
-    IconButton,
-    Drawer,
-    useDisclosure,
-    DrawerBody,
-    DrawerCloseButton,
-    DrawerContent,
-    DrawerHeader,
-    DrawerOverlay,
-    DrawerFooter,
-    extendTheme,
-    useColorModeValue, ComponentStyleConfig,
-} from "@chakra-ui/react"
-import {HamburgerIcon} from '@chakra-ui/icons'
 
-import {BrowserRouter, Routes, Route, NavLink, Link} from "react-router-dom"
+import {BrowserRouter, Routes, Route} from "react-router-dom"
 import Home from "./pages/home"
 import {blogApi, ErrorData} from "./utils/request";
 import {useMount} from "react-use";
@@ -45,14 +21,11 @@ import {appMoneyModalOpen} from "./providers/modal";
 import MoneyModal from "./components/modal/money";
 import MonthPage from "./pages/month";
 import JianliPage from "./pages/JianliPage";
-import {navbarMenu} from "./menus"
-import {mode} from '@chakra-ui/theme-tools'
 import DynamicPage from "./pages/dynamic/DynamicPage";
 import DocDetailPage from "./pages/doc/detail";
 import LoginComponent from "./components/login";
 import AddPostPage from "./pages/add/post";
-import { successResultHandle } from "dd_server_api_web/apis/utils/ResultUtil"
-import { systemAvatars } from "./providers/avatars"
+import {systemAvatars} from "./providers/avatars"
 import PubSub from "pubsub-js";
 import {errorResponseProvider} from "./providers/modal/error_response";
 import ResponseErrorModal from "./components/modal/ResponseErrorModal";
@@ -61,29 +34,12 @@ import UpdatePasswordModal from "./components/modal/UpdatePasswordModal";
 import FriendsList from "./components/user/FriendsList"
 import DynamicListPage from "./pages/dynamic/DynamicListPage";
 import AddResPage from "./pages/add/add_res_page"
-
-const BoxStyle: ComponentStyleConfig = {
-    defaultProps: {}
-}
-
-const myTheme = extendTheme({
-    styles: {
-        global: (props: any) => ({
-            body: {
-                bg: mode('#f5f6f9', 'gray.800')(props)
-            }
-        })
-    },
-    colors: {
-        appbar: {
-            'white': 'white',
-            'dark': 'black'
-        },
-    },
-    components: {
-        Box: BoxStyle
-    }
-})
+import {Container, ThemeProvider} from "@mui/material";
+import {defaultTheme} from "./theme/DefaultTheme";
+import BlogAppbar from "./components/appbar";
+import {SystemPicter} from "dd_server_api_web/dist/model/avater";
+import {Result, successResultHandle} from "dd_server_api_web/dist/utils/ResultUtil";
+import {ArchiveModel} from "dd_server_api_web/dist/model/ArchiveModel";
 
 
 export const App = () => {
@@ -103,8 +59,8 @@ export const App = () => {
 
     // 加载系统预设头像
     const fetchAvatars = () => {
-        blogApi().getPics(1).then(value => {
-            successResultHandle(value, data => {
+        blogApi().getPics(1).then((value: Result<SystemPicter[]>) => {
+            successResultHandle(value, (data: SystemPicter[] | ((currVal: SystemPicter[]) => SystemPicter[])) => {
                 setAvatars(data)
 
             })
@@ -113,7 +69,7 @@ export const App = () => {
 
     ///加载分类和归档等数据
     const getCategoryData = () => {
-        blogApi().getArchives().then(value => {
+        blogApi().getArchives().then((value: { data: ArchiveModel | ((currVal: ArchiveModel | undefined) => ArchiveModel | undefined) | undefined; }) => {
             setArchives(value.data)
         });
     }
@@ -138,12 +94,12 @@ export const App = () => {
     }
 
     return (
-        <ChakraProvider theme={myTheme}>
+        <ThemeProvider theme={defaultTheme}>
             <BrowserRouter>
-                <main style={{flexShrink: '0'}}>
-                    <BlogNav/>
+                <main>
+                    <BlogAppbar />
 
-                    <Container maxW={'container.lg'}>
+                    <Container >
                         <AppLoadingWidget/>
                         <MoneyModal/>
                         <ResponseErrorModal/>
@@ -225,116 +181,44 @@ export const App = () => {
 
             <AppFoot/>
 
-        </ChakraProvider>
+        </ThemeProvider>
     )
 }
 
 
-// 手机端的导航条
+// todo :  手机端的导航条
 const PhoneAppbar: React.FC = () => {
-    const {isOpen, onOpen, onClose} = useDisclosure()
     return <>
-        <Flex alignItems={'center'}>
-            <Box p='4'>
-                <Link to={'/'}>梁典典的博客</Link>
-            </Box>
-            <Spacer/>
-            <Box p='4'>
-                <IconButton icon={<HamburgerIcon/>} aria-label={""} onClick={onOpen}/>
-            </Box>
-        </Flex>
-        <PhoneMenuDrawer isOpen={isOpen} onClose={onClose}/>
+
     </>
 }
 
+// todo 手机端抽屉
 const PhoneMenuDrawer: React.FC<{ isOpen: boolean, onClose: () => void }> = ({isOpen, onClose}) => {
     const openMoneyModal = useSetRecoilState(appMoneyModalOpen)
     return <>
-        <Drawer
-            isOpen={isOpen}
-            placement='right'
-            onClose={onClose}
-            size={'xs'}
-        >
-            <DrawerOverlay/>
-            <DrawerContent>
-                <DrawerCloseButton/>
-                <DrawerHeader>梁典典的博客</DrawerHeader>
 
-                <DrawerBody>
-                    {
-                        navbarMenu.map(value => <Link to={value.url} key={value.url} onClick={onClose}>
-                            <Text fontSize='xl' fontWeight='bold'>
-                                {value.title}
-                            </Text>
-                        </Link>)
-                    }
-
-                </DrawerBody>
-                <DrawerFooter>
-                    {/*<ColorModeSwitcher/>*/}
-                    <Button colorScheme='blue' variant='ghost' onClick={() => {
-                        openMoneyModal(true)
-                        onClose()
-                    }}>
-                        打赏
-                    </Button>
-                </DrawerFooter>
-
-            </DrawerContent>
-        </Drawer>
     </>
 }
 
-//博客导航
-const BlogNav: React.FC = () => {
-    const openMoneyModal = useSetRecoilState(appMoneyModalOpen)
-    const [isDesk] = useMediaQuery('(min-width: 760px)')
-    const isPhone = !isDesk
+// 博客导航
 
-    const value = useColorModeValue('appbar.white', 'appbar.dark')
 
-    if (isPhone) {
-        return <PhoneAppbar/>
-    }
-
-    return <Box className={'my-nav-bar'} bg={value}>
-        <Container className={'border-bottom app-bar'} maxW={'container.lg'}>
-            <Flex alignItems={'center'}>
-                <Box p={2}>
-                    <Heading size='md'>梁典典的博客</Heading>
-                </Box>
-                <Spacer/>
-                <HStack spacing={12}>
-                    {navbarMenu.map(v => <NavLink key={v.url} to={v.url}>{v.title}</NavLink>)}
-
-                    {/*<ColorModeSwitcher/>*/}
-                </HStack>
-                <Spacer/>
-                <Box>
-                    <Button colorScheme='blue' variant='ghost' onClick={() => openMoneyModal(true)}>
-                        打赏
-                    </Button>
-                </Box>
-            </Flex>
-        </Container>
-    </Box>
-}
-
+// todo 底部区域
 const AppFoot: React.FC = () => {
     return <>
         <footer className="blog-footer mt-auto">
             <p> © 2022 <button>@梁典典的博客</button>.</p>
-            <Box p={2} fontSize={13}>
-               本站由springboot+typescript强力驱动,博客已开源<a style={{color: 'blue'}} href="https://github.com/mdddj/dd_blog_react_v2">GITHUB</a>
-            </Box>
+            {/*<Box p={2} fontSize={13}>*/}
+            {/*   本站由springboot+typescript强力驱动,博客已开源<a style={{color: 'blue'}} href="https://github.com/mdddj/dd_blog_react_v2">GITHUB</a>*/}
+            {/*</Box>*/}
 
         
-        <Box fontSize={12}>
-            赣ICP备17011549号-1 <a href={'https://github.com/mdddj/dd_server_api_web'} style={{
-                color : 'red'
-        }}>开放API</a>
-        </Box>
+        {/*<Box fontSize={12}>*/}
+        {/*    赣ICP备17011549号-1 <a href={'https://github.com/mdddj/dd_server_api_web'} style={{*/}
+        {/*        color : 'red'*/}
+        {/*}}>开放API</a>*/}
+        {/*</Box>*/}
         </footer>
     </>
 }

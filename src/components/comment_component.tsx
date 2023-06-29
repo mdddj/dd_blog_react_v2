@@ -1,40 +1,3 @@
-import {
-    AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader,
-    AlertDialogOverlay,
-    Avatar,
-    Box,
-    Button,
-    Container,
-    Divider,
-    Drawer,
-    DrawerBody,
-    DrawerContent,
-    DrawerHeader,
-    DrawerOverlay,
-    Flex,
-    Heading,
-    Input,
-    InputGroup,
-    InputLeftAddon,
-    Popover,
-    PopoverArrow,
-    PopoverBody,
-    PopoverCloseButton,
-    PopoverContent,
-    PopoverHeader,
-    PopoverTrigger,
-    SimpleGrid,
-    Spacer,
-    Stack,
-    Textarea,
-    useDisclosure,
-    useToast,
-    Wrap,
-    WrapItem,
-    AlertDialog
-} from "@chakra-ui/react";
-import {Comment} from "dd_server_api_web/apis/model/Comment";
-import {successResultHandle} from "dd_server_api_web/apis/utils/ResultUtil";
 import React, {FunctionComponent, useState} from "react";
 import {useMount} from "react-use";
 import {useRecoilValue, useSetRecoilState} from "recoil";
@@ -42,9 +5,11 @@ import {systemAvatars} from "../providers/avatars";
 import {formatDateUtil} from "../utils/DateUtil";
 import {blogApi} from "../utils/request";
 import {successMessageProvider} from "../providers/modal/success_modal";
-import {PagerModel} from "dd_server_api_web/src/utils/ResultUtil";
 import PagerNextLoad from "./pager_next_load";
 import UserWidget from "./user_widget";
+import { Comment } from "dd_server_api_web/dist/model/Comment";
+import {Avatar, Box, Button, Divider, Drawer, Grid, Stack, TextField, Typography} from "@mui/material";
+import { PagerModel, Result, successResultHandle } from "dd_server_api_web/dist/utils/ResultUtil";
 
 // 评论组件的参数
 interface CommentComponentProps {
@@ -70,8 +35,6 @@ interface CommentFormProps {
 const CommentComponent: FunctionComponent<CommentComponentProps> = ({type, id}) => {
 
 
-    const toast = useToast()
-    const {isOpen, onOpen, onClose} = useDisclosure()
 
     const [commmentList, setCommmentList] = useState<Comment[]>([])// 评论列表
     const [replyComment, setReplyComment] = useState<Comment>() // 回复对象
@@ -87,7 +50,10 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({type, id}) 
     //加载评论列表
     const fetchCommentList = async (page: number) => {
         setNextPageLoading(true)
-        let result = await blogApi().findComment({
+        let result: Result<{
+            list: Comment[],
+            page: PagerModel
+        }> = await blogApi().findComment({
             page: page,
             findKey: `${id}`,
             type: type
@@ -102,12 +68,6 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({type, id}) 
 
     // 成功提示
     const successMsg = (msg: string, sts?: "success" | "info" | "warning" | "error" | undefined) => {
-        toast.closeAll()
-        toast({
-            title: msg,
-            status: sts ?? 'success',
-            duration: 3000
-        })
     }
 
     //提交留言
@@ -126,7 +86,7 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({type, id}) 
                 "avatarUrl": avatarUrl,
                 "parentCommentId": replyComment?.id
             }
-        ).then(v => {
+        ).then((v: Result<Comment>) => {
             successResultHandle(v, _ => {
                 successMsg(v.message)
             }, msg => successMsg(msg, 'error'))
@@ -136,38 +96,30 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({type, id}) 
 
     // 回复
     const onReply = (comment: Comment) => {
-        onOpen()
         setReplyComment(comment)
 
     }
 
-    return (<Box p={2} >
-        <Heading mb={5}>评论</Heading>
+    return (<Box>
+        <Typography>评论</Typography>
 
         {/* 发布评论表单 */}
         <CommentForm onSubmit={submit}/>
 
 
         {/* 加载评论列表 */}
-        <Divider mt={5} mb={5}/>
+        <Divider />
         {
             commmentList.map(v => <CommentLayout key={v.id} comment={v} onReply={onReply}/>)
         }
         {/* 回复的弹窗 */}
-        <Drawer placement={'bottom'} onClose={onClose} isOpen={isOpen}>
-            <DrawerOverlay/>
-            <DrawerContent>
-                <DrawerHeader borderBottomWidth='1px'>回复</DrawerHeader>
-                <DrawerBody>
-                    <Container maxW={'container.lg'} p={5}>
-                        <Stack spacing={5}>
-                            {replyComment && <span>回复{replyComment.name} : {replyComment.content}</span>}
+        <Drawer  onClose={()=>{}} open={false}>
+            <span>回复</span>
+            <Stack spacing={5}>
+                {replyComment && <span>回复{replyComment.name} : {replyComment.content}</span>}
 
-                            <CommentForm onSubmit={submit}/>
-                        </Stack>
-                    </Container>
-                </DrawerBody>
-            </DrawerContent>
+                <CommentForm onSubmit={submit}/>
+            </Stack>
         </Drawer>
 
         {
@@ -184,7 +136,6 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({type, id}) 
 const CommentForm: React.FC<CommentFormProps> = (props) => {
 
 
-    const toast = useToast()
 
     const [name, setName] = useState('') //昵称
     const [email, setEmail] = useState('') //邮箱
@@ -197,12 +148,6 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
 
     //验证错误的消息
     const errorMsg = (msg: string) => {
-        toast.closeAll();
-        toast({
-            status: 'error',
-            title: msg,
-            duration: 3000
-        })
     }
 
     //提交留言
@@ -228,57 +173,24 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
     return <div style={{
         marginTop: 22
     }}>
-        <SimpleGrid columns={[2, null, 3]} spacing='12px'>
+        <Grid columns={[2, null, 3]} spacing='12px'>
             <Box>
-                <InputGroup>
-                    <InputLeftAddon children='昵称'/>
-                    <Input type='text' style={{fontSize: 12}} placeholder='请输入昵称'
-                           onChange={e => setName(e.target.value)} value={name}/>
-                </InputGroup>
+                <TextField label={'昵称'} onChange={e => setName(e.target.value)} />
             </Box>
             <Box>
-                <InputGroup>
-                    <InputLeftAddon children='邮箱'/>
-                    <Input type='tel' style={{fontSize: 12}} placeholder='请输入邮箱'
-                           onChange={e => setEmail(e.target.value)} value={email}/>
-                </InputGroup>
+                <TextField label={"邮箱"} onChange={event => {
+                    setEmail(event.target.value)
+                }} />
             </Box>
             <Box>
-                <InputGroup>
-                    <InputLeftAddon children='网址'/>
-                    <Input type='url' style={{fontSize: 12}} placeholder='链接网址' onChange={e => setUrl(e.target.value)}
-                           value={url}/>
-                </InputGroup>
+                <TextField label={'网站'} onChange={event => {
+                    setUrl(event.target.value)
+                }} />
             </Box>
-        </SimpleGrid>
-        <Textarea placeholder='说点什么吧' style={{fontSize: 12}} mt={2} onChange={e => setContent(e.target.value)}
+        </Grid>
+        <TextField multiline={true} placeholder='说点什么吧' style={{fontSize: 12}} onChange={e => setContent(e.target.value)}
                   value={content}/>
-        <Flex mt={2} alignItems={'center'}>
-            <Popover isOpen={open} onClose={() => setOpen(false)}>
-                <PopoverTrigger>
-                    {
-                        avatarUrl === '' ? <Avatar/> : <Avatar src={avatarUrl}/>
-                    }
-                </PopoverTrigger>
-                <PopoverContent>
-                    <PopoverArrow/>
-                    <PopoverCloseButton/>
-                    <PopoverHeader>系统预设头像,点击更换</PopoverHeader>
-                    <PopoverBody>
-                        <Wrap>
-                            {avatars.map(v => <WrapItem key={v.id} onClick={() => setAvatarUrl(v.url)}>
-                                <Avatar src={v.url}/>
-                            </WrapItem>)}
-                        </Wrap>
-                    </PopoverBody>
-                </PopoverContent>
-            </Popover>
-            <span style={{marginLeft: 12, color: 'gray', fontSize: 12}} onClick={() => setOpen(true)}>切换头像</span>
-            <Spacer/>
-            <Stack direction={'row'}>
-                <Button colorScheme={'blue'} onClick={submit}>发布</Button>
-            </Stack>
-        </Flex>
+        <Button onClick={submit}>发布</Button>
 
     </div>
 }
@@ -295,14 +207,12 @@ const CommentLayout: React.FC<{ comment: Comment, onReply?: (comment: Comment) =
                                                                                                                        }) => {
 
 
-    const {isOpen, onClose, onOpen} = useDisclosure() // 删除的开关
     const ref = React.createRef<any>()
     const setMsg = useSetRecoilState(successMessageProvider)
 
     return <div style={{marginBottom: 12, marginTop: 12, position: 'relative'}}>
-        <Flex>
+        <Stack>
             <Avatar src={comment.avatarUrl}/>
-            <Box w={2}/>
             <Box flex={1}>
                 <span style={{fontSize: 12, color: 'grey', marginRight: 12}}>{comment.name}</span> {
                 isChildComment && <span><span style={{fontSize: 12, color: 'grey', marginRight: 6}}>回复</span> <span
@@ -317,7 +227,7 @@ const CommentLayout: React.FC<{ comment: Comment, onReply?: (comment: Comment) =
 
                     {/* 如果是回复类型的评论,需要展示,回复父评论的那句话 */}
                     {
-                        isChildComment && <Box mt={2} bg={'gray.200'} fontSize={10} p={2} borderRadius={5} style={{
+                        isChildComment && <Box  style={{
                             textOverflow: 'ellipsis',
                             display: 'block',
                             WebkitLineClamp: 2,
@@ -344,7 +254,7 @@ const CommentLayout: React.FC<{ comment: Comment, onReply?: (comment: Comment) =
                                 marginLeft: 12,
                                 cursor: 'pointer'
                             }
-                        } onClick={()=>onOpen()}>删除</span>
+                        } onClick={()=>{}}>删除</span>
                     </UserWidget>
                 </Box>
 
@@ -354,45 +264,45 @@ const CommentLayout: React.FC<{ comment: Comment, onReply?: (comment: Comment) =
                 }
 
             </Box>
-        </Flex>
+        </Stack>
         {
             isChildComment && <ChildCommentNode childs={comment.childComment} onReply={onReply}/>
         }
 
 
         {/*    删除确认的弹窗   */}
-        <AlertDialog
-            isOpen={isOpen}
-            onClose={onClose}
-            leastDestructiveRef={ref}>
-            <AlertDialogOverlay>
-                <AlertDialogContent>
-                    <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                        提示
-                    </AlertDialogHeader>
+        {/*<AlertDialog*/}
+        {/*    isOpen={isOpen}*/}
+        {/*    onClose={onClose}*/}
+        {/*    leastDestructiveRef={ref}>*/}
+        {/*    <AlertDialogOverlay>*/}
+        {/*        <AlertDialogContent>*/}
+        {/*            <AlertDialogHeader fontSize='lg' fontWeight='bold'>*/}
+        {/*                提示*/}
+        {/*            </AlertDialogHeader>*/}
 
-                    <AlertDialogBody>
-                        确定永久删除整条评论吗?
-                    </AlertDialogBody>
+        {/*            <AlertDialogBody>*/}
+        {/*                确定永久删除整条评论吗?*/}
+        {/*            </AlertDialogBody>*/}
 
-                    <AlertDialogFooter>
-                        <Button onClick={onClose}>
-                            取消
-                        </Button>
-                        <Button colorScheme='red' onClick={()=>{
-                            onClose()
-                            blogApi().removeComment(comment.id).then(value => {
-                                successResultHandle(value,data => {
-                                    setMsg(data)
-                                })
-                            })
-                        }} ml={3}>
-                            删除
-                        </Button>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialogOverlay>
-        </AlertDialog>
+        {/*            <AlertDialogFooter>*/}
+        {/*                <Button onClick={onClose}>*/}
+        {/*                    取消*/}
+        {/*                </Button>*/}
+        {/*                <Button colorScheme='red' onClick={()=>{*/}
+        {/*                    onClose()*/}
+        {/*                    blogApi().removeComment(comment.id).then(value => {*/}
+        {/*                        successResultHandle(value,data => {*/}
+        {/*                            setMsg(data)*/}
+        {/*                        })*/}
+        {/*                    })*/}
+        {/*                }} ml={3}>*/}
+        {/*                    删除*/}
+        {/*                </Button>*/}
+        {/*            </AlertDialogFooter>*/}
+        {/*        </AlertDialogContent>*/}
+        {/*    </AlertDialogOverlay>*/}
+        {/*</AlertDialog>*/}
 
     </div>
 }

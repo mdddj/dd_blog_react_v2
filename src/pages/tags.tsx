@@ -3,7 +3,7 @@ import {useRecoilValue} from "recoil";
 import {archivesDataState} from "../providers/archives";
 import {Link, Outlet, useParams} from "react-router-dom";
 import {LeftMenuLayout} from "../components/LeftMenuLayout";
-import { Box, Button } from "@chakra-ui/react";
+import {Box, Button} from "@mui/material";
 
 //标签列表页面
 const TagsPage: React.FC = () => {
@@ -18,7 +18,7 @@ const TagsPage: React.FC = () => {
                 {tags.map((value) => {
                     return (
                             <Box key={value.id} m={1}>
-                                <Button  colorScheme={'gray'} width={'100%'} variant={id === `${value.id}` ? 'outline' : 'ghost'}>
+                                <Button >
                                 <Link to={"/tag/" + value.id}>{value.name}</Link>
                             </Button>
                             </Box>

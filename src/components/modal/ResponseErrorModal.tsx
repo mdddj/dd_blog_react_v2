@@ -1,17 +1,8 @@
 import React from "react";
 import {useRecoilState} from "recoil";
 import {errorResponseProvider} from "../../providers/modal/error_response";
-import {
-    Alert,
-    AlertIcon, Box,
-    Button, Modal,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay
-} from "@chakra-ui/react";
+import {Alert, Box, Button, Dialog, DialogActions, DialogContent} from "@mui/material";
+
 
 
 /// 错误信息的展示
@@ -29,19 +20,16 @@ const ResponseErrorModal: React.FC = () => {
     const msgList = errorData?.code === 508 ? errorData.data as string[] : []
 
     return (
-        <Modal isOpen={errorData!==undefined} onClose={close}>
-            <ModalOverlay />
-            <ModalContent>
-                <ModalHeader>{errorData?.msg}</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
+        <Dialog open={errorData!==undefined} onClose={close}>
+
+            <DialogContent>
+                {errorData?.msg}
 
 
                     {/* 出现参数验证失败的提示 */}
                     {
                         errorData?.code === 508 && msgList.map(value => {
-                            return <Alert status='error' key={value}>
-                                <AlertIcon />
+                            return <Alert severity={'error'}  key={value}>
                                 {value}
                             </Alert>
 
@@ -58,15 +46,14 @@ const ResponseErrorModal: React.FC = () => {
                     }
 
 
-                </ModalBody>
 
-                <ModalFooter>
-                    <Button colorScheme='blue' mr={3} onClick={close}>
+                <DialogActions>
+                    <Button  onClick={close}>
                         关闭
                     </Button>
-                </ModalFooter>
-            </ModalContent>
-        </Modal>
+                </DialogActions>
+            </DialogContent>
+        </Dialog>
     )
 }
 export default ResponseErrorModal

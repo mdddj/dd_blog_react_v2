@@ -1,5 +1,5 @@
+import { User } from "dd_server_api_web/dist/model/UserModel";
 import {atom} from "recoil";
-import {User} from "dd_server_api_web/apis/model/UserModel";
 
 
 const userProvider = atom<User|undefined>({

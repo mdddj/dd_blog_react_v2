@@ -3,7 +3,6 @@ import React from 'react';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import 'github-markdown-css/github-markdown-light.css'
-import {useColorMode} from "@chakra-ui/react";
 
 /**
  * 博客预览组件
@@ -11,11 +10,9 @@ import {useColorMode} from "@chakra-ui/react";
  * @constructor
  */
 export const BlogPreviewLight: React.FC<{ content: string; }> = ({content}) => {
-    const model = useColorMode()
     return (
         <>
             <ReactMarkdown
-                className={ model.colorMode === 'light' ? 'markdown-body' : ''}
                 children={content}
                 remarkPlugins={[remarkGfm]}
                 components={{

@@ -1,18 +1,18 @@
 import React, {useState} from "react";
-import {
-    AspectRatio, Box,
-    Button, Divider, Flex, Heading, Icon, Input,
-    Modal,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay, Stack, Tag, TagCloseButton, Wrap
-} from "@chakra-ui/react";
 import {useRecoilValue} from "recoil";
 import {archivesDataState} from "../../providers/archives";
-import {GiEmptyMetalBucket} from "react-icons/gi";
+import {
+    Box,
+    Button, Chip,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Divider,
+    Stack, TextField,
+    Typography
+} from "@mui/material";
+import {AspectRatio} from "@mui/icons-material";
 
 
 type Props = {
@@ -43,71 +43,68 @@ const AddPostTagModal: React.FC<Props> = ({show, onClose,onOk,initVal}) => {
   }
 
     return <>
-        <Modal isOpen={show} onClose={onClose} size={'xl'}>
-            <ModalOverlay/>
-            <ModalContent>
-                <ModalHeader>标签选择器</ModalHeader>
-                <ModalCloseButton/>
-                <ModalBody>
+        <Dialog open={show} onClose={onClose}>
+            <DialogTitle>标签选择器</DialogTitle>
+            <DialogContent>
 
-                    <Box bg={"gray.50"} p={5}>
+                    <Box >
                         <Stack spacing={5} direction={'column'}>
-                            <Heading as={'h6'} size={'xs'}>从已有标签选择</Heading>
-                            <Wrap>
-                                {tags.map(value => <Button colorScheme={values.indexOf(value.name)>=0 ? 'blue' : undefined} onClick={() => {
+                            <Typography >从已有标签选择</Typography>
+                            <Stack>
+                                {tags.map(value => <Button onClick={() => {
                                   onSeleteValue(value.name)
                                 }} key={value.id}>{value.name}</Button>)}
-                            </Wrap>
+                            </Stack>
                             <Divider/>
-                            <Heading as={'h6'} size={'xs'}>新建标签</Heading>
-                            <Flex>
-                                <Input placeholder={'创建新标签'} value={inputvalue} onChange={event => setInputValue(event.target.value)} />
-                                <Button ml={2} onClick={()=>{
+                            <Typography>新建标签</Typography>
+                            <Box>
+                                <TextField placeholder={'创建新标签'} value={inputvalue} onChange={event => setInputValue(event.target.value)} />
+                                <Button onClick={()=>{
                                   if(inputvalue!==''){
                                     onSeleteValue(inputvalue)
                                     setInputValue('')
                                   }
                                 }}>添加</Button>
-                            </Flex>
+                            </Box>
 
 
                         </Stack>
                     </Box>
 
                     <Stack spacing={5} direction={'column'} mt={4}>
-                        <Heading as={'h6'} size={'xs'}>已选择标签</Heading>
+                        <Typography>已选择标签</Typography>
 
                         {
-                            values.length === 0 && <AspectRatio ratio={3}>
+                            values.length === 0 && <AspectRatio >
                                 <div style={{textAlign: "center", color: 'grey'}}>
                                     <Box>
-                                        <Icon as={GiEmptyMetalBucket}/> 暂未选择
+                                        暂未选择
                                     </Box>
                                 </div>
                             </AspectRatio>
                         }
-                       <Wrap>
+                       <Stack>
                          {
-                           values.map(value => <Tag key={value}>{value} <TagCloseButton onClick={()=>{
-                             onSeleteValue(value)
-                           }} /></Tag>)
+                           values.map(value => <Chip key={value} label={value} avatar={<Button onClick={()=>{
+                               onSeleteValue(value)
+                           }} />} />)
                          }
-                       </Wrap>
+                       </Stack>
                     </Stack>
 
-                </ModalBody>
-                <ModalFooter>
-                    <Button variant='ghost' onClick={onClose}>取消</Button>
-                    <Button colorScheme='blue' ml={3} disabled={values.length===0} onClick={()=>{
-                      onOk(values)
-                      onClose()
-                    }}>
-                        确定
-                    </Button>
+            </DialogContent>
 
-                </ModalFooter>
-            </ModalContent>
-        </Modal>
+            <DialogActions>
+                <Button  onClick={onClose}>取消</Button>
+                <Button  disabled={values.length===0} onClick={()=>{
+                    onOk(values)
+                    onClose()
+                }}>
+                    确定
+                </Button>
+
+            </DialogActions>
+        </Dialog>
     </>
 }
 export default AddPostTagModal

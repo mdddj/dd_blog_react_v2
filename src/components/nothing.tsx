@@ -1,6 +1,5 @@
 import React from "react";
-import {Box} from "@chakra-ui/react";
-import {SunIcon} from "@chakra-ui/icons";
+import {Box} from "@mui/material";
 
 
 type Props = {
@@ -13,7 +12,6 @@ const NothingWidget: React.FC<Props> = ({nothing}) => {
         return <span/>
     }
     return <Box textAlign={'center'} color={'gray'} mt={5} mb={5}>
-        <SunIcon mr={2}/>
         这里什么都没有~
     </Box>
 }

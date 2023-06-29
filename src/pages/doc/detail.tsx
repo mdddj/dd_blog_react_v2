@@ -1,29 +1,27 @@
 import React, {useState} from "react";
 import {blogApi} from "../../utils/request";
 import {useParams} from "react-router-dom";
-import {successResultHandle} from "dd_server_api_web/apis/utils/ResultUtil";
-import {
-    Box,
-    Button, FormControl, FormHelperText, FormLabel,
-    Heading,
-    Icon, Input,
-    Modal, ModalBody, ModalCloseButton,
-    ModalContent, ModalFooter,
-    ModalHeader,
-    ModalOverlay,
-    Spinner, Textarea,
-    useBoolean
-} from "@chakra-ui/react";
 import {useMount} from "react-use";
-import {ResourceTreeModel, TreeFolders} from "dd_server_api_web/apis/model/ResourceTreeModel";
 import DocLayout from "../../components/doc_layout";
-import {AiFillFolder, AiOutlineProfile} from "react-icons/ai";
-import {ResourceModel} from "dd_server_api_web/apis/model/ResourceModel";
 import {BlogPreviewLight} from "../../components/blog_content_light";
 import MyBox from "../../components/box/my_box";
 import CreateNewDocArticle from "./components/create_new";
 import {useSetRecoilState} from "recoil";
 import {successMessageProvider} from "../../providers/modal/success_modal";
+import {
+    Box,
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    TextField,
+    Typography
+} from "@mui/material";
+import { ResourceTreeModel, TreeFolders } from "dd_server_api_web/dist/model/ResourceTreeModel";
+import { ResourceModel } from "dd_server_api_web/dist/model/ResourceModel";
+import { Result, successResultHandle } from "dd_server_api_web/dist/utils/ResultUtil";
 
 //文档详情页面
 const DocDetailPage: React.FC = () => {
@@ -39,7 +37,7 @@ const DocDetailPage: React.FC = () => {
     //加载文档的目录和文章节点
     const getDocTreeData = async () => {
         setLoading(true)
-        let result = await blogApi().getResourceSubObject(parseInt(id!!))
+        let result:Result<ResourceTreeModel> = await blogApi().getResourceSubObject(parseInt(id!!))
         setLoading(false)
         successResultHandle(result, data => {
             setTreedata(data)
@@ -79,11 +77,11 @@ const DocDetailPage: React.FC = () => {
 
     console.log(selectDoc)
     return <Box>
-        {loading && <Spinner/>}
+        {loading && <CircularProgress/>}
         {treeData && <DocLayout
             sidenav={<DocSidenav treeData={treeData} onSelect={onSelect} onFolderSelect={onFolderSelect}
                                  currentFolder={currentSelectFolderObject} id={id}/>}>
-            {selectDoc && <Heading>{selectDoc.title}</Heading>}
+            {selectDoc && <Typography>{selectDoc.title}</Typography>}
             <CreateNewDocArticle currentFolder={currentSelectFolderObject}/>
             <Box height={2}/>
             <MyBox>
@@ -108,12 +106,11 @@ const DocSidenav: React.FC<DocSidenavParams> = ({
                                                     currentFolder, id
                                                 }) => {
     const root = treeData.folders
-    const [flog, setFlog] = useBoolean()
     return <Box>
-        <Button onClick={setFlog.on}>新建子文件夹</Button>
+        <Button>新建子文件夹</Button>
         <TreeFolderLayout folder={[root]} onSelect={onSelect} onFolderSelect={onFolderSelect}
                           currentFolder={currentFolder}/>
-        <CreateNewFolder show={flog} onClose={setFlog.off} currentFolder={currentFolder} id={id}/>
+        <CreateNewFolder show={false} onClose={()=>{}} currentFolder={currentFolder} id={id}/>
     </Box>
 }
 
@@ -143,9 +140,9 @@ const CreateNewFolder: React.FC<CreateNewFolderParams> = ({
 
         const result = await blogApi().createOrUpdateDocDirectory({
             name: title,
-            parentNodeId: currentFolder?.id ?? id,
+            parentNodeId: currentFolder?.id ?? 0,
             description: desc
-        });
+        } as any);
         successResultHandle(result, _ => {
             onClose()
             setMsg(result.message)
@@ -157,38 +154,24 @@ const CreateNewFolder: React.FC<CreateNewFolderParams> = ({
 
 
     return <Box>
-        <Modal isOpen={show} onClose={onClose}>
-            <ModalOverlay/>
-            <ModalContent>
-                <ModalHeader>新建归档</ModalHeader>
-                <ModalCloseButton/>
-                <ModalBody>
-
+        <Dialog open={show} onClose={onClose}>
+            <DialogTitle>新建归档</DialogTitle>
+            <DialogContent>
                     <Box mt={3} mb={3}>
                         {currentFolder && <span>父文件夹:{currentFolder.title}</span>}
                     </Box>
-
-                    <FormControl mb={3}>
-                        <FormLabel htmlFor='name'>输入名称</FormLabel>
-                        <Input id='name' type='name' value={title} onChange={e => setTitle(e.target.value)}/>
-                        <FormHelperText>分类名称</FormHelperText>
-                    </FormControl>
-                    <FormControl>
-                        <FormLabel>简要描述</FormLabel>
-                        <Textarea
-                            value={desc}
-                            onChange={e => setDesc(e.target.value)}
-                            placeholder='介绍/备注'
-                            size='sm'
-                        />
-                    </FormControl>
-                </ModalBody>
-                <ModalFooter>
-                    <Button onClick={onClose} mr={3}>关闭</Button>
-                    <Button colorScheme={'blue'} onClick={submit}>确认</Button>
-                </ModalFooter>
-            </ModalContent>
-        </Modal>
+                <TextField id='name' type='name' value={title} onChange={e => setTitle(e.target.value)}/>
+                <TextField multiline={true}
+                    value={desc}
+                    onChange={e => setDesc(e.target.value)}
+                    placeholder='介绍/备注'
+                />
+                <DialogActions>
+                    <Button onClick={onClose}>关闭</Button>
+                    <Button onClick={submit}>确认</Button>
+                </DialogActions>
+            </DialogContent>
+        </Dialog>
     </Box>
 }
 
@@ -205,7 +188,7 @@ const TreeFolderLayout: React.FC<{ folder: TreeFolders[], onSelect: (res: Resour
             console.log(value)
             return <Box key={value.id}>
                 <Box color={currentFolder && currentFolder.id === value.id ? 'blue' : 'black'}>
-                    <div onClick={() => onFolderSelect(value)}><Icon as={AiFillFolder}/> {value.title}</div>
+                    <div onClick={() => onFolderSelect(value)}> {value.title}</div>
                 </Box>
                 {/*文件夹*/}
                 <Box ml={4}>
@@ -219,7 +202,7 @@ const TreeFolderLayout: React.FC<{ folder: TreeFolders[], onSelect: (res: Resour
                         return <div key={value.id} onClick={() => {
                             onSelect(value)
                         }}>
-                            <Icon as={AiOutlineProfile}/> {value.title}
+                            {value.title}
                         </div>
                     })}
                 </Box>
