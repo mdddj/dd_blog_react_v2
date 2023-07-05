@@ -7,7 +7,7 @@ import {Box, Skeleton, Stack} from "@mui/material";
 const MyBox: React.FunctionComponent<PropsWithChildren<{ skeleton?: boolean }>> = (props) => {
     const loading = useRecoilValue(appLoading)
 
-    return <Box>
+    return <Box p={2}>
         {
             loading && props.skeleton && <Stack>
                 <Skeleton height='20px'/>

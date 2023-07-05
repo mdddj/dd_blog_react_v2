@@ -11,9 +11,10 @@ import { useSearchParams } from "react-router-dom";
 import { useMount, useToggle } from "react-use";
 import { successMessageProvider } from "../../providers/modal/success_modal";
 import { onImageUpload } from "../../utils/EditImageFileUpload";
-import {Box, Button, CircularProgress, Select, Stack, TextField, Typography} from "@mui/material";
+import {Box, Button, Chip, CircularProgress, MenuItem, Select, Stack, TextField, Typography} from "@mui/material";
 import { Result, successResultHandle } from "dd_server_api_web/dist/utils/ResultUtil";
 import { BlogData, BlogPushNewResultData } from "dd_server_api_web/dist/model/result/BlogPushNewResultData";
+import {LoadingButton} from "@mui/lab";
 
 // 发布博客页面
 const AddPostPage: React.FC = () => {
@@ -21,7 +22,8 @@ const AddPostPage: React.FC = () => {
   const [content, setContent] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
-  const [categoryId, setCategoryId] = useState<number>(0);
+  const [showTagDialog,setShowTagDialog] = useState(false)
+  const [categoryId, setCategoryId] = useState<string|undefined>(undefined);
   const [on, toggle] = useToggle(false);
   const setMsg = useSetRecoilState(successMessageProvider)
 
@@ -30,13 +32,12 @@ const AddPostPage: React.FC = () => {
 
   // 修改的ID
   const [searchParams] = useSearchParams();
-  console.log(searchParams)
 
   useMount(() => {
     // 如果存在修改的ID,
     const id = searchParams.get('id')
     if (id !== null) {
-        toggle(true)
+      toggle(true)
       blogApi()
         .getBlogDetailById(parseInt(id))
         .then((r: Result<BlogData>) => {
@@ -46,7 +47,7 @@ const AddPostPage: React.FC = () => {
                 setContent(d.content)
                 setTitle(d.title)
                 setTags(d.tags.map(r=>r.name))
-                setCategoryId(d.category.id)
+                setCategoryId(`${d.category.id}`)
         
             },setMsg)
         });
@@ -62,9 +63,8 @@ const AddPostPage: React.FC = () => {
         tags: tags,
         categoryId: categoryId,
         id: updateBlog?.id
-      })
+      } as any)
       .then((value : BlogPushNewResultData) => {
-        console.log(value);
         successResultHandle(
           value,
           (data) => {
@@ -78,8 +78,10 @@ const AddPostPage: React.FC = () => {
   return (
     <MyBox>
       {on && <CircularProgress />}
-      <Stack direction={"column"} spacing={5}>
-        <Typography>
+      
+      {
+        !on && <Stack direction={"column"} spacing={5}>
+        <Typography variant={'h3'}>
           发布博客
         </Typography>
         <TextField
@@ -106,13 +108,13 @@ const AddPostPage: React.FC = () => {
             </Typography>
             <Select
               placeholder="文章分类"
-              value={updateBlog ?  categoryId : undefined}
-              onChange={(e) => setCategoryId(e.target.value as number)}
+              value={updateBlog && categoryId && categoryId !== 'undefined' ?  `${categoryId}` : undefined}
+              onChange={(e) => setCategoryId(e.target.value)}
             >
               {archives.categoryList.map((value) => (
-                <option value={value.id} key={value.id}>
+                <MenuItem value={`${value.id}`} key={value.id}>
                   {value.name}
-                </option>
+                </MenuItem>
               ))}
             </Select>
 
@@ -122,26 +124,36 @@ const AddPostPage: React.FC = () => {
                 已选择{tags.length}个
               </span>
             </Typography>
-            <Button onClick={()=>{}}>选择</Button>
+            <Stack direction={'row'} spacing={2}>
+                {
+                  tags.map((v)=><Chip label={v} key={v} />)
+                }
+            </Stack>
+            <Button onClick={()=>{
+                setShowTagDialog(true)
+            }}>编辑博客标签</Button>
           </Stack>
         )}
         <Box>
-          <Button  onClick={submit}>
+          <LoadingButton fullWidth loading={on}  onClick={submit} variant={"contained"}  >
             {
                 updateBlog ? '提交修改' : '发布'
             }
-          </Button>
+          </LoadingButton>
         </Box>
       </Stack>
+      }
 
       {/*选择标签的弹窗*/}
       <AddPostTagModal
-        show={true}
+        show={showTagDialog}
         onOk={(values) => {
           setTags(values);
         }}
         initVal={tags}
-       onClose={()=>{}}/>
+       onClose={()=>{
+           setShowTagDialog(false)
+       }}/>
     </MyBox>
   );
 };

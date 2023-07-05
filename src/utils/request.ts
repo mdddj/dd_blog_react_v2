@@ -1,11 +1,10 @@
 import DdServerApiByWeb from 'dd_server_api_web';
 import { Result } from 'dd_server_api_web/dist/utils/ResultUtil';
-import PubSub from 'pubsub-js'
 const MOOSE_REACT_LEARN_ACCESS_TOKEN = 'auth_token';
 
 
 /// true 表示本地服务器，false表示远程服务器
-let isLocal = false;
+let isLocal = true;
 
 const host = isLocal ? 'http://localhost' : 'https://itbug.shop:9445';
 
@@ -28,22 +27,16 @@ export const blogApi = (paramsValidError?: ParamsValidError): DdServerApiByWeb =
   const api = DdServerApiByWeb.getInstance();
   api.host = host;
   api.token = getAccessToken();
-
-  api.errHandle = {
-    error: (errorCode: number,errorMessage: string, data: any)=>{
-      paramsValidError && paramsValidError.errors(errorCode,errorMessage,data)
-      let result = {
-        code: errorCode,
-        msg: errorMessage,
-        data: data
-      }
-       PubSub.publish('response-error', result);
+  api.client.interceptors.response.use( (response) =>{
+    if(response.data['state'] === 401){
+      removeAccessToken()
     }
-  }
-
-
+    return response
+  })
   return api;
 };
+
+
 
 // 保存
 export const saveAccessToken = (token: string) => {

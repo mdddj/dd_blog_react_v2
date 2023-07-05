@@ -22,7 +22,7 @@ const ArchiveCard: React.FC = () => {
     return <MyBox>
         <Typography variant={'h4'}>归档</Typography>
             {
-                months.map(value => <ListItem key={value.months}><Link color={'teal.500'}
+                months.map(value => <ListItem key={value.months}><Link 
                                                                        href={'/month/' + value.months}>{value.months}
                    </Link> <span>({value.count})</span></ListItem>)
             }
@@ -39,7 +39,7 @@ const CategoryCard: React.FC = () => {
 
             {
                 categorys.map(value => {
-                    return <ListItem key={value.id}><Link color={'teal.500'} href={'/category/' + value.id}>{value.name}
+                    return <ListItem key={value.id}><Link  href={'/category/' + value.id}>{value.name}
                         </Link></ListItem>
                 })
             }
@@ -57,7 +57,7 @@ const TagCard: React.FC = () => {
 
             {
                 tags.map(value => {
-                    return <ListItem key={value.id}><Link color={'teal.500'} href={'/tag/' + value.id}>{value.name}
+                    return <ListItem key={value.id}><Link  href={'/tag/' + value.id}>{value.name}
                         </Link></ListItem>
                 })
             }

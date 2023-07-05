@@ -12,21 +12,30 @@ import {
     Tooltip,
     Typography
 } from "@mui/material";
-import AdbIcon from '@mui/icons-material/Adb';
 import MenuIcon from '@mui/icons-material/Menu';
 import {navbarMenu} from "../menus";
 import {useNavigate} from "react-router-dom";
+import { useMount } from "react-use";
+import { blogApi, getAccessToken } from "../utils/request";
+import { ApiResponse, User } from "../models/app_model";
+import { useRecoilState } from "recoil";
+import { userProvider } from "../providers/user";
 const BlogAppbar: React.FC = () => {
 
     var navigateFunction = useNavigate();
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+    const [user,setUser] = useRecoilState(userProvider)
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
     };
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElUser(event.currentTarget);
+        if(user){
+            setAnchorElUser(event.currentTarget);
+        }else{
+            navigateFunction("/login")
+        }
     };
 
     const handleCloseNavMenu = () => {
@@ -37,10 +46,24 @@ const BlogAppbar: React.FC = () => {
         setAnchorElUser(null);
     };
 
+
+    //启动的时候尝试自动登录
+    useMount(async () => {
+        let token = getAccessToken()
+        if(token!==''){
+            let response = await blogApi().requestT<ApiResponse<User>>('/api/get-user-by-token',{"token": token},"GET")
+            if(response.success){
+             setUser(response.data)
+            }else{
+             //todo 登录信息已失效
+            }
+        }
+       
+    })
+
   return <AppBar position="static">
       <Container maxWidth="xl">
           <Toolbar disableGutters>
-              <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
               <Typography
                   variant="h6"
                   noWrap
@@ -56,7 +79,7 @@ const BlogAppbar: React.FC = () => {
                       textDecoration: 'none',
                   }}
               >
-                  梁典典的博客
+                  典典の空间
               </Typography>
 
               <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -97,7 +120,6 @@ const BlogAppbar: React.FC = () => {
                       ))}
                   </Menu>
               </Box>
-              <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
               <Typography
                   variant="h5"
                   noWrap
@@ -114,13 +136,16 @@ const BlogAppbar: React.FC = () => {
                       textDecoration: 'none',
                   }}
               >
-                  LOGO
+                  典典の空间
               </Typography>
               <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                   {navbarMenu.map((page) => (
                       <Button
                           key={page.url}
-                          onClick={handleCloseNavMenu}
+                          onClick={()=>{
+                              handleCloseNavMenu()
+                              navigateFunction(page.url)
+                          }}
                           sx={{ my: 2, color: 'white', display: 'block' }}
                       >
                           {page.title}
@@ -129,9 +154,9 @@ const BlogAppbar: React.FC = () => {
               </Box>
 
               <Box sx={{ flexGrow: 0 }}>
-                  <Tooltip title="Open settings">
+                  <Tooltip title="打开设置">
                       <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                          <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                          <Avatar alt={user?.nickName} src={user?.picture} />
                       </IconButton>
                   </Tooltip>
                   <Menu
@@ -150,7 +175,10 @@ const BlogAppbar: React.FC = () => {
                       open={Boolean(anchorElUser)}
                       onClose={handleCloseUserMenu}
                   >
-
+                      <MenuItem onClick={()=>{
+                          handleCloseUserMenu()
+                          navigateFunction('/add-post')
+                      }}>发布博客</MenuItem>
                   </Menu>
               </Box>
           </Toolbar>

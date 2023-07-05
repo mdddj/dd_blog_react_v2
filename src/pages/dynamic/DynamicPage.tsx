@@ -8,18 +8,27 @@ import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
+  ButtonGroup,
   CircularProgress,
-  Dialog, DialogActions,
+  Dialog,
+  DialogActions,
   DialogContent,
   DialogTitle,
-  Grid, Input,
-  Stack, TextField,
-  useMediaQuery
+  ImageList,
+  ImageListItem,
+  ImageListItemBar,
+  Input,
+  Stack,
+  TextField,
 } from "@mui/material";
-import {AspectRatio} from "@mui/icons-material";
 import { ResCategory } from "dd_server_api_web/dist/model/ResCategory";
 import { ResourceCategoryType } from "dd_server_api_web/dist/model/ResourceCategoryType";
-import { Result, PagerModel, successResultHandle } from "dd_server_api_web/dist/utils/ResultUtil";
+import {
+  Result,
+  PagerModel,
+  successResultHandle,
+} from "dd_server_api_web/dist/utils/ResultUtil";
+import MyBox from "../../components/box/my_box";
 
 //动态页面
 const DynamicPage: React.FC = () => {
@@ -27,7 +36,6 @@ const DynamicPage: React.FC = () => {
   const [initLoading, setInitLoading] = useState(true); // 初始化中
   const [plotoAlbums, setPlotoAlbums] = useState<ResCategory[]>([]); // 相册列表
   const [showCreateModal, setShowCreateModal] = useState(false); //显示创建弹窗
-  const isDesk = useMediaQuery("(min-width: 760px)");
 
   useMount(async () => {
     await fetchPhotoAlbum();
@@ -51,71 +59,56 @@ const DynamicPage: React.FC = () => {
     });
   };
 
-  const getImage = (item: ResCategory) :string => {
-    if(item.logo === ''){
-      return 'https://bit.ly/2Z4KKcF';
+  const getImage = (item: ResCategory): string => {
+    if (item.logo || item.logo === "") {
+      return "https://bit.ly/2Z4KKcF";
     }
     return item.logo!;
-  }
+  };
 
   return (
-    <>
-      <Box textAlign={"end"} position={"absolute"} bottom={"20%"} left={"50%"}>
-        <Button
-          onClick={() => setShowCreateModal(true)}
-        >新增</Button>
-      </Box>
-
+    <MyBox>
       {initLoading && <CircularProgress />}
 
       {/* 动态组件 */}
       {/* <ResourceComponents resourceCategoryName={'典典面基经历'} /> */}
 
-      {plotoAlbums.length === 0 && !initLoading && (
-        <Box>
-          暂无相册,快去
-          <Button
-            onClick={() => {
-              setShowCreateModal(true);
-            }}
-          >
-            创建
-          </Button>
-          一个吧.
-        </Box>
-      )}
+      <ButtonGroup>
+        <Button
+          onClick={() => {
+            setShowCreateModal(true);
+          }}
+        >
+          新建相册
+        </Button>
+      </ButtonGroup>
 
-      <Grid>
-        {plotoAlbums.map((value) => (
-          <Box
-            key={value.id}
+      <ImageList  cols={6} rowHeight={200}>
+        {plotoAlbums.map((item) => (
+          <ImageListItem
+            key={item.id}
             onClick={() => {
-              navigation("/pics?name=" + value.name);
+              navigation("/pics?name=" + item.name);
             }}
           >
-            <Box position={"relative"}>
-              <AspectRatio >
-                <img
-                  src={getImage(value)}
-                />
-              </AspectRatio>
-              <Box
-              >
-                {value.description}
-              </Box>
-            </Box>
-            <Box mt={2}>
-              <span>{value.name}</span>
-            </Box>
-          </Box>
+            <img
+              src={`${getImage(item)}?w=164&h=164&fit=crop&auto=format`}
+              srcSet={`${getImage(
+                item
+              )}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+              alt={item.name}
+              loading="lazy"
+            />
+            <ImageListItemBar title={item.name}></ImageListItemBar>
+          </ImageListItem>
         ))}
-      </Grid>
+      </ImageList>
 
       <AddPhoneAlbumsForm
         show={showCreateModal}
         onClose={() => setShowCreateModal(false)}
       />
-    </>
+    </MyBox>
   );
 };
 
@@ -158,81 +151,74 @@ const AddPhoneAlbumsForm: React.FC<{ show: boolean; onClose: () => void }> = ({
   };
 
   return (
-    <Dialog open={show} onClose={onClose}>
+    <Dialog open={show} onClose={onClose} maxWidth={"md"}>
       <DialogTitle>新建相册</DialogTitle>
       <DialogContent>
+        <Stack direction={"column"} spacing={2}>
+          <Input
+            placeholder="名称"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+          />
+          <Input
+            placeholder="封面图"
+            value={logo}
+            onChange={(event) => setLogo(event.target.value)}
+          />
+          <Button
+            onClick={async () => {
+              try {
+                const blob = await fileOpen({
+                  mimeTypes: ["image/*"],
+                });
+                let form = new FormData();
+                form.append("file", blob);
+                let result: Result<string> =
+                  await blogApi().uploadFileWithSingle(form);
+                successResultHandle(result, (data) => {
+                  setLogo(data);
+                });
+              } catch (e) {
+              }
+            }}
+          >
+            选择封面图上传
+          </Button>
 
-          <Stack direction={"column"} spacing={5}>
-            <Input
-              placeholder="名称"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-            />
-            <Input
-              placeholder="封面图"
-              value={logo}
-              onChange={(event) => setLogo(event.target.value)}
-            />
-            <Button
-              onClick={async () => {
-                try {
-                  const blob = await fileOpen({
-                    mimeTypes: ["image/*"],
-                  });
-                  console.log(blob);
-                  let form = new FormData();
-                  form.append("file", blob);
-                  let result: Result<string> = await blogApi().uploadFileWithSingle(form);
-                  successResultHandle(result, (data) => {
-                    setLogo(data);
-                  });
-                } catch (e) {
-                  console.log("取消上传");
-                }
-              }}
-            >
-              选择封面图上传
-            </Button>
+          {logo.length !== 0 && <img src={logo} alt="logo" />}
 
-            {logo.length !== 0 && <img src={logo} />}
+          <Input
+            placeholder={"类型"}
+            value={type}
+            onChange={(event) => setType(event.target.value)}
+          />
 
-            <Input
-              placeholder={"类型"}
-              value={type}
-              onChange={(event) => setType(event.target.value)}
-            />
+          <Box>
+            {rcts.map((value) => (
+              <Button key={value.type} onClick={() => setType(value.type)}>
+                {value.type}{" "}
+              </Button>
+            ))}
+          </Box>
 
-            <Box>
-              {rcts.map((value) => (
-                <Button
-                  key={value.type}
-                  onClick={() => setType(value.type)}
-                >
-                  {value.type}{" "}
-                </Button>
-              ))}
-            </Box>
-
-            <TextField
-                multiline={true}
-              placeholder="介绍"
-              value={intro}
-              onChange={(event) => setIntro(event.target.value)}
-            />
-          </Stack>
-        <DialogActions>
-            <Button
-              onClick={() => {
-                setType("images");
-              }}
-            >
-              相册类型
-            </Button>
-            <Button onClick={submit}>
-              创建
-            </Button>
-        </DialogActions>
+          <TextField
+            multiline={true}
+            placeholder="介绍"
+            value={intro}
+            onChange={(event) => setIntro(event.target.value)}
+          />
+        </Stack>
       </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={() => {
+            setType("images");
+          }}
+        >
+          相册类型
+        </Button>
+        <Button onClick={submit}>创建</Button>
+      </DialogActions>
     </Dialog>
   );
 };

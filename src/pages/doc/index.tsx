@@ -5,11 +5,11 @@ import {useSetRecoilState} from "recoil";
 import {appLoading} from "../../providers/loading";
 import NothingWidget from "../../components/nothing";
 import PageHeader from "../../components/page_header";
-import {Link} from "react-router-dom";
-import {Box, Chip, Grid} from "@mui/material";
-import {AspectRatio} from "@mui/icons-material";
+import {useNavigate} from "react-router-dom";
+import {ImageList, ImageListItem, ImageListItemBar} from "@mui/material";
 import { ResCategory } from "dd_server_api_web/dist/model/ResCategory";
 import { PagerModel, Result, successResultHandle } from "dd_server_api_web/dist/utils/ResultUtil";
+import MyBox from "../../components/box/my_box";
 
 //文档列表页面
 const DocsPage:React.FC = () => {
@@ -18,6 +18,7 @@ const DocsPage:React.FC = () => {
   const [docs, setDocs] = useState<ResCategory[]>([])
   const [pager,setPager] = useState<PagerModel>()
   const setLoading = useSetRecoilState(appLoading)
+   const nav = useNavigate()
 
 
   // 加载数据
@@ -34,7 +35,6 @@ const DocsPage:React.FC = () => {
     }>) => {
       setLoading(false)
       successResultHandle(value,data => {
-        console.log(data)
         setDocs(data.list??[])
       })
       setPager(value.data?.page)
@@ -46,44 +46,39 @@ const DocsPage:React.FC = () => {
     fetchData()
   })
 
+  const getImage = (item: ResCategory): string => {
+    if (item.logo || item.logo === "") {
+      return "https://bit.ly/2Z4KKcF";
+    }
+    return item.logo!;
+  };
 
-  return <>
+  return <MyBox>
     <PageHeader title={'文档'} />
     <NothingWidget nothing={ pager && pager.total === 0 } />
-    <Grid columns={4} spacing={10}>
-      {
-        docs.map(property =>  <Box key={property.id}>
 
-          <AspectRatio>
-            <img src={property.logo} alt={property.name}/>
-          </AspectRatio>
 
-          <Box p='6'>
-            <Box display='flex' alignItems='baseline'>
-              <Chip  label={property.type} />
 
-              <Box
-                  color='gray.500'
-                  fontWeight='semibold'
-                  letterSpacing='wide'
-                  fontSize='xs'
-                  textTransform='uppercase'
-                  ml='2'
-              >
-              </Box>
-            </Box>
+    <ImageList  cols={6} rowHeight={200}>
 
-            <Box>
-             <Link to={'/docs/'+property.id}> {property.name}</Link>
-            </Box>
+      {docs.map((item)=>{
+        return <ImageListItem key={item.id} onClick={()=>{
+          nav("/docs/"+item.id)
+        }}>
+            <img
+              src={`${getImage(item)}?w=164&h=164&fit=crop&auto=format`}
+              srcSet={`${getImage(
+                item
+              )}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+              alt={item.name}
+              loading="lazy"
+            />
+            <ImageListItemBar title={item.name} subtitle={item.description} />
+        </ImageListItem>
+      })}
 
-            <Box>
-              {property.description}
-            </Box>
-          </Box>
-        </Box>)
-      }
-    </Grid>
-  </>
+    </ImageList>
+
+  </MyBox>
 }
 export default DocsPage

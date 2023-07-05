@@ -12,7 +12,6 @@ const AddResPage: React.FC = () => {
    */
   const selectImage = async () => {
     const blobs = await fileOpen({ mimeTypes: ["image/*"], multiple: true });
-    console.log(blobs);
     setFiles(blobs);
   };
 
@@ -57,7 +56,6 @@ const BlobFileView: React.FC<{ blob: Blob }> = ({ blob }) => {
     let reader = new FileReader();
     reader.onload = () => {
       let result = reader.result;
-      console.log(result);
       if (result) {
         setUrl(result as string);
       }

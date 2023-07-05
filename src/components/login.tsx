@@ -1,14 +1,13 @@
 import React, {useState} from "react";
-import {blogApi, getAccessToken, removeAccessToken, saveAccessToken} from "../utils/request";
+import {blogApi, removeAccessToken, saveAccessToken} from "../utils/request";
 import {useRecoilState, useSetRecoilState} from "recoil";
 import {userProvider} from "../providers/user";
-import {useMount} from "react-use";
 import {useNavigate} from "react-router-dom";
 import {successMessageProvider} from "../providers/modal/success_modal";
 import {showPasswordModal} from "../providers/setting";
-import {Box, Button, Input, Popover, Stack, Typography} from "@mui/material";
-import { User } from "dd_server_api_web/dist/model/UserModel";
+import {Box, Button, Input, Stack, Typography} from "@mui/material";
 import { Result, successResultHandle } from "dd_server_api_web/dist/utils/ResultUtil";
+import {ApiResponse, LoginResultModel} from "../models/app_model";
 
 
 const LoginComponent: React.FC = () => {
@@ -17,56 +16,56 @@ const LoginComponent: React.FC = () => {
     const [user, setUser] = useRecoilState(userProvider)
     const [username, setUserName] = useState('') //用户名
     const [password, setPassword] = useState('') //密码
-    const [result, setResult] = useState<Result<string>>()
     let navigateFunction = useNavigate();
 
     const setMsg = useSetRecoilState(successMessageProvider)
     const passModal = useSetRecoilState(showPasswordModal)
 
-    useMount(() => fetchUserData())
 
-    //加载用户信息
-    const fetchUserData = () => {
-        const token = getAccessToken()
-        if (token && token !== '') {
-            blogApi().getUserInfo(token).then((value: {
-                state: number;
-                data: User | ((currVal: User | undefined) => User | undefined) | undefined;
-            }) => {
-                if (value.state === 200) {
-                    setUser(value.data)
-                } else {
-                    removeAccessToken()
-                }
-            })
-        }
-    }
+    // //加载用户信息
+    // const fetchUserData = () => {
+    //     const token = getAccessToken()
+    //     if (token && token !== '') {
+    //         blogApi().getUserInfo(token).then((value: {
+    //             state: number;
+    //             data: User | ((currVal: User | undefined) => User | undefined) | undefined;
+    //         }) => {
+    //             if (value.state === 200) {
+    //                 setUser(value.data)
+    //             } else {
+    //                 removeAccessToken()
+    //             }
+    //         })
+    //     }
+    // }
 
     //执行登录
-    const login = () => {
+    const login = async () => {
         if (username.length === 0 || password.length === 0) {
             setMsg('请输入账号和密码')
             return;
         }
-        blogApi().login(username, password).then((value: Result<string>) => {
-            setResult(value)
-            if (value.state === 200) {
-                saveAccessToken(value.data!!)
-                fetchUserData()
-            }
-        })
+
+
+        const result = await blogApi().requestT<ApiResponse<LoginResultModel>>("/api/user-public/login-by-email",{
+            "loginNumber": username,
+            "password": password,
+            "loginType": "email"
+        },"POST")
+        if(result.success){
+            saveAccessToken(result.data.token)
+            setUser(result.data.user)
+        }else{
+            setMsg(result.message)
+        }
     }
 
     return <>
-        <Popover
-            open={false}
-        >
             {/*未登录*/}
-            {!user && <Box>
+            {!user && <Box width={400} >
                 <Stack spacing={4}>
-                    <Typography>登录</Typography>
-                    {result?.state !== 200 && <span style={{fontSize: 12, color: 'red'}}>{result?.message}</span>}
-                    <Input placeholder={'用户名'} value={username} onChange={e => setUserName(e.target.value)}/>
+                    <Typography>用户登录</Typography>
+                    <Input placeholder={'邮箱'} value={username} onChange={e => setUserName(e.target.value)}/>
                     <Input placeholder={'密码'} type={'password'} value={password}
                            onChange={event => setPassword(event.target.value)}/>
                     <Button onClick={login}>登录</Button>
@@ -96,7 +95,6 @@ const LoginComponent: React.FC = () => {
                        }>退出登录</Button>
                    </Stack>
                 </Box> }
-        </Popover>
     </>
 
 }

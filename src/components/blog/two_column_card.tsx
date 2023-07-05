@@ -1,37 +1,21 @@
 import React from "react";
 import { BlogCardProps } from "./props";
-import { Link } from "react-router-dom";
-import {Box, Chip, Typography} from "@mui/material";
-
-
+import {useNavigate} from "react-router-dom";
+import { Box, Typography } from "@mui/material";
 /// 两列展示的博客卡片
-const TwoColumnBlogCard: React.FC<BlogCardProps> = ({ blog}) => {
-    return <>
-        <Box borderRadius='lg' overflow='hidden' p={6} mb={2}>
-            <Chip label={blog.category.name} />
+const TwoColumnBlogCard: React.FC<BlogCardProps> = ({ blog }) => {
+  const navigate = useNavigate();
+  return (
+    <>
+      <Box p={2} onClick={()=>{
+          navigate("/post/" + blog.id)
+      }}>
+          <Typography variant={"h5"} >
+            {blog.title}
+          </Typography>
 
-
-            <Typography variant={'h1'}>
-                {blog.title}
-            </Typography>
-
-            <Box display='flex' alignItems='baseline'>
-                <Box
-                    color='gray.500'
-                    fontWeight='semibold'
-                    letterSpacing='wide'
-                    fontSize='xs'
-                    textTransform='uppercase'
-                >
-                    {blog.tags.map((value,index) => <span key={value.id}>{value.name} {index!==blog.tags.length-1 ? '•' : ''} </span>)}
-                </Box>
-            </Box>
-
-            <Box mt={4}>
-                <Link to={'/post/'+blog.id}>查看全文</Link>
-            </Box>
-
-        </Box>
+      </Box>
     </>
-}
-export default TwoColumnBlogCard
+  );
+};
+export default TwoColumnBlogCard;

@@ -48,7 +48,6 @@ const ResourceComponents: React.FC<Props> = ({resourceCategoryName}) => {
         <Link to={"/add-res"}>发布</Link>
             {
                 list.map(value => {
-                    console.log(value.type)
                     return <DynamicCard key={value.id} res={value}/>
                 })
             }

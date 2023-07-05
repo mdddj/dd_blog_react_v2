@@ -38,9 +38,9 @@ const BlogPage: React.FC = () => {
         ]} bottomComponent={
             <>{blog && <CommentComponent type={"blog"} id={blog.id} isBlogComment />} </>
         }>
-                <Typography>{blog?.title}</Typography>
-                <Box >{blog?.dateString}</Box>
-                <Box mt={5}>
+                <Typography variant="h3" gutterBottom>{blog?.title}</Typography>
+                <Typography  variant={"h5"} gutterBottom>发布时间:{blog?.dateString}</Typography>
+                <Box mt={5} mb={5}>
                     {blog && <MarkdownView content={blog!.content} />}
                 </Box>
                 <Box mt={2}>

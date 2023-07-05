@@ -8,14 +8,14 @@ const AppSuccessModel: React.FC = () => {
   const [msg,setMsg] = useRecoilState(successMessageProvider)
 
   return (
-      <Dialog  open={msg!==undefined} onClose={()=>setMsg(undefined)}>
+      <Dialog open={msg!==undefined} onClose={()=>setMsg(undefined)} maxWidth={'lg'} >
         <DialogTitle>提示</DialogTitle>
         <DialogContent>
           {msg}
         </DialogContent>
         <DialogActions>
           <Button onClick={()=>setMsg(undefined)}>
-            我知道了
+            好的
           </Button>
         </DialogActions>
       </Dialog>

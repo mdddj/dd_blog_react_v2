@@ -43,14 +43,14 @@ const AddPostTagModal: React.FC<Props> = ({show, onClose,onOk,initVal}) => {
   }
 
     return <>
-        <Dialog open={show} onClose={onClose}>
+        <Dialog open={show} onClose={onClose} maxWidth={'lg'}>
             <DialogTitle>标签选择器</DialogTitle>
             <DialogContent>
 
                     <Box >
                         <Stack spacing={5} direction={'column'}>
                             <Typography >从已有标签选择</Typography>
-                            <Stack>
+                            <Stack direction={'row'} spacing={1}>
                                 {tags.map(value => <Button onClick={() => {
                                   onSeleteValue(value.name)
                                 }} key={value.id}>{value.name}</Button>)}
@@ -71,7 +71,7 @@ const AddPostTagModal: React.FC<Props> = ({show, onClose,onOk,initVal}) => {
                         </Stack>
                     </Box>
 
-                    <Stack spacing={5} direction={'column'} mt={4}>
+                    <Stack spacing={1} direction={'row'} mt={4}>
                         <Typography>已选择标签</Typography>
 
                         {
@@ -83,11 +83,11 @@ const AddPostTagModal: React.FC<Props> = ({show, onClose,onOk,initVal}) => {
                                 </div>
                             </AspectRatio>
                         }
-                       <Stack>
+                       <Stack direction={'row'} spacing={1}>
                          {
-                           values.map(value => <Chip key={value} label={value} avatar={<Button onClick={()=>{
-                               onSeleteValue(value)
-                           }} />} />)
+                           values.map(value => <Chip key={value} label={value} onClick={()=>{
+                            onSeleteValue(value)
+                           }}/>)
                          }
                        </Stack>
                     </Stack>

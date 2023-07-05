@@ -41,7 +41,7 @@ const Home: React.FC = () => {
         if(page===1){
             setAppLoading(true)
         }
-        blogApi().getBlogList(page, 20).then((value: Result<BlogListData>) => {
+        blogApi().getBlogList(page, 2000).then((value: Result<BlogListData>) => {
             if(page===1){
                 setAppLoading(false)
             }
