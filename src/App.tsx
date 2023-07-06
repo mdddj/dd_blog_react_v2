@@ -83,7 +83,6 @@ export const App = () => {
       );
   };
 
-
   return (
     <ThemeProvider theme={defaultTheme}>
       <BrowserRouter>
@@ -101,7 +100,7 @@ export const App = () => {
 
               <Route path={"/archive"} element={<Archive />} />
 
-              <Route path={"/add-res"} element={<AddResPage />} />
+              <Route path={"/add-res/:cateName"} element={<AddResPage />} />
 
               <Route path={"/post"} element={<BlogPage />}>
                 <Route path={":id"} element={<BlogPage />} />
@@ -112,7 +111,6 @@ export const App = () => {
 
               {/*标签页面*/}
               <Route path={"tag"} element={<TagsPage />}>
-                {/*<Route path={'/tag'} element={<TagsPage/>} />*/}
                 <Route path={":id"} element={<TagPage />} />
               </Route>
 
@@ -131,7 +129,7 @@ export const App = () => {
                 <Route path={"/ss"} element={<DynamicPage />} />
 
                 {/* 相册详情页面页面 */}
-                <Route path={"/pics"} element={<DynamicListPage />} />
+                <Route path={"/pics/:cateName"} element={<DynamicListPage />} />
               </Route>
 
               {/*月份归档查看页面*/}

@@ -83,12 +83,12 @@ const DynamicPage: React.FC = () => {
         </Button>
       </ButtonGroup>
 
-      <ImageList  cols={6} rowHeight={200}>
+      <ImageList cols={6} rowHeight={200}>
         {plotoAlbums.map((item) => (
           <ImageListItem
             key={item.id}
             onClick={() => {
-              navigation("/pics?name=" + item.name);
+              navigation("/pics/" + item.name);
             }}
           >
             <img
@@ -178,8 +178,7 @@ const AddPhoneAlbumsForm: React.FC<{ show: boolean; onClose: () => void }> = ({
                 successResultHandle(result, (data) => {
                   setLogo(data);
                 });
-              } catch (e) {
-              }
+              } catch (e) {}
             }}
           >
             选择封面图上传

@@ -9,9 +9,10 @@
     "@mui/icons-material": "^5.13.7",
     "@mui/lab": "5.0.0-alpha.135",
     "@mui/material": "^5.13.7",
+    "axios": "^1.4.0",
     "browser-fs-access": "^0.34.1",
     "dayjs": "^1.11.9",
-    "dd_server_api_web": "^1.8.46",
+    "dd_server_api_web": "^1.8.48",
     "esbuild-loader": "^3.0.1",
     "framer-motion": "^10.12.18",
     "github-markdown-css": "^5.2.0",
@@ -46,7 +47,8 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
-    "analyze": "source-map-explorer build/static/js/main.*"
+    "analyze": "source-map-explorer build/static/js/main.*",
+    "lint": "eslint src --ext .js,.ts"
   },
   "eslintConfig": {
     "extends": "react-app"
