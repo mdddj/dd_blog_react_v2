@@ -36,6 +36,7 @@ import {
 } from "dd_server_api_web/dist/utils/ResultUtil";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import ArticleIcon from "@mui/icons-material/Article";
 
 //文档详情页面
 const DocDetailPage: React.FC = () => {
@@ -72,20 +73,24 @@ const DocDetailPage: React.FC = () => {
   }
 
   //选中某个文档
-  const onSelect = (res: ResourceModel) => {
+  const onSelect = (res?: ResourceModel) => {
     setSelectDoc(res);
   };
 
   //文件夹类型选中
-  const onFolderSelect = (f: TreeFolders) => {
-    if (currentSelectFolderObject) {
-      if (f.id === currentSelectFolderObject.id) {
-        setCurrentSelectFolderObject(undefined);
+  const onFolderSelect = (f?: TreeFolders) => {
+    if (f) {
+      if (currentSelectFolderObject) {
+        if (f.id === currentSelectFolderObject.id) {
+          setCurrentSelectFolderObject(undefined);
+        } else {
+          setCurrentSelectFolderObject(f);
+        }
       } else {
         setCurrentSelectFolderObject(f);
       }
     } else {
-      setCurrentSelectFolderObject(f);
+      setCurrentSelectFolderObject(undefined);
     }
   };
 
@@ -104,11 +109,16 @@ const DocDetailPage: React.FC = () => {
             />
           }
         >
-          {selectDoc && <Typography>{selectDoc.title}</Typography>}
-          <CreateNewDocArticle currentFolder={currentSelectFolderObject} />
+          {currentSelectFolderObject && (
+            <CreateNewDocArticle currentFolder={currentSelectFolderObject} />
+          )}
           <Box height={2} />
+          {selectDoc && (
+            <Typography variant={"h3"}>{selectDoc.title}</Typography>
+          )}
           <MyBox>
             {selectDoc && <BlogPreviewLight content={selectDoc.content} />}
+            {!selectDoc && <>左侧选择文章即可预览内容</>}
           </MyBox>
         </DocLayout>
       )}
@@ -118,8 +128,8 @@ const DocDetailPage: React.FC = () => {
 
 type DocSidenavParams = {
   treeData: ResourceTreeModel;
-  onSelect: (res: ResourceModel) => void;
-  onFolderSelect: (f: TreeFolders) => void;
+  onSelect: (res?: ResourceModel) => void;
+  onFolderSelect: (f?: TreeFolders) => void;
   currentFolder: TreeFolders | undefined;
   id: string;
 };
@@ -215,14 +225,14 @@ const CreateNewFolder: React.FC<CreateNewFolderParams> = ({
             type="name"
             placeholder="文件夹名字"
             value={title}
-            onChange={(e:any) => setTitle(e.target.value)}
+            onChange={(e: any) => setTitle(e.target.value)}
           />
           <TextField
             fullWidth
             margin={"dense"}
             multiline={true}
             value={desc}
-            onChange={(e:any) => setDesc(e.target.value)}
+            onChange={(e: any) => setDesc(e.target.value)}
             placeholder="介绍/备注"
           />
           <DialogActions>
@@ -237,8 +247,8 @@ const CreateNewFolder: React.FC<CreateNewFolderParams> = ({
 
 type TreeFolderLayoutProp = {
   folder: TreeFolders[];
-  onSelect: (res: ResourceModel) => void;
-  onFolderSelect: (f: TreeFolders) => void;
+  onSelect: (res?: ResourceModel) => void;
+  onFolderSelect: (f?: TreeFolders) => void;
   currentFolder: TreeFolders | undefined;
   isSub: boolean;
   level: number;
@@ -285,8 +295,8 @@ const TreeFolderLayout: React.FC<TreeFolderLayoutProp> = ({
 
 type TreeFolderLayoutPropItem = {
   folder: TreeFolders[];
-  onSelect: (res: ResourceModel) => void;
-  onFolderSelect: (f: TreeFolders) => void;
+  onSelect: (res?: ResourceModel) => void;
+  onFolderSelect: (f?: TreeFolders) => void;
   currentFolder: TreeFolders | undefined;
   isSub: boolean;
   level: number;
@@ -317,6 +327,7 @@ const TreeFoldersLayoutItem: React.FC<TreeFolderLayoutPropItem> = ({
         onClick={() => {
           onFolderSelect(value);
           setCollapseIn(!collapseIn);
+          onSelect(undefined);
         }}
       >
         <ListItemAvatar>
@@ -340,14 +351,19 @@ const TreeFoldersLayoutItem: React.FC<TreeFolderLayoutPropItem> = ({
         {/*文章*/}
         {value.resources.map((value) => {
           return (
-            <div
+            <ListItemButton
               key={value.id}
+              sx={isSub ? { pl: (2 + 1) * level } : undefined}
               onClick={() => {
                 onSelect(value);
+                onFolderSelect(undefined);
               }}
             >
-              {value.title}
-            </div>
+              <ListItemAvatar>
+                <ArticleIcon />
+              </ListItemAvatar>
+              <ListItemText>{value.title}</ListItemText>
+            </ListItemButton>
           );
         })}
       </Collapse>

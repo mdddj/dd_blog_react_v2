@@ -17,6 +17,15 @@ type ParamsValidError = {
   errors: (code: number, msg: string, data: any) => void;
 };
 
+export const getAxiosHeader = () => {
+  return {
+    headers: {
+      Authorization: getAccessToken(),
+      "Content-Type": "multipart/form-data",
+    },
+  };
+};
+
 /**
  * 博客api接口
  */

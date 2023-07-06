@@ -24,7 +24,6 @@ import DynamicPage from "./pages/dynamic/DynamicPage";
 import DocDetailPage from "./pages/doc/detail";
 import LoginComponent from "./components/login";
 import AddPostPage from "./pages/add/post";
-import { systemAvatars } from "./providers/avatars";
 import ResponseErrorModal from "./components/modal/ResponseErrorModal";
 import AppSuccessModel from "./components/modal/AppSuccessModel";
 import UpdatePasswordModal from "./components/modal/UpdatePasswordModal";
@@ -34,53 +33,36 @@ import AddResPage from "./pages/add/add_res_page";
 import { Container, ThemeProvider } from "@mui/material";
 import { defaultTheme } from "./theme/DefaultTheme";
 import BlogAppbar from "./components/appbar";
-import { SystemPicter } from "dd_server_api_web/dist/model/avater";
-import {
-  Result,
-  successResultHandle,
-} from "dd_server_api_web/dist/utils/ResultUtil";
 import { ArchiveModel } from "dd_server_api_web/dist/model/ArchiveModel";
 
 export const App = () => {
   const setArchives = useSetRecoilState(archivesDataState);
-  const setAvatars = useSetRecoilState(systemAvatars);
 
   //组件被挂载后执行的方法
   useMount(() => {
     getCategoryData();
-    fetchAvatars();
   });
-
-  // 加载系统预设头像
-  const fetchAvatars = () => {
-    blogApi()
-      .getPics(1)
-      .then((value: Result<SystemPicter[]>) => {
-        successResultHandle(
-          value,
-          (
-            data: SystemPicter[] | ((currVal: SystemPicter[]) => SystemPicter[])
-          ) => {
-            setAvatars(data);
-          }
-        );
-      });
-  };
 
   ///加载分类和归档等数据
   const getCategoryData = () => {
-    blogApi()
-      .getArchives()
-      .then(
-        (value: {
-          data:
-            | ArchiveModel
-            | ((currVal: ArchiveModel | undefined) => ArchiveModel | undefined)
-            | undefined;
-        }) => {
-          setArchives(value.data);
-        }
-      );
+    try {
+      blogApi()
+        .getArchives()
+        .then(
+          (value: {
+            data:
+              | ArchiveModel
+              | ((
+                  currVal: ArchiveModel | undefined
+                ) => ArchiveModel | undefined)
+              | undefined;
+          }) => {
+            setArchives(value.data);
+          }
+        );
+    } catch (error) {
+      console.log("加载失败" + error);
+    }
   };
 
   return (

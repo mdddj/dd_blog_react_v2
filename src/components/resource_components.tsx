@@ -24,7 +24,6 @@ import {
   successResultHandle,
   PagerModel,
 } from "dd_server_api_web/dist/utils/ResultUtil";
-import { RssFeed } from "@mui/icons-material";
 
 type Props = {
   resourceCategoryName: string; //动态分类的名字

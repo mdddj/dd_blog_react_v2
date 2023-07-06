@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { blogApi } from "../../../utils/request";
+import { blogApi, getAxiosHeader, host } from "../../../utils/request";
 import { useSetRecoilState } from "recoil";
 import { successMessageProvider } from "../../../providers/modal/success_modal";
 import MdEditor from "react-markdown-editor-lite";
@@ -17,23 +17,20 @@ import {
   Typography,
 } from "@mui/material";
 import { TreeFolders } from "dd_server_api_web/dist/model/ResourceTreeModel";
-import { successResultHandle } from "dd_server_api_web/dist/utils/ResultUtil";
 import CloseIcon from "@mui/icons-material/Close";
 import { BlogPreviewLight } from "../../../components/blog_content_light";
 import { onImageUpload } from "../../../utils/EditImageFileUpload";
 import { TransitionProps } from "@mui/material/transitions";
-
-
+import axios from "axios";
 const Transition = React.forwardRef(function Transition(
-    props: TransitionProps & {
-      children: React.ReactElement;
-    },
-    ref: React.Ref<unknown>,
-  ) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
+  props: TransitionProps & {
+    children: React.ReactElement;
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
-  
 //创建一个新文章
 const CreateNewDocArticle: React.FC<{
   currentFolder: TreeFolders | undefined;
@@ -47,22 +44,18 @@ const CreateNewDocArticle: React.FC<{
 
   ///提交
   const submit = async () => {
-    const result = await blogApi().publishPost({
-      title: title,
-      content: content,
-      label: label,
-      categoryId: currentFolder?.id,
-    });
-
-    successResultHandle(
-      result,
-      (_) => {
-        msg(result.message);
+    const result = await axios.post(
+      host + "/api/resource/add-post",
+      {
+        title: title,
+        content: content,
+        label: label,
+        categoryId: currentFolder?.id,
       },
-      (message) => {
-        msg(message);
-      }
+      getAxiosHeader()
     );
+
+    console.log(result);
   };
 
   return (
@@ -72,7 +65,7 @@ const CreateNewDocArticle: React.FC<{
           setShow(true);
         }}
       >
-        新建一篇文稿
+        新建一篇文稿 ({currentFolder?.title})
       </Button>
 
       <Dialog
@@ -93,7 +86,7 @@ const CreateNewDocArticle: React.FC<{
               <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              添加文稿
+              添加文稿 - {currentFolder?.title}
             </Typography>
             <Button autoFocus color="inherit" onClick={submit}>
               发布
