@@ -1,4 +1,5 @@
 import { createTheme } from "@mui/material";
+import { grey } from "@mui/material/colors";
 
 export const defaultTheme = createTheme({
   components: {
@@ -7,11 +8,13 @@ export const defaultTheme = createTheme({
         root: {
           borderRadius: 12,
           padding: 12,
-          cursor: "pointer",
+          borderColor: grey[100],
+          borderStyle: "solid",
+          borderWidth: 1,
         },
       },
       defaultProps: {
-        elevation: 1,
+        elevation: 0,
       },
     },
     MuiTypography: {
@@ -23,6 +26,14 @@ export const defaultTheme = createTheme({
           },
         },
       ],
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {},
+      },
+      defaultProps: {
+        elevation: 1,
+      },
     },
   },
   palette: {

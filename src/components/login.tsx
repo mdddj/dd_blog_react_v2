@@ -9,13 +9,10 @@ import {
   Box,
   Button,
   Container,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
   Input,
-  Radio,
-  RadioGroup,
   Stack,
+  Tab,
+  Tabs,
   Typography,
 } from "@mui/material";
 import {
@@ -71,7 +68,9 @@ const LoginComponent: React.FC = () => {
       setMsg(result.message);
     }
   };
-
+  const handleChange = (event: React.SyntheticEvent, newValue: LoginType) => {
+    setLoginType(newValue);
+  };
   //
   return (
     <>
@@ -82,6 +81,10 @@ const LoginComponent: React.FC = () => {
             <Typography component={"h3"} variant={"h3"}>
               用户登录
             </Typography>
+            <Tabs value={loginType} onChange={handleChange}>
+              <Tab label="账号" value={LoginType.account} />
+              <Tab label="邮箱" value={LoginType.email} />
+            </Tabs>
             <Input
               placeholder={
                 loginType === LoginType.email ? "请输入邮箱" : "请输入账号"
@@ -95,23 +98,7 @@ const LoginComponent: React.FC = () => {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
             />
-            <FormControl>
-              <FormLabel id="login-type">登录方式</FormLabel>
-              <RadioGroup row aria-labelledby="login-type" value={loginType}>
-                <FormControlLabel
-                  value={LoginType.account}
-                  control={<Radio />}
-                  label="账号"
-                  onClick={(_) => setLoginType(LoginType.account)}
-                />
-                <FormControlLabel
-                  value={LoginType.email}
-                  control={<Radio />}
-                  onClick={(_) => setLoginType(LoginType.email)}
-                  label="邮箱"
-                />
-              </RadioGroup>
-            </FormControl>
+
             <Button variant={"contained"} onClick={login}>
               登 录
             </Button>

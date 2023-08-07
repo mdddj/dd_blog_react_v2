@@ -296,7 +296,7 @@ const CommentLayout: React.FC<{
         display: "flex",
         marginBottom: 2,
         justifyItems: "start",
-        marginLeft: isChildComment ? 4 : undefined,
+        // marginLeft: isChildComment ? 4 : undefined,
       }}
     >
       <Box>

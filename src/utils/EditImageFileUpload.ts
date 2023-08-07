@@ -1,4 +1,3 @@
-import { successResultHandle } from "dd_server_api_web/dist/utils/ResultUtil";
 import { blogApi } from "./request";
 
 // 编辑器图片上传
@@ -7,9 +6,11 @@ function onImageUpload(file: File) {
     const formData = new FormData();
     formData.append("file", file);
     const result = await blogApi().uploadFileWithSingle(formData);
-    successResultHandle(result, (d) => {
-      resolve(d);
-    });
+    if (result.state === 200) {
+      resolve(result.data);
+    } else {
+      alert(result.message);
+    }
   });
 }
 export { onImageUpload };

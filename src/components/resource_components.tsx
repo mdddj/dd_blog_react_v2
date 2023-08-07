@@ -22,8 +22,8 @@ import { ResourceModel } from "dd_server_api_web/dist/model/ResourceModel";
 import {
   Result,
   successResultHandle,
-  PagerModel,
 } from "dd_server_api_web/dist/utils/ResultUtil";
+import { ApiResponse, JpaPage } from "../models/app_model";
 
 type Props = {
   resourceCategoryName: string; //动态分类的名字
@@ -46,12 +46,13 @@ const ResourceComponents: React.FC<Props> = ({ resourceCategoryName }) => {
   //加载列表
   const fetchList = async (page: number, id?: number) => {
     let pager = { page: page, pageSize: 20 };
-    let result: Result<{ page: PagerModel; list: ResourceModel[] }> =
-      await blogApi().getResourceList(pager, id, {});
-    successResultHandle(result, (data) => {
-      let newArray = [...list, ...data.list];
-      setList(newArray);
-    });
+    const result = await blogApi().requestT<
+      ApiResponse<JpaPage<ResourceModel>>
+    >("/api/resource/list", { ...pager, id }, "GET");
+    console.log(result);
+    if (result.success) {
+      setList([...list, ...result.data.content]);
+    }
   };
 
   const getData = async () => {

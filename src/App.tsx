@@ -19,7 +19,6 @@ import DocsPage from "./pages/doc";
 import AppLoadingWidget from "./components/app_loading_widget";
 import MoneyModal from "./components/modal/money";
 import MonthPage from "./pages/month";
-import JianliPage from "./pages/JianliPage";
 import DynamicPage from "./pages/dynamic/DynamicPage";
 import DocDetailPage from "./pages/doc/detail";
 import LoginComponent from "./components/login";
@@ -30,7 +29,7 @@ import UpdatePasswordModal from "./components/modal/UpdatePasswordModal";
 import FriendsList from "./components/user/FriendsList";
 import DynamicListPage from "./pages/dynamic/DynamicListPage";
 import AddResPage from "./pages/add/add_res_page";
-import { Container, ThemeProvider } from "@mui/material";
+import { Container, ThemeProvider, Typography } from "@mui/material";
 import { defaultTheme } from "./theme/DefaultTheme";
 import BlogAppbar from "./components/appbar";
 import { ArchiveModel } from "dd_server_api_web/dist/model/ArchiveModel";
@@ -68,12 +67,14 @@ export const App = () => {
   return (
     <ThemeProvider theme={defaultTheme}>
       <BrowserRouter>
-        <main>
+        <main id={"main"}>
           <BlogAppbar />
 
-          <Container sx={{
-            pt:2
-          }}>
+          <Container
+            sx={{
+              pt: 2,
+            }}
+          >
             <AppLoadingWidget />
             <MoneyModal />
             <ResponseErrorModal />
@@ -122,7 +123,7 @@ export const App = () => {
               </Route>
 
               {/*简历页面*/}
-              <Route path={"/jianli"} element={<JianliPage />} />
+              {/* <Route path={"/jianli"} element={<JianliPage />} /> */}
 
               <Route path={"*"} element={<NotFoundPage />} />
 
@@ -154,8 +155,9 @@ const AppFoot: React.FC = () => {
     <>
       <footer className="blog-footer mt-auto">
         <p>
-          {" "}
-          © 2022 <button>@梁典典的博客</button>.
+          <Typography variant={"body2"}>
+            梁典典的博客 赣ICP备17011549号-1
+          </Typography>
         </p>
         {/*<Box p={2} fontSize={13}>*/}
         {/*   本站由springboot+typescript强力驱动,博客已开源<a style={{color: 'blue'}} href="https://github.com/mdddj/dd_blog_react_v2">GITHUB</a>*/}
