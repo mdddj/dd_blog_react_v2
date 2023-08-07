@@ -71,7 +71,9 @@ export const App = () => {
         <main>
           <BlogAppbar />
 
-          <Container>
+          <Container sx={{
+            pt:2
+          }}>
             <AppLoadingWidget />
             <MoneyModal />
             <ResponseErrorModal />

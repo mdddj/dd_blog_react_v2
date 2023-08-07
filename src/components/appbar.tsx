@@ -16,13 +16,13 @@ import MenuIcon from '@mui/icons-material/Menu';
 import {navbarMenu} from "../menus";
 import {useNavigate} from "react-router-dom";
 import { useMount } from "react-use";
-import { blogApi, getAccessToken } from "../utils/request";
+import {blogApi, getAccessToken, removeAccessToken} from "../utils/request";
 import { ApiResponse, User } from "../models/app_model";
 import { useRecoilState } from "recoil";
 import { userProvider } from "../providers/user";
 const BlogAppbar: React.FC = () => {
 
-    var navigateFunction = useNavigate();
+    const navigateFunction = useNavigate();
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
     const [user,setUser] = useRecoilState(userProvider)
@@ -179,6 +179,12 @@ const BlogAppbar: React.FC = () => {
                           handleCloseUserMenu()
                           navigateFunction('/add-post')
                       }}>发布博客</MenuItem>
+                      <MenuItem onClick={()=>{
+                          handleCloseUserMenu()
+                          removeAccessToken()
+                          setUser(undefined)
+                          navigateFunction('/')
+                      }}>退出登录</MenuItem>
                   </Menu>
               </Box>
           </Toolbar>

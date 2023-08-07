@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 
-import { blogApi, getAxiosHeader, host } from "../../../utils/request";
-import { useSetRecoilState } from "recoil";
-import { successMessageProvider } from "../../../providers/modal/success_modal";
+import { getAxiosHeader, host } from "../../../utils/request";
 import MdEditor from "react-markdown-editor-lite";
 import {
   AppBar,
@@ -38,7 +36,6 @@ const CreateNewDocArticle: React.FC<{
   const [title, setTitle] = useState("");
   const [label, setLabel] = useState("");
   const [content, setContent] = useState("");
-  const msg = useSetRecoilState(successMessageProvider);
 
   const [show, setShow] = useState(false);
 

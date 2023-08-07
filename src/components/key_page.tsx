@@ -12,40 +12,43 @@ import { onImageUpload } from "../utils/EditImageFileUpload";
 import { successMessageProvider } from "../providers/modal/success_modal";
 import { useSearchParams } from "react-router-dom";
 import {
-    Box,
-    Button,
-    Checkbox,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle, FormControlLabel, FormGroup,
-    Stack,
-    TextField
+  Box,
+  Button,
+  Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControlLabel,
+  FormGroup,
+  Stack,
+  TextField,
 } from "@mui/material";
 import { TextModel } from "dd_server_api_web/dist/model/TextModel";
-import { Result, successResultHandle } from "dd_server_api_web/dist/utils/ResultUtil";
+import {
+  Result,
+  successResultHandle,
+} from "dd_server_api_web/dist/utils/ResultUtil";
+import UserWidget from "./user_widget";
 type Props = {
   keyText: string;
 };
 ///字典组件
 const KeyPage: React.FC<Props> = ({ keyText }) => {
-  const [params] = useSearchParams()
-  const urlPass = params.get('view-password') ?? ''
+  const [params] = useSearchParams();
+  const urlPass = params.get("view-password") ?? "";
   const [inputPassword, setInputPassword] = useState<string>(urlPass);
   const [model, setModel] = useState<TextModel>();
   const [result, setResult] = useState<Result<any> | undefined>(undefined);
   const setLoading = useSetRecoilState(appLoading);
-  const [on,setToggle] = useToggle(true)
+  const [on, setToggle] = useToggle(true);
   const [showUpdateOrCreateModal, setShowUpdateOrCreateModal] = useState(false); // 新建或者修改弹窗显示
 
   const hasPassword = result && result.state === 303;
 
-  
-
   // 组件挂载
   useMount(() => {
     fetchData();
-
   });
 
   // 执行修改
@@ -64,9 +67,9 @@ const KeyPage: React.FC<Props> = ({ keyText }) => {
     setLoading(true);
     blogApi()
       .getTextByName(keyText, inputPassword)
-      .then((value:Result<TextModel>) => {
+      .then((value: Result<TextModel>) => {
         setLoading(false);
-        setToggle(false)
+        setToggle(false);
         setResult(value);
         if (inputPassword.length !== 0) {
         }
@@ -75,8 +78,7 @@ const KeyPage: React.FC<Props> = ({ keyText }) => {
           (data) => {
             setModel(data);
           },
-          (message) => {
-          }
+          (message) => {}
         );
       });
   };
@@ -97,41 +99,39 @@ const KeyPage: React.FC<Props> = ({ keyText }) => {
             onChange={(event) => setInputPassword(event.target.value)}
           />
           <Box mt={4}>
-            <Button
-              onClick={fetchData}
-            >
-              确认
-            </Button>
+            <Button onClick={fetchData}>确认</Button>
           </Box>
         </Box>
       )}
 
-      <span
-        style={{
-          position: "absolute",
-          top: 0,
-          right: 0,
-          fontSize: 12,
-          color: "grey",
-          cursor: "pointer",
-        }}
-        onClick={showUpdateModal}
-      >
+      <UserWidget>
+          <span
+              style={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  fontSize: 12,
+                  color: "grey",
+                  cursor: "pointer",
+              }}
+              onClick={showUpdateModal}
+          >
         编辑字典
       </span>
+      </UserWidget>
 
       {model && <MarkdownView content={model.context} />}
 
       {model && <CommentComponent type={"text"} id={model?.id ?? 0} />}
 
       {/* 新建或者修改弹窗 */}
-      {
-          !on  && <CreateT
+      {!on && (
+        <CreateT
           showUpdateOrCreateModal={showUpdateOrCreateModal}
           onClose={() => setShowUpdateOrCreateModal(false)}
-          model= {model}
+          model={model}
         />
-      }
+      )}
     </div>
   );
 };
@@ -139,8 +139,8 @@ const KeyPage: React.FC<Props> = ({ keyText }) => {
 const CreateT: React.FC<{
   showUpdateOrCreateModal: boolean;
   onClose: () => void;
-  model?: TextModel | undefined
-}> = ({ showUpdateOrCreateModal, onClose,model }) => {
+  model?: TextModel | undefined;
+}> = ({ showUpdateOrCreateModal, onClose, model }) => {
   //正文
   const [content, setContent] = useState("");
 
@@ -158,16 +158,15 @@ const CreateT: React.FC<{
 
   const setMsg = useSetRecoilState(successMessageProvider);
 
-
   // 组件被挂载
-  useMount(()=>{
-    if(model){
-        setContent(model.context)
-        setTitle(model.name)
-        setIsPass(model.isEncryptionText?? false)
-        setIntro(model.intro??'')
+  useMount(() => {
+    if (model) {
+      setContent(model.context);
+      setTitle(model.name);
+      setIsPass(model.isEncryptionText ?? false);
+      setIntro(model.intro ?? "");
     }
-  })
+  });
 
   // 提交数据
   const onSubmit = () => {
@@ -176,11 +175,11 @@ const CreateT: React.FC<{
         name: title,
         context: content,
         isEncryptionText: isPass,
-        viewPassword: password==='' ? undefined : password,
+        viewPassword: password === "" ? undefined : password,
         intro: intro,
-        id: model?.id
+        id: model?.id,
       })
-      .then((r:Result<TextModel>) => {
+      .then((r: Result<TextModel>) => {
         successResultHandle(
           r,
           (d) => {
@@ -193,47 +192,54 @@ const CreateT: React.FC<{
 
   return (
     <>
-      <Dialog open={showUpdateOrCreateModal} onClose={onClose}>
-          <DialogTitle>编辑字典</DialogTitle>
+      <Dialog open={showUpdateOrCreateModal} onClose={onClose} maxWidth={"lg"}>
+        <DialogTitle>编辑字典</DialogTitle>
         <DialogContent>
+          <Stack direction={"column"} spacing={2} component={"form"}>
+            <TextField
+              placeholder="关键字"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <MdEditor
+              style={{ height: "200px" }}
+              value={content}
+              renderHTML={(text) => <BlogPreviewLight content={text} />}
+              onChange={(data) => {
+                setContent(data.text);
+              }}
+              onImageUpload={onImageUpload}
+            />
+            <TextField
+              placeholder="备注"
+              value={intro}
+              onChange={(e) => setIntro(e.target.value)}
+            />
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    name="isEncryptionText"
+                    checked={isPass}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setIsPass(e.target.checked);
+                    }}
+                  />
+                }
+                label={"是否加密内容"}
+              />
+            </FormGroup>
 
-            <Stack direction={"column"}>
-              <TextField
-                placeholder="关键字"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              <MdEditor
-                style={{ height: "200px" }}
-                value={content}
-                renderHTML={(text) => <BlogPreviewLight content={text} />}
-                onChange={(data) => {
-                  setContent(data.text);
-                }}
-                onImageUpload={onImageUpload}
-              />
-              <TextField
-                placeholder="备注"
-                value={intro}
-                onChange={(e) => setIntro(e.target.value)}
-              />
-                <FormGroup>
-                    <FormControlLabel control={<Checkbox
-                        name="isEncryptionText"
-                        checked={isPass}/>} label={"加密"} />
-                </FormGroup>
-
-              <TextField
-                placeholder="查看密码"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Stack>
-
+            <TextField
+              placeholder="查看密码"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Stack>
         </DialogContent>
-          <DialogActions>
-              <Button onClick={onSubmit}>提交</Button>
-          </DialogActions>
+        <DialogActions>
+          <Button onClick={onSubmit}>提交</Button>
+        </DialogActions>
       </Dialog>
     </>
   );

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { useMount } from "react-use";
 import { formatDateUtil } from "../utils/DateUtil";
 import { blogApi } from "../utils/request";
@@ -8,14 +8,12 @@ import {
   Avatar,
   Box,
   Button,
-  Divider,
+  Card,
   Drawer,
   Grid,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
   Stack,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import {
@@ -23,6 +21,13 @@ import {
   Result,
   successResultHandle,
 } from "dd_server_api_web/dist/utils/ResultUtil";
+import { ApiResponse } from "../models/app_model";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { successMessageProvider } from "../providers/modal/success_modal";
+import { userProvider } from "../providers/user";
+import { useNavigate } from "react-router-dom";
+import CommentIcon from "@mui/icons-material/Comment";
+import { Role } from "dd_server_api_web/dist/model/UserModel";
 
 // 评论组件的参数
 interface CommentComponentProps {
@@ -52,6 +57,7 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({
   const [replyComment, setReplyComment] = useState<Comment>(); // 回复对象
   const [pager, setPager] = useState<PagerModel | undefined>(undefined);
   const [nextPageLoading, setNextPageLoading] = useState(false);
+  const setMsg = useSetRecoilState(successMessageProvider);
 
   //组件被挂载
   useMount(async () => {
@@ -61,10 +67,11 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({
   //加载评论列表
   const fetchCommentList = async (page: number) => {
     setNextPageLoading(true);
+    setCommmentList([]);
     let result: Result<{
       list: Comment[];
       page: PagerModel;
-    }> = await blogApi().findComment({
+    }> = await blogApi().requestT("/api/public/find-comment", {
       page: page,
       findKey: `${id}`,
       type: type,
@@ -76,41 +83,31 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({
     setNextPageLoading(false);
   };
 
-  // 成功提示
-  const successMsg = (
-    msg: string,
-    sts?: "success" | "info" | "warning" | "error" | undefined
-  ) => {};
-
   //提交留言
-  const submit = (
+  const submit = async (
     name: string,
     email: string,
     url: string,
     content: string,
     avatarUrl: string
   ) => {
-    //提交
-    blogApi()
-      .submitComment({
-        email: email,
-        website: url,
-        content: content,
-        name: name,
-        type: type,
-        findKey: id,
-        avatarUrl: avatarUrl,
-        parentCommentId: replyComment?.id,
-      })
-      .then((v: Result<Comment>) => {
-        successResultHandle(
-          v,
-          (_) => {
-            successMsg(v.message);
-          },
-          (msg) => successMsg(msg, "error")
-        );
-      });
+    let json = {
+      email: email,
+      website: url,
+      content: content,
+      name: name,
+      type: type,
+      findKey: id,
+      avatarUrl: avatarUrl,
+      parentCommentId: replyComment?.id,
+    };
+    let result = await blogApi().requestT<ApiResponse<Comment>>(
+      "/api/public/add-comment",
+      json,
+      "POST"
+    );
+    console.log(result);
+    setMsg(result.message);
   };
 
   // 回复
@@ -120,28 +117,34 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({
 
   return (
     <Box>
-      <Typography>评论</Typography>
+      <Typography variant={"h6"}>评论</Typography>
 
       {/* 发布评论表单 */}
       <CommentForm onSubmit={submit} />
+      <Box height={12} />
 
       {/* 加载评论列表 */}
-      <Divider />
       {commmentList.map((v) => (
         <CommentLayout key={v.id} comment={v} onReply={onReply} />
       ))}
       {/* 回复的弹窗 */}
-      <Drawer onClose={() => {}} open={false}>
-        <span>回复</span>
-        <Stack spacing={5}>
-          {replyComment && (
-            <span>
-              回复{replyComment.name} : {replyComment.content}
-            </span>
-          )}
-
-          <CommentForm onSubmit={submit} />
-        </Stack>
+      <Drawer
+        onClose={() => {
+          setReplyComment(undefined);
+        }}
+        open={replyComment !== undefined}
+        anchor={"right"}
+      >
+        <Box sx={{ p: 6 }}>
+          <Stack spacing={5}>
+            {replyComment && (
+              <span>
+                回复{replyComment.name} : {replyComment.content}
+              </span>
+            )}
+            <CommentForm onSubmit={submit} />
+          </Stack>
+        </Box>
       </Drawer>
 
       {pager && (
@@ -159,14 +162,24 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({
 
 // 评论输入表单封装
 const CommentForm: React.FC<CommentFormProps> = (props) => {
+  const nav = useNavigate();
   const [name, setName] = useState(""); //昵称
   const [email, setEmail] = useState(""); //邮箱
   const [url, setUrl] = useState(""); // 网站链接
   const [content, setContent] = useState(""); //评论内容
-  // const [avatarUrl, setAvatarUrl] = useState('') //用户头像
+  const [user] = useRecoilState(userProvider);
+  const [avatarUrl, setAvatarUrl] = useState(""); //用户头像
   // const [open, setOpen] = useState(false) //是否显示选择头像的组件
 
   // const avatars = useRecoilValue(systemAvatars) // 系统预设头像
+
+  useEffect(() => {
+    if (user) {
+      setName(user.nickName);
+      setEmail(user.email);
+      setAvatarUrl(user.picture);
+    }
+  }, [user]);
 
   //验证错误的消息
   const errorMsg = (msg: string) => {};
@@ -188,60 +201,78 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
     }
 
     //提交
-    props.onSubmit(name, email, url, content, "");
+    props.onSubmit(name, email, url, content, avatarUrl);
   };
 
   return (
-    <div
-      style={{
-        marginTop: 22,
+    <Box
+      sx={{
+        display: "flex",
+        width: "100%",
+        justifyItems: "start",
+        flexFlow: "row",
+        marginTop: 2,
       }}
     >
-      <Grid
-        columns={{ xs: 6, sm: 12, md: 12 }}
-        container
-        spacing={{ xs: 2, md: 3 }}
-      >
-        <Grid item xs={2} sm={4} md={4}>
-          <TextField
-            fullWidth={true}
-            label={"昵称"}
-            onChange={(e) => setName(e.target.value)}
-          />
+      <Avatar
+        src={avatarUrl}
+        sx={{ mr: 2 }}
+        onClick={() => {
+          if (!user) {
+            nav("/login");
+          }
+        }}
+      ></Avatar>
+      <Box sx={{ flex: 1 }}>
+        <Grid
+          columns={{ xs: 6, sm: 12, md: 12 }}
+          container
+          spacing={{ xs: 2, md: 3 }}
+        >
+          <Grid item xs={2} sm={4} md={4}>
+            <TextField
+              fullWidth={true}
+              label={"昵称"}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={2} sm={4} md={4}>
+            <TextField
+              fullWidth={true}
+              label={"邮箱"}
+              value={email}
+              onChange={(event) => {
+                setEmail(event.target.value);
+              }}
+            />
+          </Grid>
+          <Grid item xs={2} sm={4} md={4}>
+            <TextField
+              fullWidth={true}
+              label={"网站"}
+              value={url}
+              onChange={(event) => {
+                setUrl(event.target.value);
+              }}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={2} sm={4} md={4}>
-          <TextField
-            fullWidth={true}
-            label={"邮箱"}
-            onChange={(event) => {
-              setEmail(event.target.value);
-            }}
-          />
-        </Grid>
-        <Grid item xs={2} sm={4} md={4}>
-          <TextField
-            fullWidth={true}
-            label={"网站"}
-            onChange={(event) => {
-              setUrl(event.target.value);
-            }}
-          />
-        </Grid>
-      </Grid>
-      <TextField
-        fullWidth={true}
-        multiline={true}
-        placeholder="说点什么吧"
-        style={{ fontSize: 12, marginTop: 22 }}
-        onChange={(e) => setContent(e.target.value)}
-        value={content}
-        rows={4}
-        margin={"dense"}
-      />
-      <Button onClick={submit} variant={"contained"} sx={{mt: 2}}>
-        评论
-      </Button>
-    </div>
+        <TextField
+          fullWidth={true}
+          multiline={true}
+          placeholder="说点什么吧"
+          style={{ fontSize: 12, marginTop: 22 }}
+          onChange={(e) => setContent(e.target.value)}
+          value={content}
+          rows={4}
+          margin={"dense"}
+        />
+        <Button onClick={submit} variant={"contained"} sx={{ mt: 2 }}>
+          发表评论
+        </Button>
+      </Box>
+    </Box>
   );
 };
 
@@ -254,115 +285,83 @@ const CommentLayout: React.FC<{
   onReply?: (comment: Comment) => void;
   isChildComment?: boolean;
 }> = ({ comment, onReply, isChildComment }) => {
+  const getRoleIcons = (): Role[] => {
+    let roles = comment.user?.roles ?? [];
+    return roles.filter((v) => v.icon !== undefined && v.icon !== "");
+  };
+  let roleIcons = getRoleIcons();
   return (
-    <div style={{ marginBottom: 12, marginTop: 12, position: "relative" }}>
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar src={comment.avatarUrl} />
-        </ListItemAvatar>
-        <ListItemText
-          primary={comment.name}
-          secondary={
-            <React.Fragment>
-              <Typography
-                sx={{ display: "inline" }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                {formatDateUtil(comment.createDate)}评论:
+    <Box
+      sx={{
+        display: "flex",
+        marginBottom: 2,
+        justifyItems: "start",
+        marginLeft: isChildComment ? 4 : undefined,
+      }}
+    >
+      <Box>
+        <Avatar
+          src={comment.user?.picture ?? comment.avatarUrl}
+          sx={{ mr: 2 }}
+        />
+      </Box>
+      <Box sx={{ flex: 1 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexFlow: "wrap",
+              alignItems: "end",
+            }}
+          >
+            <Typography variant={"h6"}> {comment.name}</Typography>
+            {roleIcons.map((v) => (
+              <Typography variant={"body2"} key={v.id}>
+                <Tooltip title={v.description}>
+                  <img
+                    src={v.icon}
+                    width={24}
+                    height={24}
+                    alt="role"
+                    style={{ marginLeft: 2 }}
+                  />
+                </Tooltip>
               </Typography>
-              {comment.content}
-            </React.Fragment>
-          }
-        ></ListItemText>
-        {/*<Box flex={1}>*/}
-        {/*    <span style={{fontSize: 12, color: 'grey', marginRight: 12}}>{comment.name}</span> {*/}
-        {/*    isChildComment && <span><span style={{fontSize: 12, color: 'grey', marginRight: 6}}>回复</span> <span*/}
-        {/*        style={{fontSize: 12, color: 'black', marginRight: 6}}>{comment.parentComment?.name}</span></span>*/}
-        {/*} <span style={{fontSize: 12, color: 'grey'}}>{formatDateUtil(comment.createDate)}</span>*/}
-
-        {/*    /!* 主评论显示区域 *!/*/}
-        {/*    <Box mt={2}>*/}
-        {/*        {comment.content}*/}
-
-        {/*        /!* 如果是回复类型的评论,需要展示,回复父评论的那句话 *!/*/}
-        {/*        {*/}
-        {/*            isChildComment && <Box  style={{*/}
-        {/*                textOverflow: 'ellipsis',*/}
-        {/*                display: 'block',*/}
-        {/*                WebkitLineClamp: 2,*/}
-        {/*                overflow: 'hidden',*/}
-        {/*                WebkitBoxOrient: 'vertical'*/}
-        {/*            }}>*/}
-        {/*                {comment.parentComment?.name + ': ' + comment.parentComment?.content}*/}
-        {/*            </Box>*/}
-        {/*        }*/}
-        {/*    </Box>*/}
-
-        {/*    /!* 操作区域: 回复按钮 *!/*/}
-        {/*    <Box mt={5} display={'block'}>*/}
-        {/*        <span style={{cursor: 'pointer', color: 'grey', fontSize: 12}}*/}
-        {/*              onClick={() => {*/}
-        {/*                  onReply && onReply(comment)*/}
-        {/*              }} >回复</span>*/}
-        {/*        <UserWidget>*/}
-        {/*            <span style={*/}
-        {/*                {*/}
-        {/*                    fontSize: 12,*/}
-        {/*                    color: 'grey',*/}
-        {/*                    marginLeft: 12,*/}
-        {/*                    cursor: 'pointer'*/}
-        {/*                }*/}
-        {/*            } onClick={()=>{}}>删除</span>*/}
-        {/*        </UserWidget>*/}
-        {/*    </Box>*/}
-
-        {/*    /!* 渲染子评论 *!/*/}
-        {/*    {*/}
-        {/*        !isChildComment && <ChildCommentNode childs={comment.childComment} onReply={onReply}/>*/}
-        {/*    }*/}
-
-        {/*</Box>*/}
-      </ListItem>
-      {isChildComment && (
-        <ChildCommentNode childs={comment.childComment} onReply={onReply} />
-      )}
-
-      {/*    删除确认的弹窗   */}
-      {/*<AlertDialog*/}
-      {/*    isOpen={isOpen}*/}
-      {/*    onClose={onClose}*/}
-      {/*    leastDestructiveRef={ref}>*/}
-      {/*    <AlertDialogOverlay>*/}
-      {/*        <AlertDialogContent>*/}
-      {/*            <AlertDialogHeader fontSize='lg' fontWeight='bold'>*/}
-      {/*                提示*/}
-      {/*            </AlertDialogHeader>*/}
-
-      {/*            <AlertDialogBody>*/}
-      {/*                确定永久删除整条评论吗?*/}
-      {/*            </AlertDialogBody>*/}
-
-      {/*            <AlertDialogFooter>*/}
-      {/*                <Button onClick={onClose}>*/}
-      {/*                    取消*/}
-      {/*                </Button>*/}
-      {/*                <Button colorScheme='red' onClick={()=>{*/}
-      {/*                    onClose()*/}
-      {/*                    blogApi().removeComment(comment.id).then(value => {*/}
-      {/*                        successResultHandle(value,data => {*/}
-      {/*                            setMsg(data)*/}
-      {/*                        })*/}
-      {/*                    })*/}
-      {/*                }} ml={3}>*/}
-      {/*                    删除*/}
-      {/*                </Button>*/}
-      {/*            </AlertDialogFooter>*/}
-      {/*        </AlertDialogContent>*/}
-      {/*    </AlertDialogOverlay>*/}
-      {/*</AlertDialog>*/}
-    </div>
+            ))}
+          </Box>
+          <Box>
+            <Typography variant={"subtitle2"} color={"gray"}>
+              {formatDateUtil(comment.createDate)}
+            </Typography>
+          </Box>
+        </Box>
+        <Box sx={{ mt: 2, mb: 2 }}>
+          <Typography variant={"body1"}>{comment.content}</Typography>
+        </Box>
+        <Box
+          color={"gray"}
+          sx={{
+            display: "flex",
+            justifyItems: "center",
+          }}
+          onClick={() => {
+            onReply?.(comment);
+          }}
+        >
+          <CommentIcon sx={{ mr: 1, cursor: "pointer" }} />
+          <Typography style={{ cursor: "pointer" }}>回复</Typography>
+        </Box>
+        {comment.childComment.length !== 0 && (
+          <ChildCommentNode childs={comment.childComment} onReply={onReply} />
+        )}
+      </Box>
+    </Box>
   );
 };
 
@@ -372,7 +371,7 @@ const ChildCommentNode: React.FC<{
   onReply?: (comment: Comment) => void;
 }> = ({ childs, onReply }) => {
   return (
-    <>
+    <Card sx={{ mt: 2 }}>
       {childs.map((value) => (
         <CommentLayout
           comment={value}
@@ -381,7 +380,7 @@ const ChildCommentNode: React.FC<{
           isChildComment
         />
       ))}
-    </>
+    </Card>
   );
 };
 

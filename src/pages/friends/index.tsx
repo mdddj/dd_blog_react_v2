@@ -71,13 +71,14 @@ const FriendsPage: React.FC = () => {
       </span>
 
       <Box sx={{ flexGrow: 1, p: 2 }}>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} >
           {friends.map((value) => {
             return (
               <Grid
                 key={value.id}
                 {...{ xs: 12, sm: 6, md: 4, lg: 3 }}
                 minHeight={160}
+                item
               >
                 <Card>
                   <Box mb={2}>
@@ -120,11 +121,11 @@ const FriendsPage: React.FC = () => {
 
 /// 添加友链页面
 const AddFriendsForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
-  const [name, setName] = useState("典典的博客");
-  const [url, setUrl] = useState("https://itbug.shop");
-  const [intro, setIntro] = useState("典典的小卖部开源");
-  const [logo, setLogo] = useState("no logo ");
-  const [email, setEmail] = useState("413153189@qq.com");
+  const [name, setName] = useState("");
+  const [url, setUrl] = useState("");
+  const [intro, setIntro] = useState("");
+  const [logo, setLogo] = useState("");
+  const [email, setEmail] = useState("");
 
   const setMsg = useSetRecoilState(successMessageProvider);
 
