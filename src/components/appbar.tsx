@@ -14,12 +14,13 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { navbarMenu } from "../menus";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useMount } from "react-use";
 import { blogApi, getAccessToken, removeAccessToken } from "../utils/request";
 import { ApiResponse, User } from "../models/app_model";
 import { useRecoilState } from "recoil";
 import { userProvider } from "../providers/user";
+import { blue, grey } from "@mui/material/colors";
 const BlogAppbar: React.FC = () => {
   const navigateFunction = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -118,14 +119,11 @@ const BlogAppbar: React.FC = () => {
               }}
             >
               {navbarMenu.map((page) => (
-                <MenuItem
-                  key={page.title}
-                  onClick={() => {
-                    navigateFunction(page.url);
-                  }}
-                >
-                  <Typography textAlign="center">{page.title}</Typography>
-                </MenuItem>
+                <NavLink to={page.url} key={page.title}>
+                  <MenuItem>
+                    <Typography textAlign="center">{page.title}</Typography>
+                  </MenuItem>
+                </NavLink>
               ))}
             </Menu>
           </Box>

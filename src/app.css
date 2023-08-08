@@ -63,6 +63,14 @@ code {
 
 /*文档页面布局*/
 
+
+.m--img {
+    border-radius: 12px;
+}
+
+.m--img img {
+    border-radius: 12px;
+}
 /* Style the side navigation */
 .sidenav {
     height: 100%;

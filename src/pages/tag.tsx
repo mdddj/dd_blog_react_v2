@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { blogApi } from "../utils/request";
 import BlogListLoad from "../components/blog_list_load";
+import PageHeader from "../components/page_header";
 
 ///标签列表
 const TagPage: React.FC = () => {
@@ -17,12 +18,15 @@ const TagPage: React.FC = () => {
   const tagId = parseInt(id);
   return (
     <>
-      <div>博客列表</div>
-      <BlogListLoad refd={ref} api={(page) => blogApi().getBlogsByTagId(tagId, { page: page, pageSize: 20 })}
+      <PageHeader title="博客列表" />
+      <BlogListLoad
+        refd={ref}
+        api={(page) =>
+          blogApi().getBlogsByTagId(tagId, { page: page, pageSize: 20 })
+        }
       />
     </>
   );
 };
 
 export default TagPage;
-

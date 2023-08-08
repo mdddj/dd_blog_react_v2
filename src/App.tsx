@@ -33,6 +33,10 @@ import { Container, ThemeProvider, Typography } from "@mui/material";
 import { defaultTheme } from "./theme/DefaultTheme";
 import BlogAppbar from "./components/appbar";
 import { ArchiveModel } from "dd_server_api_web/dist/model/ArchiveModel";
+import NameResourceWidget from "./components/resource/name_resource";
+import { ResourceModel } from "dd_server_api_web/dist/model/ResourceModel";
+import { JSXElementConstructor, ReactElement } from "react";
+import { grey } from "@mui/material/colors";
 
 export const App = () => {
   const setArchives = useSetRecoilState(archivesDataState);
@@ -151,23 +155,36 @@ export const App = () => {
 
 // todo 底部区域
 const AppFoot: React.FC = () => {
+  function render(
+    list: ResourceModel[]
+  ): ReactElement<any, string | JSXElementConstructor<any>> {
+    return (
+      <>
+        {list &&
+          list.map((v) => {
+            return (
+              <Typography key={v.id} variant={"body2"}>
+                <a style={{ color: grey[500] }} href={v.content}>
+                  {v.title}
+                </a>
+              </Typography>
+            );
+          })}
+      </>
+    );
+  }
+
   return (
     <>
       <footer className="blog-footer mt-auto">
-        <p>
-          <Typography variant={"body2"}>
+        <div>
+          <Typography variant={"body1"}>
             梁典典的博客 赣ICP备17011549号-1
           </Typography>
-        </p>
-        {/*<Box p={2} fontSize={13}>*/}
-        {/*   本站由springboot+typescript强力驱动,博客已开源<a style={{color: 'blue'}} href="https://github.com/mdddj/dd_blog_react_v2">GITHUB</a>*/}
-        {/*</Box>*/}
-
-        {/*<Box fontSize={12}>*/}
-        {/*    赣ICP备17011549号-1 <a href={'https://github.com/mdddj/dd_server_api_web'} style={{*/}
-        {/*        color : 'red'*/}
-        {/*}}>开放API</a>*/}
-        {/*</Box>*/}
+        </div>
+        <div style={{ marginTop: 12 }}>
+          <NameResourceWidget categoryName={"博客底部链接"} render={render} />
+        </div>
       </footer>
     </>
   );
