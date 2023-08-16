@@ -6,7 +6,6 @@ import { appLoading } from "../../providers/loading";
 import NothingWidget from "../../components/nothing";
 import PageHeader from "../../components/page_header";
 import { useNavigate } from "react-router-dom";
-import { ImageList, ImageListItem, ImageListItemBar } from "@mui/material";
 import { ResCategory } from "dd_server_api_web/dist/model/ResCategory";
 import {
   PagerModel,
@@ -14,6 +13,8 @@ import {
   successResultHandle,
 } from "dd_server_api_web/dist/utils/ResultUtil";
 import MyBox from "../../components/box/my_box";
+import Grid2 from "@mui/material/Unstable_Grid2";
+import {ImageCard} from "../../components/image";
 
 //文档列表页面
 const DocsPage: React.FC = () => {
@@ -67,36 +68,21 @@ const DocsPage: React.FC = () => {
       <PageHeader title={"文档"} />
       <NothingWidget nothing={pager && pager.total === 0} />
 
-      <ImageList cols={5} rowHeight={200} gap={12}>
-        {docs.map((item) => {
-          return (
-            <ImageListItem
-              className="m--img"
-              key={item.id}
-              onClick={() => {
-                nav("/docs/" + item.id);
-              }}
-            >
-              <img
-                src={`${getImage(item)}?w=164&h=164&fit=crop&auto=format`}
-                srcSet={`${getImage(
-                  item
-                )}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                alt={item.name}
-                loading="lazy"
-              />
-              <ImageListItemBar
-                style={{
-                  borderBottomRightRadius: 12,
-                  borderBottomLeftRadius: 12,
-                }}
-                title={item.name}
-                subtitle={item.description}
-              />
-            </ImageListItem>
-          );
-        })}
-      </ImageList>
+        <Grid2 container
+               spacing={2}
+        >
+            {
+                docs.map(value => {
+                    return <Grid2  key={value.id} {...{ xs: 12, sm: 6, md: 4, lg: 3 }} minHeight={160} onClick={()=>{
+                        nav("/pics/" + value.name)
+                    }} >
+                        <ImageCard src={getImage(value)} title={value.name??''} imageWith={'100%'} />
+                    </Grid2>
+                })
+            }
+        </Grid2>
+
+
     </MyBox>
   );
 };

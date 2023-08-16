@@ -35,7 +35,7 @@ import BlogAppbar from "./components/appbar";
 import { ArchiveModel } from "dd_server_api_web/dist/model/ArchiveModel";
 import NameResourceWidget from "./components/resource/name_resource";
 import { ResourceModel } from "dd_server_api_web/dist/model/ResourceModel";
-import { JSXElementConstructor, ReactElement } from "react";
+import { ReactElement } from "react";
 import { grey } from "@mui/material/colors";
 
 export const App = () => {
@@ -73,10 +73,9 @@ export const App = () => {
       <BrowserRouter>
         <main id={"main"}>
           <BlogAppbar />
-
           <Container
             sx={{
-              pt: 2,
+              mt: '80px',
             }}
           >
             <AppLoadingWidget />
@@ -157,7 +156,7 @@ export const App = () => {
 const AppFoot: React.FC = () => {
   function render(
     list: ResourceModel[]
-  ): ReactElement<any, string | JSXElementConstructor<any>> {
+  ): ReactElement {
     return (
       <>
         {list &&

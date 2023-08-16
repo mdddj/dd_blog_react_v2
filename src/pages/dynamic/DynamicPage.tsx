@@ -13,9 +13,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  ImageList,
-  ImageListItem,
-  ImageListItemBar,
   Input,
   Stack,
   TextField,
@@ -28,8 +25,12 @@ import {
   successResultHandle,
 } from "dd_server_api_web/dist/utils/ResultUtil";
 import MyBox from "../../components/box/my_box";
-import UserWidget from "../../components/user_widget";
 import PageHeader from "../../components/page_header";
+import { UserWidget } from "../../components/user_widget";
+import Grid2 from "@mui/material/Unstable_Grid2";
+import {ImageCard} from "../../components/image";
+
+
 
 //动态页面
 const DynamicPage: React.FC = () => {
@@ -69,7 +70,7 @@ const DynamicPage: React.FC = () => {
 
   return (
     <MyBox>
-      <PageHeader title="相册" />
+      <PageHeader title="动态" />
       {initLoading && <CircularProgress />}
 
       <UserWidget>
@@ -82,33 +83,47 @@ const DynamicPage: React.FC = () => {
         </Button>
       </UserWidget>
 
-      <ImageList cols={5} gap={12} rowHeight={200}>
-        {plotoAlbums.map((item) => (
-          <ImageListItem
-            className="m--img"
-            key={item.id}
-            onClick={() => {
-              navigation("/pics/" + item.name);
-            }}
-          >
-            <img
-              src={`${getImage(item)}?w=164&h=164&fit=crop&auto=format`}
-              srcSet={`${getImage(
-                item
-              )}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-              alt={item.name}
-              loading="lazy"
-            />
-            <ImageListItemBar
-              style={{
-                borderBottomRightRadius: 12,
-                borderBottomLeftRadius: 12,
-              }}
-              title={item.name}
-            ></ImageListItemBar>
-          </ImageListItem>
-        ))}
-      </ImageList>
+      <Grid2 container
+             spacing={2}
+            >
+        {
+          plotoAlbums.map(value => {
+            return <Grid2  key={value.id} {...{ xs: 12, sm: 6, md: 4, lg: 3 }} minHeight={160} onClick={()=>{
+              navigation("/pics/" + value.name)
+            }} >
+              <ImageCard src={getImage(value)} title={value.name??''} imageWith={'100%'} />
+            </Grid2>
+          })
+        }
+      </Grid2>
+
+      {/*<ImageList  gap={12} >*/}
+      {/*  {plotoAlbums.map((item) => (*/}
+      {/*    <ImageListItem*/}
+      {/*      className="m--img"*/}
+      {/*      key={item.id}*/}
+      {/*      onClick={() => {*/}
+      {/*        navigation("/pics/" + item.name);*/}
+      {/*      }}*/}
+      {/*    >*/}
+      {/*      <img*/}
+      {/*        src={`${getImage(item)}?w=164&h=164&fit=crop&auto=format`}*/}
+      {/*        srcSet={`${getImage(*/}
+      {/*          item*/}
+      {/*        )}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}*/}
+      {/*        alt={item.name}*/}
+      {/*        loading="lazy"*/}
+      {/*      />*/}
+      {/*      <ImageListItemBar*/}
+      {/*        style={{*/}
+      {/*          borderBottomRightRadius: 12,*/}
+      {/*          borderBottomLeftRadius: 12,*/}
+      {/*        }}*/}
+      {/*        title={item.name}*/}
+      {/*      ></ImageListItemBar>*/}
+      {/*    </ImageListItem>*/}
+      {/*  ))}*/}
+      {/*</ImageList>*/}
 
       <AddPhoneAlbumsForm
         show={showCreateModal}

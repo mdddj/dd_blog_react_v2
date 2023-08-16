@@ -29,7 +29,7 @@ import {
   Result,
   successResultHandle,
 } from "dd_server_api_web/dist/utils/ResultUtil";
-import UserWidget from "./user_widget";
+import { UserWidget } from "./user_widget";
 type Props = {
   keyText: string;
 };
@@ -105,19 +105,19 @@ const KeyPage: React.FC<Props> = ({ keyText }) => {
       )}
 
       <UserWidget>
-          <span
-              style={{
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                  fontSize: 12,
-                  color: "grey",
-                  cursor: "pointer",
-              }}
-              onClick={showUpdateModal}
-          >
-        编辑字典
-      </span>
+        <span
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            fontSize: 12,
+            color: "grey",
+            cursor: "pointer",
+          }}
+          onClick={showUpdateModal}
+        >
+          编辑字典
+        </span>
       </UserWidget>
 
       {model && <MarkdownView content={model.context} />}

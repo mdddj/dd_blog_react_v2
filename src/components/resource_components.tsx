@@ -24,6 +24,8 @@ import {
   successResultHandle,
 } from "dd_server_api_web/dist/utils/ResultUtil";
 import { ApiResponse, JpaPage } from "../models/app_model";
+import { UserWidget } from "./user_widget";
+import PageHeader from "./page_header";
 
 type Props = {
   resourceCategoryName: string; //动态分类的名字
@@ -40,15 +42,19 @@ const ResourceComponents: React.FC<Props> = ({ resourceCategoryName }) => {
 
   //组件挂载
   useMount(async () => {
-    getData();
+    await getData();
   });
 
   //加载列表
-  const fetchList = async (page: number, id?: number) => {
-    let pager = { page: page, pageSize: 20 };
+  const fetchList = async (page: number) => {
+    let pager = { page: page, pageSize: 2000 };
     const result = await blogApi().requestT<
       ApiResponse<JpaPage<ResourceModel>>
-    >("/api/resource/list", { ...pager, id }, "GET");
+    >(
+      "/api/app/resource/list",
+      { ...pager, name: resourceCategoryName },
+      "GET"
+    );
     console.log(result);
     if (result.success) {
       setList([...list, ...result.data.content]);
@@ -62,33 +68,35 @@ const ResourceComponents: React.FC<Props> = ({ resourceCategoryName }) => {
       } as any);
     successResultHandle(result, (data) => {
       setResCate(data);
-      fetchList(0, data?.id);
+      fetchList(0);
     });
   };
 
   return (
     <>
       <Box>
-        {resCate && <Typography>{resCate.name}</Typography>}
+        {resCate && <PageHeader showBack={true} title={resCate.name ?? ""} />}
 
         <ButtonGroup variant="contained">
-          <Button
-            onClick={() => {
-              nav("/add-res/" + params.cateName);
-            }}
-          >
-            发布
-          </Button>
-          <Button
-            onClick={() => {
-              getData();
-            }}
-          >
-            刷新
-          </Button>
+          <UserWidget>
+            <Button
+              onClick={() => {
+                nav("/add-res/" + params.cateName);
+              }}
+            >
+              发布
+            </Button>
+          </UserWidget>
         </ButtonGroup>
 
-        <Stack direction={"column"} spacing={2}>
+        <Stack
+          direction={"column"}
+          spacing={2}
+          sx={{
+            mt: 4,
+            mb: 2,
+          }}
+        >
           {list.map((value) => {
             return <DynamicCard key={value.id} res={value} />;
           })}

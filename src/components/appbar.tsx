@@ -1,16 +1,16 @@
 import React from "react";
 import {
-  AppBar,
-  Avatar,
-  Box,
-  Button,
-  Container,
-  IconButton,
-  Menu,
-  MenuItem,
-  Toolbar,
-  Tooltip,
-  Typography,
+    AppBar,
+    Avatar,
+    Box,
+    Button,
+    Container,
+    IconButton,
+    Menu,
+    MenuItem,
+    Toolbar,
+    Tooltip,
+    Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { navbarMenu } from "../menus";
@@ -20,9 +20,13 @@ import { blogApi, getAccessToken, removeAccessToken } from "../utils/request";
 import { ApiResponse, User } from "../models/app_model";
 import { useRecoilState } from "recoil";
 import { userProvider } from "../providers/user";
-import { blue, grey } from "@mui/material/colors";
+
+import logo from "../assets/avatar.jpeg"
+import { AccountCircle } from "@mui/icons-material";
+
 const BlogAppbar: React.FC = () => {
   const navigateFunction = useNavigate();
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -68,9 +72,10 @@ const BlogAppbar: React.FC = () => {
   });
 
   return (
-    <AppBar position="static">
+    <AppBar position="fixed">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
+            <Avatar src={logo} sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -86,7 +91,7 @@ const BlogAppbar: React.FC = () => {
               textDecoration: "none",
             }}
           >
-            梁典典
+            梁典典的博客
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -119,7 +124,9 @@ const BlogAppbar: React.FC = () => {
               }}
             >
               {navbarMenu.map((page) => (
-                <NavLink to={page.url} key={page.title}>
+                <NavLink to={page.url} key={page.title} onClick={()=>{
+                    handleCloseNavMenu()
+                }}>
                   <MenuItem>
                     <Typography textAlign="center">{page.title}</Typography>
                   </MenuItem>
@@ -143,7 +150,7 @@ const BlogAppbar: React.FC = () => {
               textDecoration: "none",
             }}
           >
-            典典の空间
+            梁典典的博客
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {navbarMenu.map((page) => (
@@ -162,8 +169,19 @@ const BlogAppbar: React.FC = () => {
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="打开设置">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt={user?.nickName} src={user?.picture} />
+              <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="primary-search-account-menu"
+                  aria-haspopup="true"
+                  color="inherit"
+                  onClick={handleOpenUserMenu}>
+                  {
+                      user && <Avatar alt={user?.nickName} src={user?.picture} />
+                  }
+                  {
+                      !user && <AccountCircle />
+                  }
               </IconButton>
             </Tooltip>
             <Menu

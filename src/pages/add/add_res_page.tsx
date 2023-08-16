@@ -14,6 +14,8 @@ import { ApiResponse } from "../../models/app_model";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { LoadingButton } from "@mui/lab";
+import { UserWidget } from "../../components/user_widget";
+import LoginTip from "../../components/login_tip";
 
 const AddResPage: React.FC = () => {
   const [files, setFiles] = useState<File[]>([]);
@@ -65,6 +67,7 @@ const AddResPage: React.FC = () => {
     <Box>
       <PageHeader title="发布动态" />
 
+      <LoginTip />
       <Stack direction={"column"} spacing={2}>
         <TextField
           label={"标题(可选)"}
@@ -87,13 +90,15 @@ const AddResPage: React.FC = () => {
           ))}
         </ImageList>
         <Stack direction={"row"} spacing={2}>
-          <LoadingButton
-            variant={"contained"}
-            onClick={submit}
-            loading={loading}
-          >
-            发布动态
-          </LoadingButton>
+          <UserWidget>
+            <LoadingButton
+              variant={"contained"}
+              onClick={submit}
+              loading={loading}
+            >
+              发布动态
+            </LoadingButton>
+          </UserWidget>
           <Button onClick={selectImage}>添加图片</Button>
         </Stack>
       </Stack>

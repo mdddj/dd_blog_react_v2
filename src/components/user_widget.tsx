@@ -1,17 +1,22 @@
-import React, {PropsWithChildren} from "react";
-import {useRecoilValue} from "recoil";
-import {userProvider} from "../providers/user";
+import React, { PropsWithChildren } from "react";
+import { useRecoilValue } from "recoil";
+import { userProvider } from "../providers/user";
 
-type Props = {}
+type Props = {};
 
-const UserWidget: React.FC<PropsWithChildren<Props>> = ({children}) => {
- const user = useRecoilValue(userProvider)
- if(!user){
-  return <></>
- }
- return <>
-  {children}
- </>
-}
+const UserWidget: React.FC<PropsWithChildren<Props>> = ({ children }) => {
+  const user = useRecoilValue(userProvider);
+  if (!user) {
+    return <></>;
+  }
+  return <>{children}</>;
+};
 
-export default UserWidget
+const UnUserWidget: React.FC<PropsWithChildren<Props>> = ({ children }) => {
+  const user = useRecoilValue(userProvider);
+  if (user) {
+    return <></>;
+  }
+  return <>{children}</>;
+};
+export { UserWidget, UnUserWidget };

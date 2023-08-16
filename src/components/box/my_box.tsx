@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from "react";
 import { useRecoilValue } from "recoil";
 import { appLoading } from "../../providers/loading";
-import { Card, Skeleton, Stack } from "@mui/material";
+import {Box, Skeleton, Stack} from "@mui/material";
 
 ///重构box
 const MyBox: React.FunctionComponent<
@@ -10,7 +10,7 @@ const MyBox: React.FunctionComponent<
   const loading = useRecoilValue(appLoading);
 
   return (
-    <Card>
+    <Box>
       {loading && props.skeleton && (
         <Stack>
           <Skeleton height="20px" />
@@ -22,7 +22,7 @@ const MyBox: React.FunctionComponent<
         </Stack>
       )}
       {props.children}
-    </Card>
+    </Box>
   );
 };
 export default MyBox;

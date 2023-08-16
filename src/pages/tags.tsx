@@ -2,7 +2,7 @@ import React from "react";
 import {useRecoilValue} from "recoil";
 import {archivesDataState} from "../providers/archives";
 import {Link, Outlet} from "react-router-dom";
-import {Box, Button, Grid} from "@mui/material";
+import {Box, Grid} from "@mui/material";
 
 //标签列表页面
 const TagsPage: React.FC = () => {
@@ -15,16 +15,14 @@ const TagsPage: React.FC = () => {
             {tags.map((value) => {
                 return (
                     <Box key={value.id} m={1}>
-                        <Button>
                             <Link to={"/tag/" + value.id}>{value.name}</Link>
-                        </Button>
                     </Box>
                 );
             })}
         </Grid>
 
         <Grid item xs={9}>
-            <Outlet/>
+            <Outlet />
         </Grid>
 
     </Grid>
