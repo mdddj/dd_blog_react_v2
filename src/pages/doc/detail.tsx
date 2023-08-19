@@ -37,6 +37,7 @@ import {
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import ArticleIcon from "@mui/icons-material/Article";
+import {UserWidget} from "../../components/user_widget";
 
 //文档详情页面
 const DocDetailPage: React.FC = () => {
@@ -146,13 +147,15 @@ const DocSidenav: React.FC<DocSidenavParams> = ({
   const [show, setShow] = useState(false);
   return (
     <>
-      <Button
-        onClick={() => {
-          setShow(true);
-        }}
-      >
-        新建子文件夹
-      </Button>
+     <UserWidget>
+       <Button
+           onClick={() => {
+             setShow(true);
+           }}
+       >
+         新建子文件夹
+       </Button>
+     </UserWidget>
       <TreeFolderLayout
         folder={[root]}
         onSelect={onSelect}

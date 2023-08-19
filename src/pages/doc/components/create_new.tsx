@@ -20,6 +20,7 @@ import { BlogPreviewLight } from "../../../components/blog_content_light";
 import { onImageUpload } from "../../../utils/EditImageFileUpload";
 import { TransitionProps } from "@mui/material/transitions";
 import axios from "axios";
+import {UserWidget} from "../../../components/user_widget";
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement;
@@ -36,9 +37,7 @@ const CreateNewDocArticle: React.FC<{
   const [title, setTitle] = useState("");
   const [label, setLabel] = useState("");
   const [content, setContent] = useState("");
-
   const [show, setShow] = useState(false);
-
   ///提交
   const submit = async () => {
     const result = await axios.post(
@@ -57,14 +56,16 @@ const CreateNewDocArticle: React.FC<{
 
   return (
     <Box>
-      <Button
-        onClick={() => {
-          setShow(true);
-        }}
-      >
-        新建一篇文稿 ({currentFolder?.title})
-      </Button>
+      <UserWidget>
+          <Button
+              onClick={() => {
+                  setShow(true);
+              }}
+          >
+              新建一篇文稿 ({currentFolder?.title})
+          </Button>
 
+      </UserWidget>
       <Dialog
         open={show}
         onClose={() => setShow(false)}

@@ -3,7 +3,7 @@ import { Result } from "dd_server_api_web/dist/utils/ResultUtil";
 const MOOSE_REACT_LEARN_ACCESS_TOKEN = "auth_token";
 
 /// true 表示本地服务器，false表示远程服务器
-let isLocal = false;
+let isLocal = true;
 
 const host = isLocal ? "http://localhost:8082" : "https://itbug.shop:9445";
 

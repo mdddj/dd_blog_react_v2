@@ -8,7 +8,6 @@ import {
   Box,
   Button,
   ButtonGroup,
-  Card,
   CardContent,
   CardHeader,
   Divider,
@@ -26,6 +25,7 @@ import {
 import { ApiResponse, JpaPage } from "../models/app_model";
 import { UserWidget } from "./user_widget";
 import PageHeader from "./page_header";
+import StyledCard from "./blog/styled";
 
 type Props = {
   resourceCategoryName: string; //动态分类的名字
@@ -122,7 +122,7 @@ const DynamicCard: React.FC<{ res: ResourceModel }> = ({ res }) => {
 const ImageTypeLayout: React.FC<{ res: ResourceModel }> = ({ res }) => {
   return (
     <>
-      <Card>
+      <StyledCard>
         <CardHeader
           avatar={<Avatar src={res.user?.picture} />}
           title={res.user?.nickName}
@@ -146,7 +146,7 @@ const ImageTypeLayout: React.FC<{ res: ResourceModel }> = ({ res }) => {
             ))}
           </ImageList>
         </CardContent>
-      </Card>
+      </StyledCard>
     </>
   );
 };

@@ -74,7 +74,7 @@ const DocsPage: React.FC = () => {
             {
                 docs.map(value => {
                     return <Grid2  key={value.id} {...{ xs: 12, sm: 6, md: 4, lg: 3 }} minHeight={160} onClick={()=>{
-                        nav("/pics/" + value.name)
+                        nav("/docs/" + value.id)
                     }} >
                         <ImageCard src={getImage(value)} title={value.name??''} imageWith={'100%'} />
                     </Grid2>

@@ -11,6 +11,9 @@ export const defaultTheme = createTheme({
           borderColor: grey[100],
           borderStyle: "solid",
           borderWidth: 1,
+          "&:hover":{
+            borderColor: 'blue'
+          }
         },
       },
       defaultProps: {
