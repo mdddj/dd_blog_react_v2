@@ -36,16 +36,18 @@ const MonthGroup: React.FC<{ monthItem: MonthsCount }> = ({monthItem}) => {
 
     return <Box>
         <Box mb={5}>
-            <Typography>{monthItem.months}</Typography>
+            <Typography variant={'h2'}>{monthItem.months}</Typography>
         </Box>
         <ul style={{listStyle: 'none'}}>
             {
                 blogs.map(value => {
                     let dateString = dayjs(value.createTime).format('YYYY-MM-DD')
                     return (<li style={{display: 'block',marginBottom: 12}} key={value.id}>
-                        <span style={{float: 'right', color: '#767676'}}>{dateString}</span>
-                        <Link style={{color: '#007bff', cursor: 'pointer'}}
-                              to={'/post/' + value.id}>{value.title}</Link>
+                        <Typography variant={'body1'} sx={{float: 'right', color: '#767676'}}>{dateString}</Typography>
+                        <Typography variant={'h6'}>
+                            <Link style={{color: '#007bff', cursor: 'pointer'}}
+                                  to={'/post/' + value.id}>{value.title}</Link>
+                        </Typography>
                     </li>)
                 })
             }

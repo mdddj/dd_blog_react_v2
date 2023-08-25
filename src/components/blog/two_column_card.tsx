@@ -1,7 +1,9 @@
 import React from "react";
 import { BlogCardProps } from "./props";
 import { useNavigate } from "react-router-dom";
-import { Box, Typography, Chip, Avatar } from "@mui/material";
+import TagIcon from '@mui/icons-material/Tag';
+import {Box, Typography, Chip, Avatar, Stack} from "@mui/material";
+import {grey} from "@mui/material/colors";
 /// 两列展示的博客卡片
 const TwoColumnBlogCard: React.FC<BlogCardProps> = ({ blog }) => {
   const navigate = useNavigate();
@@ -20,12 +22,15 @@ const TwoColumnBlogCard: React.FC<BlogCardProps> = ({ blog }) => {
         >
           {blog.title}
         </Typography>
-        <Box sx={{ mt: 2 }}>
+        <Stack sx={{ mt: 2 }} direction={'row'} spacing={2} flexWrap={'wrap'} alignItems={'center'}>
           <Chip
             avatar={<Avatar src={blog.category.logo} />}
             label={blog.category.name}
           />
-        </Box>
+          {
+            blog.tags.map(value => <Typography color={grey["400"]} ><TagIcon sx={{fontSize: 12}} />{value.name}</Typography>)
+          }
+        </Stack>
       </Box>
     </Box>
   );
