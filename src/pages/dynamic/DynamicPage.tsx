@@ -28,9 +28,8 @@ import MyBox from "../../components/box/my_box";
 import PageHeader from "../../components/page_header";
 import { UserWidget } from "../../components/user_widget";
 import Grid2 from "@mui/material/Unstable_Grid2";
-import {ImageCard} from "../../components/image";
-
-
+import { ImageCard } from "../../components/image";
+import UpdateResourceCategoryThumbnail from "../../components/update_resource_category_thumbnail";
 
 //动态页面
 const DynamicPage: React.FC = () => {
@@ -62,7 +61,7 @@ const DynamicPage: React.FC = () => {
   };
 
   const getImage = (item: ResCategory): string => {
-    if (item.logo || item.logo === "") {
+    if (!item.logo || item.logo === "") {
       return "https://bit.ly/2Z4KKcF";
     }
     return item.logo!;
@@ -83,18 +82,39 @@ const DynamicPage: React.FC = () => {
         </Button>
       </UserWidget>
 
-      <Grid2 container
-             spacing={2}
+      <Grid2 container spacing={2}>
+        {plotoAlbums.map((value) => {
+          return (
+            <Grid2
+              key={value.id}
+              {...{ xs: 12, sm: 6, md: 4, lg: 3 }}
+              minHeight={160}
+              sx={{
+                position: "relative",
+              }}
             >
-        {
-          plotoAlbums.map(value => {
-            return <Grid2  key={value.id} {...{ xs: 12, sm: 6, md: 4, lg: 3 }} minHeight={160} onClick={()=>{
-              navigation("/pics/" + value.name)
-            }} >
-              <ImageCard src={getImage(value)} title={value.name??''} imageWith={'100%'} />
+              <Box
+                onClick={() => {
+                  navigation("/pics/" + value.name);
+                }}
+              >
+                <ImageCard
+                  src={getImage(value)}
+                  title={value.name ?? ""}
+                  imageWith={"100%"}
+                />
+              </Box>
+              {value.id && (
+                <UpdateResourceCategoryThumbnail
+                  id={value.id}
+                  onSuccess={() => {
+                    fetchPhotoAlbum();
+                  }}
+                />
+              )}
             </Grid2>
-          })
-        }
+          );
+        })}
       </Grid2>
 
       {/*<ImageList  gap={12} >*/}

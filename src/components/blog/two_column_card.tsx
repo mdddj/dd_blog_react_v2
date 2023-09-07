@@ -28,7 +28,7 @@ const TwoColumnBlogCard: React.FC<BlogCardProps> = ({ blog }) => {
             label={blog.category.name}
           />
           {
-            blog.tags.map(value => <Typography color={grey["400"]} ><TagIcon sx={{fontSize: 12}} />{value.name}</Typography>)
+            blog.tags.map(value => <Typography key={value.id} color={grey["400"]} ><TagIcon sx={{fontSize: 12}} />{value.name}</Typography>)
           }
         </Stack>
       </Box>

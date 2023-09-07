@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { blogApi } from "../../utils/request";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useMount } from "react-use";
 import DocLayout from "../../components/doc_layout";
 import { BlogPreviewLight } from "../../components/blog_content_light";
@@ -11,7 +11,7 @@ import FolderIcon from "@mui/icons-material/Folder";
 import { successMessageProvider } from "../../providers/modal/success_modal";
 import {
   Box,
-  Button,
+  Button, Chip,
   CircularProgress,
   Collapse,
   Dialog,
@@ -21,7 +21,7 @@ import {
   List,
   ListItemAvatar,
   ListItemButton,
-  ListItemText,
+  ListItemText, Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -37,7 +37,9 @@ import {
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import ArticleIcon from "@mui/icons-material/Article";
-import {UserWidget} from "../../components/user_widget";
+import { UserWidget } from "../../components/user_widget";
+import { grey } from "@mui/material/colors";
+import {formatDateUtil} from "../../utils/DateUtil";
 
 //文档详情页面
 const DocDetailPage: React.FC = () => {
@@ -50,6 +52,8 @@ const DocDetailPage: React.FC = () => {
     TreeFolders | undefined
   >();
   const { id } = useParams<{ id: string | undefined }>();
+
+  const nav = useNavigate();
 
   //加载文档的目录和文章节点
   const getDocTreeData = async () => {
@@ -95,6 +99,10 @@ const DocDetailPage: React.FC = () => {
     }
   };
 
+  const onCreateSuccess = () => {
+    getDocTreeData(); //刷新文档数据
+  };
+
   return (
     <>
       {loading && <CircularProgress />}
@@ -111,15 +119,63 @@ const DocDetailPage: React.FC = () => {
           }
         >
           {currentSelectFolderObject && (
-            <CreateNewDocArticle currentFolder={currentSelectFolderObject} />
+            <CreateNewDocArticle
+              currentFolder={currentSelectFolderObject}
+              onCreateSuccess={onCreateSuccess}
+            />
           )}
           <Box height={2} />
           {selectDoc && (
-            <Typography variant={"h3"}>{selectDoc.title}</Typography>
+            <Typography variant={"h2"} sx={{mb:2}} fontWeight={'bold'}>{selectDoc.title}</Typography>
           )}
+
+          {
+            selectDoc?.label && <Stack direction={'row'} sx={{mt:1,mb: 3}}>
+                {
+                  selectDoc.label.split(",").map(value => <Chip label={value} key={value}/>)
+                }
+              </Stack>
+          }
+
           <MyBox>
-            {selectDoc && <BlogPreviewLight content={selectDoc.content} />}
-            {!selectDoc && <>左侧选择文章即可预览内容</>}
+            {selectDoc && (
+              <Box
+                sx={{
+                  position: "relative",
+                }}
+              >
+                <BlogPreviewLight content={selectDoc.content} />
+                {selectDoc.updateDate && <Typography sx={{mt:2}} variant={'body2'} color={'grey'}>[最后更新时间:{formatDateUtil(selectDoc.updateDate)}]</Typography>}
+                <UserWidget>
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      right: 2,
+                      top: 2,
+                    }}
+                  >
+                    <Button
+                      onClick={() => {
+                        nav("/r/u?updateId=" + selectDoc.id);
+                      }}
+                    >
+                      编辑
+                    </Button>
+                  </Box>
+                </UserWidget>
+              </Box>
+            )}
+            {!selectDoc && (
+              <Box
+                sx={{
+                  p: 5,
+                  textAlign: "center",
+                  color: grey[400],
+                }}
+              >
+                提示:左侧选择文章即可预览内容
+              </Box>
+            )}
           </MyBox>
         </DocLayout>
       )}
@@ -147,15 +203,15 @@ const DocSidenav: React.FC<DocSidenavParams> = ({
   const [show, setShow] = useState(false);
   return (
     <>
-     <UserWidget>
-       <Button
-           onClick={() => {
-             setShow(true);
-           }}
-       >
-         新建子文件夹
-       </Button>
-     </UserWidget>
+      <UserWidget>
+        <Button
+          onClick={() => {
+            setShow(true);
+          }}
+        >
+          新建子文件夹
+        </Button>
+      </UserWidget>
       <TreeFolderLayout
         folder={[root]}
         onSelect={onSelect}
@@ -334,7 +390,7 @@ const TreeFoldersLayoutItem: React.FC<TreeFolderLayoutPropItem> = ({
         }}
       >
         <ListItemAvatar>
-          <FolderIcon />
+          <FolderIcon sx={{color: 'grey'}} />
         </ListItemAvatar>
         <ListItemText>{value.title}</ListItemText>
         {hasChildren && <>{collapseIn ? <ExpandLess /> : <ExpandMore />}</>}
@@ -363,7 +419,7 @@ const TreeFoldersLayoutItem: React.FC<TreeFolderLayoutPropItem> = ({
               }}
             >
               <ListItemAvatar>
-                <ArticleIcon />
+                <ArticleIcon sx={{color: 'grey'}} />
               </ListItemAvatar>
               <ListItemText>{value.title}</ListItemText>
             </ListItemButton>

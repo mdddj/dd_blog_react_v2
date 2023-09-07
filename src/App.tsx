@@ -37,6 +37,8 @@ import NameResourceWidget from "./components/resource/name_resource";
 import { ResourceModel } from "dd_server_api_web/dist/model/ResourceModel";
 import { ReactElement } from "react";
 import { grey } from "@mui/material/colors";
+import TextPage from "./pages/text";
+import UpdateResourcePage from "./pages/resource/update";
 
 export const App = () => {
   const setArchives = useSetRecoilState(archivesDataState);
@@ -75,7 +77,7 @@ export const App = () => {
           <BlogAppbar />
           <Container
             sx={{
-              mt: '80px',
+              mt: "80px",
             }}
           >
             <AppLoadingWidget />
@@ -106,6 +108,9 @@ export const App = () => {
               <Route path={"/docs"} element={<DocsPage />}></Route>
               <Route path={"/docs/:id"} element={<DocDetailPage />} />
 
+              {/* 修改资源动态的页面 */}
+              <Route path="/r/u" element={<UpdateResourcePage />} />
+
               <Route>
                 {/*    关于我页面*/}
                 <Route path={"/about"} element={<AboutPage />} />
@@ -123,6 +128,10 @@ export const App = () => {
               {/*月份归档查看页面*/}
               <Route path={"/month"} element={<MonthPage />}>
                 <Route path={":month"} element={<MonthPage />} />
+              </Route>
+
+              <Route path="/t">
+                <Route path={":text"} element={<TextPage />} />
               </Route>
 
               {/*简历页面*/}
@@ -154,9 +163,7 @@ export const App = () => {
 
 // todo 底部区域
 const AppFoot: React.FC = () => {
-  function render(
-    list: ResourceModel[]
-  ): ReactElement {
+  function render(list: ResourceModel[]): ReactElement {
     return (
       <>
         {list &&
