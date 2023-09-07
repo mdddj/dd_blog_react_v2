@@ -33,8 +33,8 @@ dependencies:
     specifier: ^1.11.9
     version: 1.11.9
   dd_server_api_web:
-    specifier: ^1.8.50
-    version: 1.8.50
+    specifier: ^1.8.62
+    version: 1.8.62
   esbuild-loader:
     specifier: ^4.0.2
     version: 4.0.2(webpack@5.88.1)
@@ -4535,8 +4535,8 @@ packages:
     resolution: {integrity: sha512-QvzAURSbQ0pKdIye2txOzNaHmxtUBXerpY0FJsFXUMKbIZeFm5ht1LS/jFsrncjnmtv8HsG0W2g6c0zUjZWmpA==}
     dev: false
 
-  /dd_server_api_web@1.8.50:
-    resolution: {integrity: sha512-tfThrWLND3qGbHc36gH+hRR9rPgINvRCuGVYbDqDJ1fHPGCPLD9TMy2Fa/6SXcDqXtM8Dj+p3Ibh2lUqAjdrag==}
+  /dd_server_api_web@1.8.62:
+    resolution: {integrity: sha512-wukDlsPk+DCCfzYcX7BqOZySJHOAo3JvmohAnNI5EHMkWmfgpCVEFHcqLozbgOk+pfBKafT3nQ4noCnj8Mndug==}
     dependencies:
       axios: 1.5.0
     transitivePeerDependencies:

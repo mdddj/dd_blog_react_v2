@@ -64,6 +64,9 @@ const DynamicPage: React.FC = () => {
     if (!item.logo || item.logo === "") {
       return "https://bit.ly/2Z4KKcF";
     }
+    if (item.fileInfo && item.fileInfo.thumbnail) {
+      return item.fileInfo.thumbnail;
+    }
     return item.logo!;
   };
 
