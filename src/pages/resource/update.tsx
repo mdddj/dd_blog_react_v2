@@ -63,7 +63,7 @@ const UpdateResourcePage: React.FC = () => {
   };
 
   useEffect(() => {
-    getUpdateModel();
+    getUpdateModel().then();
   }, [updateId]);
 
   const content = watch("content");

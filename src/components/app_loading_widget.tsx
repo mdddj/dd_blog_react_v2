@@ -5,11 +5,11 @@ import {CircularProgress} from "@mui/material";
 
 const AppLoadingWidget: React.FC = () => {
     const loading = useRecoilValue(appLoading)
-    if(!loading){
+    if (!loading) {
         return <></>
     }
-    return <div style={{position: 'absolute', top: '12px',right: '12px',zIndex: 9999999999999}}>
-       <CircularProgress />
+    return <div>
+        <CircularProgress/>
     </div>
 }
 export default AppLoadingWidget

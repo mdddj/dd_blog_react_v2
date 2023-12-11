@@ -3,6 +3,7 @@ const {
     override,
     addWebpackModuleRule,
     setWebpackTarget,
+    removeModuleScopePlugin
   } = require("customize-cra");
   
   module.exports = override(
@@ -20,11 +21,12 @@ const {
             { helpers: true },
           ],
         ],
-        cacheDirectory: true,
+        cacheDirectory: false,
         cacheCompression: false,
-        sourceMaps: true,
-        inputSourceMap: true,
+        sourceMaps: false,
+        inputSourceMap: false,
       },
-    })
+    }),
+      removeModuleScopePlugin()
   );
   

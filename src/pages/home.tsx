@@ -17,7 +17,6 @@ import {
   BlogListData,
 } from "dd_server_api_web/dist/model/result/BlogPushNewResultData";
 import { PagerModel, Result } from "dd_server_api_web/dist/utils/ResultUtil";
-import { CircularProgress } from "@mui/material";
 
 //首页
 const Home: React.FC = () => {
@@ -26,20 +25,17 @@ const Home: React.FC = () => {
   const [nextPageLoading, setNextPageLoading] = useState<boolean>(false);
   const [pager, setPager] = useState<PagerModel>();
   const setAppLoading = useSetRecoilState(appLoading);
-  const [loading, setLoading] = useState(false);
 
   //组件挂载
   useMount(async () => {
-    setLoading(true);
     await fetchBlogData(1);
-    setLoading(false);
   });
 
   ///获取下一页博客数据
   const getNextPage = () => {
     let nextPage = page + 1;
     setNextPageLoading(true);
-    fetchBlogData(nextPage);
+    fetchBlogData(nextPage).then();
     setPage(nextPage);
   };
 
@@ -71,13 +67,6 @@ const Home: React.FC = () => {
           <TagCard />,
         ]}
       >
-        {loading && (
-          <CircularProgress
-            sx={{
-              textAlign: "center",
-            }}
-          />
-        )}
         {blogs.length !== 0 && (
           <>
             {blogs.map((value) => (

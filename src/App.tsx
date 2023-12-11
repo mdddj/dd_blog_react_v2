@@ -75,6 +75,7 @@ export const App = () => {
       <BrowserRouter>
         <main id={"main"}>
           <BlogAppbar />
+
           <Container
             sx={{
               mt: "80px",
