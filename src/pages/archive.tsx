@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import PageHeader from "../components/page_header";
 import NothingWidget from "../components/nothing";
 import MyBox from "../components/box/my_box";
-import { MonthsCount } from "dd_server_api_web/dist/model/ArchiveModel";
+import {MonthsCount} from "dd_server_api_web/dist/model/ArchiveModel";
 import Box from "../components/box/box";
 
 const Archive: React.FC = () => {
@@ -17,7 +17,7 @@ const Archive: React.FC = () => {
 
     return <>
         <PageHeader title={'归档'}/>
-        <NothingWidget nothing={archives.length === 0} />
+        <NothingWidget nothing={archives.length === 0}/>
         <div className={'flex flex-col gap-2'}>
             {
                 archives.map(value => <MonthGroup monthItem={value} key={value.months}/>)
@@ -34,19 +34,20 @@ const MonthGroup: React.FC<{ monthItem: MonthsCount }> = ({monthItem}) => {
 
 
     return <div>
-            <div className={'font-bold text-large'}>{monthItem.months}</div>
-        <ul style={{listStyle: 'none'}}>
+        <div className={'font-bold text-large'}>{monthItem.months}</div>
+        <div>
             {
                 blogs.map(value => {
                     let dateString = dayjs(value.createTime).format('YYYY-MM-DD')
-                    return (<li style={{display: 'block',marginBottom: 12}} key={value.id}>
-                        <div><span className={'text-default-500'}>{dateString}</span>  <Link style={{color: '#007bff', cursor: 'pointer'}}
-                                                 to={'/post/' + value.id}>{value.title}</Link></div>
-                    </li>)
+                    return (<div key={value.id}>
+                        <div><span className={'text-default-500'}>{dateString}</span> <Link
+                            style={{color: '#007bff', cursor: 'pointer'}}
+                            to={'/post/' + value.id}>{value.title}</Link></div>
+                    </div>)
                 })
             }
 
-        </ul>
+        </div>
 
     </div>
 }

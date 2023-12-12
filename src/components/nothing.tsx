@@ -11,8 +11,8 @@ const NothingWidget: React.FC<Props> = ({nothing}) => {
     if (!nothing) {
         return <span/>
     }
-    return <Box>
-        这里什么都没有~
-    </Box>
+    return <div className={'text-center text-default'}>
+        暂无内容~
+    </div>
 }
 export default NothingWidget

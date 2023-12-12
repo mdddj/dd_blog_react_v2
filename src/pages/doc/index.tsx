@@ -76,20 +76,17 @@ const DocsPage: React.FC = () => {
                 {docs.map((value) => {
                     return (
                         <div
+                            className={'bg-secondary-50 rounded-3xl aspect-square'}
                             key={value.id}
-                            {...{xs: 12, sm: 6, md: 4, lg: 3}}
                         >
-                            <Box
-                                onClick={() => {
+                            <ImageCard
+                                onClick={()=>{
                                     nav("/docs/" + value.id);
                                 }}
-                            >
-                                <ImageCard
-                                    src={getImage(value)}
-                                    title={value.name ?? ""}
-                                    imageWith={"100%"}
-                                />
-                            </Box>
+                                src={getImage(value)}
+                                title={value.name ?? ""}
+                                imageWith={"100%"}
+                            />
                             {value.id && (
                                 <UpdateResourceCategoryThumbnail
                                     id={value.id}

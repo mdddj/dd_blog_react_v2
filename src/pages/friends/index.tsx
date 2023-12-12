@@ -21,12 +21,13 @@ import {
     CardFooter,
     Divider,
     Input, Link,
-    Modal,
+    Modal, ModalBody,
     ModalContent,
     ModalHeader, Tooltip,
     User
 } from "@nextui-org/react";
 import Box from "../../components/box/box";
+import TwoColumnLayout from "../../components/two_column_layout";
 
 //友链页面
 const FriendsPage: React.FC = () => {
@@ -48,56 +49,61 @@ const FriendsPage: React.FC = () => {
     };
 
     return (
-        <div className={'relative flex flex-col gap-2'}>
-            <PageHeader title={"友链"}/>
+        <TwoColumnLayout right={[
+            <span className={' right-1 top-1'} onClick={() => setShowModal(true)}>自助申请友链</span>
+        ]}>
+            <div className={' flex flex-col gap-2 px-5'}>
+                <PageHeader title={"友链"}/>
 
-            <span className={'absolute right-1 top-1'} onClick={() => setShowModal(true)}>自助申请友链</span>
 
-            <div>
-                <div className={'grid grid-cols-4 gap-2'}>
-                    {friends.map((value) => {
-                        return <Card>
-                            <CardBody>
-                                <User name={value.name} avatarProps={{
-                                    src: value.logo
-                                }} description={value.intro} onClick={() => {
-                                    window.open(value.url, '_blank');
-                                }}/>
-                            </CardBody>
-                            <Divider/>
-                            <CardFooter>
-                                <Tooltip content={value.url}>
-                                    <Link
-                                        isExternal
-                                        showAnchorIcon
-                                        href={value.url}
-                                    >
-                                        去看看
-                                    </Link>
-                                </Tooltip>
-                            </CardFooter>
-                        </Card>
 
-                    })}
+                <div>
+                    <div className={'grid grid-cols-3 gap-2'}>
+                        {friends.map((value) => {
+                            return <Card>
+                                <CardBody>
+                                    <User name={value.name} avatarProps={{
+                                        src: value.logo
+                                    }} description={value.intro} onClick={() => {
+                                        window.open(value.url, '_blank');
+                                    }}/>
+                                </CardBody>
+                                <Divider/>
+                                <CardFooter>
+                                    <Tooltip content={value.url}>
+                                        <Link
+                                            isExternal
+                                            showAnchorIcon
+                                            href={value.url}
+                                        >
+                                            去看看
+                                        </Link>
+                                    </Tooltip>
+                                </CardFooter>
+                            </Card>
+
+                        })}
+                    </div>
                 </div>
+
+                <CommentComponent type={"friend"} id={0}/>
+
+                <Modal
+                    isOpen={showModal}
+                    onClose={() => setShowModal(false)}>
+                    <ModalContent>
+                        <ModalHeader>自助申请友链</ModalHeader>
+                        <ModalBody>
+                            <AddFriendsForm
+                                onSuccess={() => {
+                                    setShowModal(false);
+                                }}
+                            />
+                        </ModalBody>
+                    </ModalContent>
+                </Modal>
             </div>
-
-            <CommentComponent type={"friend"} id={0}/>
-
-            <Modal
-                isOpen={showModal}
-                onClose={() => setShowModal(false)}
-            >
-                <ModalHeader>自助申请友链</ModalHeader>
-                <ModalContent>
-                    <AddFriendsForm
-                        onSuccess={() => {
-                            setShowModal(false);
-                        }}
-                    />
-                </ModalContent>
-            </Modal>
-        </div>
+        </TwoColumnLayout>
     );
 };
 
@@ -173,7 +179,7 @@ const AddFriendsForm: React.FC<{ onSuccess: () => void }> = ({onSuccess}) => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
             />
-            <Button onClick={() => submit()} fullWidth>
+            <Button onClick={() => submit()} fullWidth color={'primary'} className={'mt-2'}>
                 提交数据
             </Button>
         </div>

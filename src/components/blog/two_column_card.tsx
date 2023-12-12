@@ -5,9 +5,7 @@ import { Link } from "react-router-dom";
 /// 两列展示的博客卡片
 const TwoColumnBlogCard: React.FC<BlogCardProps> = ({ blog }) => {
   return (
-    <Card
-      className={''}
-    >
+    <Card className={'hover:scale-105'}>
       <CardBody className={'flex flex-col gap-2'}>
         <Link
             className={'font-bold text-large'}

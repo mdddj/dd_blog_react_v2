@@ -4,10 +4,11 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useMount} from "react-use";
 import DocLayout from "../../components/doc_layout";
 import {BlogPreviewLight} from "../../components/blog_content_light";
-import MyBox from "../../components/box/my_box";
 import CreateNewDocArticle from "./components/create_new";
 import {useSetRecoilState} from "recoil";
 import {successMessageProvider} from "../../providers/modal/success_modal";
+import {ReactComponent as FolderSvg} from "../../assets/folder_fill.svg";
+import {ReactComponent as FileSvg} from "../../assets/file.svg";
 import {
     ResourceTreeModel,
     TreeFolders,
@@ -32,6 +33,7 @@ import {
     Spinner
 } from "@nextui-org/react";
 import Box from "../../components/box/box";
+import {FolderIcon} from "../../assets/svgs";
 
 //文档详情页面
 const DocDetailPage: React.FC = () => {
@@ -182,7 +184,7 @@ const DocSidenav: React.FC<DocSidenavParams> = ({
 
 
     return (
-        <>
+        <div className={'sticky'}>
             <UserWidget>
                 <Button
                     onClick={() => {
@@ -215,7 +217,7 @@ const DocSidenav: React.FC<DocSidenavParams> = ({
                 currentFolder={currentFolder}
                 id={id}
             />
-        </>
+        </div>
     );
 };
 
@@ -363,11 +365,12 @@ const TreeFoldersLayoutItem: React.FC<TreeFolderLayoutPropItem> = ({
                     onSelect(undefined);
                 }}
             >
-                <span>
-                    文件夹
-                </span>
-                <span>{value.title}</span>
-                {hasChildren && <>{collapseIn ? <span>展开</span> : <span>收起</span>}</>}
+                {/*{hasChildren && <>{collapseIn ? <span>展开</span> : <span>收起</span>}</>}*/}
+                <div>
+                    <FolderIcon  className={'w-6 h-6 inline'}/> <span>{value.title}</span>
+                </div>
+
+
             </div>
             <div>
                 {/*文件夹*/}
@@ -386,16 +389,15 @@ const TreeFoldersLayoutItem: React.FC<TreeFolderLayoutPropItem> = ({
                     return (
                         <div
                             key={value.id}
-                            // sx={isSub ? {pl: (2 + 1) * level} : undefined}
                             onClick={() => {
                                 onSelect(value);
                                 onFolderSelect(undefined);
                             }}
+                            style={{
+                                marginLeft: isSub ? 6 * level : undefined
+                            }}
                         >
-                            <span>
-                                文章
-                            </span>
-                            <span>{value.title}</span>
+                            <div><FileIcon/>{value.title}</div>
                         </div>
                     );
                 })}
@@ -404,4 +406,8 @@ const TreeFoldersLayoutItem: React.FC<TreeFolderLayoutPropItem> = ({
     );
 };
 
+
+const FileIcon: React.FC = () => {
+    return <FileSvg className={'w-6 h-6 inline'} />
+}
 export default DocDetailPage;

@@ -79,7 +79,7 @@ const DynamicPage: React.FC = () => {
           return (
             <div
               key={value.id}
-              className={'relative'}
+              className={'relative aspect-square bg-default-50'}
             >
               <ImageCard
                   onClick={()=>navigation("/pics/" + value.name)}

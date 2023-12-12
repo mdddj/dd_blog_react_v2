@@ -12,19 +12,17 @@ type Props = {
 
 const PagerNextLoad: React.FC<Props> = ({ pager, onload, loading }) => {
   return (
-    <Box >
+    <div className={'text-center'} >
       {/*    加载下一页  */}
       {!pager.paged && <Button onClick={onload}>查看更多</Button>}
       {pager.paged && pager.total !== 0 && (
-        <Box >
-          <span>
+        <div >
             没有更多了
-          </span>
-        </Box>
+        </div>
       )}
 
       <NothingWidget nothing={pager.total === 0} />
-    </Box>
+    </div>
   );
 };
 export default PagerNextLoad;

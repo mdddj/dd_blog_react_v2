@@ -85,8 +85,7 @@ const BlogPage: React.FC = () => {
         <Box>
           {blog && <MarkdownView content={blog.content} />}
         </Box>
-        <Box >
-          <div className={'columns-1'}>
+        <div className={'flex gap-2'}>
             <UserWidget>
               <Button
                 onClick={() => {
@@ -101,8 +100,7 @@ const BlogPage: React.FC = () => {
                 删除博客
               </Button>
             </UserWidget>
-          </div>
-        </Box>
+        </div>
 
         <Modal isOpen={modalShow} onClose={() => setModalShow(false)}>
           <ModalHeader>删除博客</ModalHeader>
