@@ -7,24 +7,7 @@ import {BlogPreviewLight} from "../../components/blog_content_light";
 import MyBox from "../../components/box/my_box";
 import CreateNewDocArticle from "./components/create_new";
 import {useSetRecoilState} from "recoil";
-import FolderIcon from "@mui/icons-material/Folder";
 import {successMessageProvider} from "../../providers/modal/success_modal";
-import {
-    Box,
-    Button, Chip,
-    CircularProgress,
-    Collapse,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    List,
-    ListItemAvatar,
-    ListItemButton,
-    ListItemText, Stack,
-    TextField,
-    Typography,
-} from "@mui/material";
 import {
     ResourceTreeModel,
     TreeFolders,
@@ -34,12 +17,21 @@ import {
     Result,
     successResultHandle,
 } from "dd_server_api_web/dist/utils/ResultUtil";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import ArticleIcon from "@mui/icons-material/Article";
 import {UserWidget} from "../../components/user_widget";
-import {grey} from "@mui/material/colors";
 import {formatDateUtil} from "../../utils/DateUtil";
+import {
+    Button,
+    Card,
+    CardBody, CardHeader,
+    Chip,
+    Input,
+    Modal,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    Spinner
+} from "@nextui-org/react";
+import Box from "../../components/box/box";
 
 //文档详情页面
 const DocDetailPage: React.FC = () => {
@@ -104,8 +96,8 @@ const DocDetailPage: React.FC = () => {
     };
 
     return (
-        <>
-            {loading && <CircularProgress/>}
+        <div className={'p-5'}>
+            {loading && <Spinner/>}
             {treeData && (
                 <DocLayout
                     sidenav={
@@ -124,36 +116,26 @@ const DocDetailPage: React.FC = () => {
                             onCreateSuccess={onCreateSuccess}
                         />
                     )}
-                    <Box height={2}/>
+                    <Box/>
                     {selectDoc && (
-                        <Typography variant={"h2"} sx={{mb: 2}} fontWeight={'bold'}>{selectDoc.title}</Typography>
+                        <div >{selectDoc.title}</div>
                     )}
 
                     {
-                        selectDoc?.label && <Stack direction={'row'} sx={{mt: 1, mb: 3}}>
+                        selectDoc?.label && <div className={'columns-1'}>
                             {
-                                selectDoc.label.split(",").map(value => <Chip label={value} key={value}/>)
+                                selectDoc.label.split(",").map(value => <Chip key={value}>{value}</Chip>)
                             }
-                        </Stack>
+                        </div>
                     }
 
-                    <MyBox>
+                    <div>
                         {selectDoc && (
-                            <Box
-                                sx={{
-                                    position: "relative",
-                                }}
-                            >
+                            <div className={'overflow-x-scroll'}>
                                 <BlogPreviewLight content={selectDoc.content}/>
-                                {selectDoc.updateDate && <Typography sx={{mt: 2}} variant={'body2'}
-                                                                     color={'grey'}>[最后更新时间:{formatDateUtil(selectDoc.updateDate)}]</Typography>}
+                                {selectDoc.updateDate && <div>[最后更新时间:{formatDateUtil(selectDoc.updateDate)}]</div>}
                                 <UserWidget>
-                                    <Box
-                                        sx={{
-                                            position: "absolute",
-                                            right: 2,
-                                            top: 2,
-                                        }}
+                                    <div
                                     >
                                         <Button
                                             onClick={() => {
@@ -162,25 +144,20 @@ const DocDetailPage: React.FC = () => {
                                         >
                                             编辑
                                         </Button>
-                                    </Box>
+                                    </div>
                                 </UserWidget>
-                            </Box>
+                            </div>
                         )}
                         {!selectDoc && (
                             <Box
-                                sx={{
-                                    p: 5,
-                                    textAlign: "center",
-                                    color: grey[400],
-                                }}
                             >
                                 提示:左侧选择文章即可预览内容
                             </Box>
                         )}
-                    </MyBox>
+                    </div>
                 </DocLayout>
             )}
-        </>
+        </div>
     );
 };
 
@@ -215,14 +192,21 @@ const DocSidenav: React.FC<DocSidenavParams> = ({
                     新建子文件夹
                 </Button>
             </UserWidget>
-            <TreeFolderLayout
-                folder={[root]}
-                onSelect={onSelect}
-                onFolderSelect={onFolderSelect}
-                currentFolder={currentFolder}
-                isSub={false}
-                level={1}
-            />
+            <Card>
+                <CardBody>
+                    <CardHeader>
+                        <span>文档目录</span>
+                    </CardHeader>
+                    <TreeFolderLayout
+                        folder={[root]}
+                        onSelect={onSelect}
+                        onFolderSelect={onFolderSelect}
+                        currentFolder={currentFolder}
+                        isSub={false}
+                        level={1}
+                    />
+                </CardBody>
+            </Card>
             <CreateNewFolder
                 show={show}
                 onClose={() => {
@@ -274,14 +258,13 @@ const CreateNewFolder: React.FC<CreateNewFolderParams> = ({
 
     return (
         <>
-            <Dialog open={show} onClose={onClose}>
-                <DialogTitle>新建文件夹</DialogTitle>
-                <DialogContent>
-                    <Box mt={3} mb={3}>
+            <Modal isOpen={show} onClose={onClose}>
+                <ModalHeader>新建文件夹</ModalHeader>
+                <ModalContent>
+                    <Box>
                         {currentFolder && <span>父文件夹:{currentFolder.title}</span>}
                     </Box>
-                    <TextField
-                        margin={"dense"}
+                    <Input
                         fullWidth
                         id="name"
                         type="name"
@@ -289,20 +272,18 @@ const CreateNewFolder: React.FC<CreateNewFolderParams> = ({
                         value={title}
                         onChange={(e: any) => setTitle(e.target.value)}
                     />
-                    <TextField
+                    <Input
                         fullWidth
-                        margin={"dense"}
-                        multiline={true}
                         value={desc}
                         onChange={(e: any) => setDesc(e.target.value)}
                         placeholder="介绍/备注"
                     />
-                    <DialogActions>
+                    <ModalFooter>
                         <Button onClick={onClose}>关闭</Button>
                         <Button onClick={submit}>确认</Button>
-                    </DialogActions>
-                </DialogContent>
-            </Dialog>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </>
     );
 };
@@ -326,32 +307,23 @@ const TreeFolderLayout: React.FC<TreeFolderLayoutProp> = ({
                                                               level,
                                                           }) => {
     return (
-        <List
-            sx={
-                isSub
-                    ? undefined
-                    : {width: "100%", maxWidth: 360, bgcolor: "background.paper"}
-            }
-            component={isSub ? "div" : "nav"}
-            aria-labelledby={isSub ? undefined : "nested-list-subheader"}
-            disablePadding={isSub}
-        >
-            {folder.map((value) => {
-                return (
-                    <Box key={value.id}>
-                        <TreeFoldersLayoutItem
-                            value={value}
-                            folder={folder}
-                            onSelect={onSelect}
-                            onFolderSelect={onFolderSelect}
-                            currentFolder={currentFolder}
-                            isSub={isSub}
-                            level={level}
-                        />
-                    </Box>
-                );
-            })}
-        </List>
+        <div>
+                {folder.map((value) => {
+                    return (
+                        <div key={value.id}>
+                            <TreeFoldersLayoutItem
+                                value={value}
+                                folder={folder}
+                                onSelect={onSelect}
+                                onFolderSelect={onFolderSelect}
+                                currentFolder={currentFolder}
+                                isSub={isSub}
+                                level={level}
+                            />
+                        </div>
+                    );
+                })}
+        </div>
     );
 };
 
@@ -382,22 +354,22 @@ const TreeFoldersLayoutItem: React.FC<TreeFolderLayoutPropItem> = ({
 
     return (
         <>
-            <ListItemButton
-                sx={isSub ? {pl: 2 * level} : undefined}
-                selected={isSelect}
+            <div
+                // sx={isSub ? {pl: 2 * level} : undefined}
+                // selected={isSelect}
                 onClick={() => {
                     onFolderSelect(value);
                     setCollapseIn(!collapseIn);
                     onSelect(undefined);
                 }}
             >
-                <ListItemAvatar>
-                    <FolderIcon sx={{color: 'grey'}}/>
-                </ListItemAvatar>
-                <ListItemText>{value.title}</ListItemText>
-                {hasChildren && <>{collapseIn ? <ExpandLess/> : <ExpandMore/>}</>}
-            </ListItemButton>
-            <Collapse in={collapseIn} timeout="auto" unmountOnExit>
+                <span>
+                    文件夹
+                </span>
+                <span>{value.title}</span>
+                {hasChildren && <>{collapseIn ? <span>展开</span> : <span>收起</span>}</>}
+            </div>
+            <div>
                 {/*文件夹*/}
                 {value.children && value.children.length !== 0 && (
                     <TreeFolderLayout
@@ -412,22 +384,22 @@ const TreeFoldersLayoutItem: React.FC<TreeFolderLayoutPropItem> = ({
                 {/*文章*/}
                 {value.resources.map((value) => {
                     return (
-                        <ListItemButton
+                        <div
                             key={value.id}
-                            sx={isSub ? {pl: (2 + 1) * level} : undefined}
+                            // sx={isSub ? {pl: (2 + 1) * level} : undefined}
                             onClick={() => {
                                 onSelect(value);
                                 onFolderSelect(undefined);
                             }}
                         >
-                            <ListItemAvatar>
-                                <ArticleIcon sx={{color: 'grey'}}/>
-                            </ListItemAvatar>
-                            <ListItemText>{value.title}</ListItemText>
-                        </ListItemButton>
+                            <span>
+                                文章
+                            </span>
+                            <span>{value.title}</span>
+                        </div>
                     );
                 })}
-            </Collapse>
+            </div>
         </>
     );
 };

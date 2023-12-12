@@ -1,28 +1,20 @@
 import React, { PropsWithChildren } from "react";
 import { useRecoilValue } from "recoil";
 import { appLoading } from "../../providers/loading";
-import {Box, Skeleton, Stack} from "@mui/material";
+import Box from "./box";
+import {Skeleton} from "@nextui-org/react";
+
+
 
 ///重构box
 const MyBox: React.FunctionComponent<
   PropsWithChildren<{ skeleton?: boolean }>
 > = (props) => {
-  const loading = useRecoilValue(appLoading);
 
   return (
-    <Box>
-      {loading && props.skeleton && (
-        <Stack>
-          <Skeleton height="20px" />
-          <Skeleton height="20px" />
-          <Skeleton height="20px" />
-          <Skeleton height="20px" />
-          <Skeleton height="20px" />
-          <Skeleton height="20px" />
-        </Stack>
-      )}
+    <div className={'columns-1'}>
       {props.children}
-    </Box>
+    </div>
   );
 };
 export default MyBox;

@@ -5,9 +5,9 @@ import {appMoneyModalOpen, appMoneyTextModel} from "../../providers/modal";
 import {useMount} from "react-use";
 import {blogApi} from "../../utils/request";
 import MarkdownView from "../MarkdownView";
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import { TextModel } from "dd_server_api_web/dist/model/TextModel";
 import { Result, successResultHandle } from "dd_server_api_web/dist/utils/ResultUtil";
+import {Button, Modal, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/react";
 
 const MoneyModal: React.FC = () => {
     const [isOpen, setIsOpen] = useRecoilState(appMoneyModalOpen)
@@ -26,19 +26,19 @@ const MoneyModal: React.FC = () => {
 
     return (
         <>
-            <Dialog open={isOpen} onClose={onClose}>
-                <DialogTitle>打赏</DialogTitle>
-                <DialogContent>
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalHeader>打赏</ModalHeader>
+                <ModalContent>
                     {
                         moneyTextModel &&  <MarkdownView content={moneyTextModel.context}/>
                     }
-                </DialogContent>
-                <DialogActions>
+                </ModalContent>
+                <ModalFooter>
                     <Button  onClick={onClose}>
                         关闭
                     </Button>
-                </DialogActions>
-            </Dialog>
+                </ModalFooter>
+            </Modal>
         </>
     )
 }

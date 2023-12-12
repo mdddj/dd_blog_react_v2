@@ -13,10 +13,9 @@ import {
     successResultHandle,
 } from "dd_server_api_web/dist/utils/ResultUtil";
 import MyBox from "../../components/box/my_box";
-import Grid2 from "@mui/material/Unstable_Grid2";
 import {ImageCard} from "../../components/image";
-import {Box} from "@mui/material";
 import UpdateResourceCategoryThumbnail from "../../components/update_resource_category_thumbnail";
+import Box from "../../components/box/box";
 
 //文档列表页面
 const DocsPage: React.FC = () => {
@@ -73,16 +72,12 @@ const DocsPage: React.FC = () => {
             <PageHeader title={"文档"}/>
             <NothingWidget nothing={pager && pager.total === 0}/>
 
-            <Grid2 container spacing={2}>
+            <div className={'grid grid-cols-4 gap-5'}>
                 {docs.map((value) => {
                     return (
-                        <Grid2
+                        <div
                             key={value.id}
                             {...{xs: 12, sm: 6, md: 4, lg: 3}}
-                            minHeight={160}
-                            sx={{
-                                position: "relative",
-                            }}
                         >
                             <Box
                                 onClick={() => {
@@ -103,10 +98,10 @@ const DocsPage: React.FC = () => {
                                     }}
                                 />
                             )}
-                        </Grid2>
+                        </div>
                     );
                 })}
-            </Grid2>
+            </div>
         </MyBox>
     );
 };

@@ -11,25 +11,14 @@ import { BlogPreviewLight } from "./blog_content_light";
 import { onImageUpload } from "../utils/EditImageFileUpload";
 import { successMessageProvider } from "../providers/modal/success_modal";
 import { useSearchParams } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControlLabel,
-  FormGroup,
-  Stack,
-  TextField,
-} from "@mui/material";
 import { TextModel } from "dd_server_api_web/dist/model/TextModel";
 import {
   Result,
   successResultHandle,
 } from "dd_server_api_web/dist/utils/ResultUtil";
 import { UserWidget } from "./user_widget";
+import Box from "./box/box";
+import {Button, Checkbox, Input, Modal, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/react";
 type Props = {
   keyText: string;
 };
@@ -93,12 +82,12 @@ const KeyPage: React.FC<Props> = ({ keyText }) => {
 
       {hasPassword && (
         <Box>
-          <Box mb={2}>{result?.message}</Box>
-          <TextField
+          <Box >{result?.message}</Box>
+          <Input
             placeholder="请输入密码"
             onChange={(event) => setInputPassword(event.target.value)}
           />
-          <Box mt={4}>
+          <Box>
             <Button onClick={fetchData}>确认</Button>
           </Box>
         </Box>
@@ -192,11 +181,11 @@ const CreateT: React.FC<{
 
   return (
     <>
-      <Dialog open={showUpdateOrCreateModal} onClose={onClose} maxWidth={"lg"}>
-        <DialogTitle>编辑字典</DialogTitle>
-        <DialogContent>
-          <Stack direction={"column"} spacing={2} component={"form"}>
-            <TextField
+      <Modal isOpen={showUpdateOrCreateModal} onClose={onClose} >
+        <ModalHeader>编辑字典</ModalHeader>
+        <ModalContent>
+          <div className={'columns-1'}>
+            <Input
               placeholder="关键字"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -210,37 +199,30 @@ const CreateT: React.FC<{
               }}
               onImageUpload={onImageUpload}
             />
-            <TextField
+            <Input
               placeholder="备注"
               value={intro}
               onChange={(e) => setIntro(e.target.value)}
             />
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="isEncryptionText"
-                    checked={isPass}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              <Checkbox
+                  name="isEncryptionText"
+                  checked={isPass}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setIsPass(e.target.checked);
-                    }}
-                  />
-                }
-                label={"是否加密内容"}
+                  }}
               />
-            </FormGroup>
 
-            <TextField
+            <Input
               placeholder="查看密码"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-          </Stack>
-        </DialogContent>
-        <DialogActions>
+          </div>
+        </ModalContent>
+        <ModalFooter>
           <Button onClick={onSubmit}>提交</Button>
-        </DialogActions>
-      </Dialog>
+        </ModalFooter>
+      </Modal>
     </>
   );
 };

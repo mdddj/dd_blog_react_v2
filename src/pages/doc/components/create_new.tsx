@@ -2,39 +2,17 @@ import React, { useState } from "react";
 
 import { getAxiosHeader, host } from "../../../utils/request";
 import MdEditor from "react-markdown-editor-lite";
-import {
-  AppBar,
-  Box,
-  Button,
-  Dialog,
-  DialogContent,
-  IconButton,
-  Slide,
-  TextField,
-  Toolbar,
-  Typography,
-} from "@mui/material";
 import { TreeFolders } from "dd_server_api_web/dist/model/ResourceTreeModel";
-import CloseIcon from "@mui/icons-material/Close";
 import { BlogPreviewLight } from "../../../components/blog_content_light";
 import { onImageUpload } from "../../../utils/EditImageFileUpload";
-import { TransitionProps } from "@mui/material/transitions";
 import axios from "axios";
 import { UserWidget } from "../../../components/user_widget";
-import { LoadingButton } from "@mui/lab";
 import { Result } from "dd_server_api_web/dist/utils/ResultUtil";
 import { ResourceModel } from "dd_server_api_web/dist/model/ResourceModel";
 import { useSetRecoilState } from "recoil";
 import { successMessageProvider } from "../../../providers/modal/success_modal";
-
-const Transition = React.forwardRef(function Transition(
-  props: TransitionProps & {
-    children: React.ReactElement;
-  },
-  ref: React.Ref<unknown>
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+import {Button, Input, Modal, ModalContent, ModalHeader} from "@nextui-org/react";
+import Box from "../../../components/box/box";
 
 //创建一个新文章
 const CreateNewDocArticle: React.FC<{
@@ -93,52 +71,29 @@ const CreateNewDocArticle: React.FC<{
               新建一篇文稿 ({currentFolder?.title})
             </Button>
           </UserWidget>
-          <Dialog
-            open={show}
+          <Modal
+            isOpen={show}
             onClose={() => setShow(false)}
-            maxWidth={"lg"}
-            fullScreen
-            TransitionComponent={Transition}
           >
-            <AppBar sx={{ position: "relative" }}>
-              <Toolbar>
-                <IconButton
-                  edge="start"
-                  color="inherit"
-                  onClick={() => setShow(false)}
-                  aria-label="close"
-                >
-                  <CloseIcon />
-                </IconButton>
-                <Typography
-                  sx={{ ml: 2, flex: 1 }}
-                  variant="h6"
-                  component="div"
-                >
-                  添加文稿 - {currentFolder?.title}
-                </Typography>
-                <LoadingButton
+            <ModalHeader >
+              添加文稿 - {currentFolder?.title}
+              <Button
                   autoFocus
-                  color="inherit"
                   onClick={submit}
-                  loading={loading}
-                >
-                  发布
-                </LoadingButton>
-              </Toolbar>
-            </AppBar>
-            <DialogContent>
-              <TextField
+              >
+                发布
+              </Button>
+            </ModalHeader>
+            <ModalContent>
+              <Input
                 placeholder={"标题"}
                 onChange={(e) => setTitle(e.target.value)}
                 fullWidth
-                margin={"dense"}
               />
-              <TextField
+              <Input
                 placeholder={"标签"}
                 onChange={(e) => setLabel(e.target.value)}
                 fullWidth
-                margin={"dense"}
               />
               <MdEditor
                 style={{ height: "500px" }}
@@ -149,8 +104,8 @@ const CreateNewDocArticle: React.FC<{
                 }}
                 onImageUpload={onImageUpload}
               />
-            </DialogContent>
-          </Dialog>
+            </ModalContent>
+          </Modal>
         </Box>
       }
     </>

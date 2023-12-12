@@ -3,19 +3,7 @@ import { useMount } from "react-use";
 import { blogApi } from "../utils/request";
 import { formatDateUtil } from "../utils/DateUtil";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  Avatar,
-  Box,
-  Button,
-  ButtonGroup,
-  CardContent,
-  CardHeader,
-  Divider,
-  ImageList,
-  ImageListItem,
-  Stack,
-  Typography,
-} from "@mui/material";
+
 import { ResCategory } from "dd_server_api_web/dist/model/ResCategory";
 import { ResourceModel } from "dd_server_api_web/dist/model/ResourceModel";
 import {
@@ -23,9 +11,9 @@ import {
   successResultHandle,
 } from "dd_server_api_web/dist/utils/ResultUtil";
 import { ApiResponse, JpaPage } from "../models/app_model";
-import { UserWidget } from "./user_widget";
 import PageHeader from "./page_header";
-import StyledCard from "./blog/styled";
+import Box from "./box/box";
+import {Avatar, Button, CardHeader, Divider} from "@nextui-org/react";
 
 type Props = {
   resourceCategoryName: string; //动态分类的名字
@@ -77,30 +65,21 @@ const ResourceComponents: React.FC<Props> = ({ resourceCategoryName }) => {
       <Box>
         {resCate && <PageHeader showBack={true} title={resCate.name ?? ""} />}
 
-        <ButtonGroup variant="contained">
-          <UserWidget>
-            <Button
-              onClick={() => {
-                nav("/add-res/" + params.cateName);
-              }}
-            >
-              发布
-            </Button>
-          </UserWidget>
-        </ButtonGroup>
+        <Button
+            onClick={() => {
+              nav("/add-res/" + params.cateName);
+            }}
+        >
+          发布
+        </Button>
 
-        <Stack
-          direction={"column"}
-          spacing={2}
-          sx={{
-            mt: 4,
-            mb: 2,
-          }}
+        <div
+            className={'columns-1'}
         >
           {list.map((value) => {
             return <DynamicCard key={value.id} res={value} />;
           })}
-        </Stack>
+        </div>
       </Box>
     </>
   );
@@ -122,19 +101,20 @@ const DynamicCard: React.FC<{ res: ResourceModel }> = ({ res }) => {
 const ImageTypeLayout: React.FC<{ res: ResourceModel }> = ({ res }) => {
   return (
     <>
-      <StyledCard>
         <CardHeader
-          avatar={<Avatar src={res.user?.picture} />}
-          title={res.user?.nickName}
-          subheader={"发布于" + formatDateUtil(res.createDate)}
-        />
-        <CardContent>
-          <Typography variant={"body2"} color={"text.secondary"}>
+        >
+
+          <Avatar src={res.user?.picture} />
+          <span>{res.user?.nickName}</span>
+          <span>{"发布于" + formatDateUtil(res.createDate)}</span>
+        </CardHeader>
+        <div>
+          <div color={"text.secondary"}>
             {res.content}
-          </Typography>
-          <ImageList sx={{ width: "100%" }} cols={6} rowHeight={164}>
+          </div>
+          <div className={'grid grid-cols-4 gap-2'}>
             {res.images!.map((item) => (
-              <ImageListItem key={item.id}>
+              <div key={item.id}>
                 <img
                   src={`${item.url}`}
                   alt={item.fileName}
@@ -142,11 +122,10 @@ const ImageTypeLayout: React.FC<{ res: ResourceModel }> = ({ res }) => {
                   style={{ objectFit: "cover", borderRadius: 12 }}
                   height={"100%"}
                 />
-              </ImageListItem>
+              </div>
             ))}
-          </ImageList>
-        </CardContent>
-      </StyledCard>
+          </div>
+        </div>
     </>
   );
 };
@@ -166,7 +145,7 @@ const DocDynamicCard: React.FC<{ res: ResourceModel }> = ({ res }) => {
   return (
     <Box>
       <Box>文档 &bull; 梁典典发布于{formatDateUtil(res.createDate)}</Box>
-      <Typography>{res.title}</Typography>
+      <div>{res.title}</div>
       <Box>
         {res.category && (
           <span>

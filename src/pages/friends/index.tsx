@@ -7,25 +7,26 @@ import {appLoading} from "../../providers/loading";
 
 import CommentComponent from "../../components/comment_component";
 import {successMessageProvider} from "../../providers/modal/success_modal";
-import {
-    Avatar,
-    Box,
-    Button,
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    Grid,
-    Stack,
-    TextField,
-    Typography,
-} from "@mui/material";
 import {Friend} from "dd_server_api_web/dist/model/friend";
 import {
     Result,
 
 } from "dd_server_api_web/dist/utils/ResultUtil";
 import {ApiResponse} from "../../models/app_model";
-import StyledCard from "../../components/blog/styled";
+import {
+    Avatar,
+    Button,
+    Card,
+    CardBody,
+    CardFooter,
+    Divider,
+    Input, Link,
+    Modal,
+    ModalContent,
+    ModalHeader, Tooltip,
+    User
+} from "@nextui-org/react";
+import Box from "../../components/box/box";
 
 //友链页面
 const FriendsPage: React.FC = () => {
@@ -38,84 +39,64 @@ const FriendsPage: React.FC = () => {
     // 加载数据
     const fetchData = async () => {
         setLoading(true);
-        const result = await blogApi().requestT<Result<Friend[]>>("/api/public/friends",{state:"1"})
+        const result = await blogApi().requestT<Result<Friend[]>>("/api/public/friends", {state: "1"})
         setLoading(false);
-        if(result.state === 200){
+        if (result.state === 200) {
             setFriends(result.data ?? []);
         }
 
     };
 
     return (
-        <div
-            style={{
-                position: "relative",
-            }}
-        >
+        <div className={'relative flex flex-col gap-2'}>
             <PageHeader title={"友链"}/>
 
-            <span
-                style={{
-                    fontSize: 12,
-                    color: "grey",
-                    cursor: "pointer",
-                    position: "absolute",
-                    top: 22,
-                    right: 0,
-                }}
-                onClick={() => setShowModal(true)}
-            >
-        自助申请友链
-      </span>
+            <span className={'absolute right-1 top-1'} onClick={() => setShowModal(true)}>自助申请友链</span>
 
-            <Box sx={{flexGrow: 1, p: 2}}>
-                <Grid container spacing={2}>
+            <div>
+                <div className={'grid grid-cols-4 gap-2'}>
                     {friends.map((value) => {
-                        return (
-                            <Grid
-                                key={value.id}
-                                {...{xs: 12, sm: 6, md: 4, lg: 3}}
-                                minHeight={160}
-                                item
-                                onClick={()=>{
+                        return <Card>
+                            <CardBody>
+                                <User name={value.name} avatarProps={{
+                                    src: value.logo
+                                }} description={value.intro} onClick={() => {
                                     window.open(value.url, '_blank');
-                                }}
-                            >
-                                <StyledCard>
-                                    <Box mb={2}>
-                                        <Avatar src={value.logo}/>
-                                    </Box>
-                                    <Box>
-                                        <Typography fontWeight="bold" mb={2} color={"deeppink"}>
-                                            {value.name}
-                                        </Typography>
-                                        <Typography fontSize="sm" color={'salmon'}>{value.intro}</Typography>
-                                    </Box>
-                                </StyledCard>
-                            </Grid>
-                        );
+                                }}/>
+                            </CardBody>
+                            <Divider/>
+                            <CardFooter>
+                                <Tooltip content={value.url}>
+                                    <Link
+                                        isExternal
+                                        showAnchorIcon
+                                        href={value.url}
+                                    >
+                                        去看看
+                                    </Link>
+                                </Tooltip>
+                            </CardFooter>
+                        </Card>
+
                     })}
-                </Grid>
-            </Box>
+                </div>
+            </div>
 
-            <Box>
-                <CommentComponent type={"friend"} id={0}/>
-            </Box>
+            <CommentComponent type={"friend"} id={0}/>
 
-            <Dialog
-                open={showModal}
+            <Modal
+                isOpen={showModal}
                 onClose={() => setShowModal(false)}
-                maxWidth={"lg"}
             >
-                <DialogTitle>自助申请友链</DialogTitle>
-                <DialogContent>
+                <ModalHeader>自助申请友链</ModalHeader>
+                <ModalContent>
                     <AddFriendsForm
                         onSuccess={() => {
                             setShowModal(false);
                         }}
                     />
-                </DialogContent>
-            </Dialog>
+                </ModalContent>
+            </Modal>
         </div>
     );
 };
@@ -151,61 +132,51 @@ const AddFriendsForm: React.FC<{ onSuccess: () => void }> = ({onSuccess}) => {
     };
 
     return (
-        <>
-            <Stack
-                direction={"column"}
-                component={"form"}
-                spacing={3}
-                sx={{
-                    width: "50ch",
-                }}
-                pt={2}
-            >
-                <TextField
-                    id="name"
-                    name="name"
-                    label={"网站名称"}
-                    fullWidth
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
-                <TextField
-                    id="urlId"
-                    name="url"
-                    label="主页"
-                    fullWidth
-                    value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                />
-                <TextField
-                    id="introId"
-                    name="intro"
-                    label="简单介绍"
-                    fullWidth
-                    value={intro}
-                    onChange={(e) => setIntro(e.target.value)}
-                />
-                <TextField
-                    name="logo"
-                    id="logoId"
-                    label="Logo直链"
-                    fullWidth
-                    value={logo}
-                    onChange={(e) => setLogo(e.target.value)}
-                />
-                <TextField
-                    name="email"
-                    id="emailId"
-                    label="邮箱,用来接收审核通知,非必须"
-                    fullWidth
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <Button variant={"contained"} onClick={() => submit()} fullWidth>
-                    提交数据
-                </Button>
-            </Stack>
-        </>
+        <div className={'p-2 flex flex-col gap-2'}>
+            <Input
+                id="name"
+                name="name"
+                label={"网站名称"}
+                fullWidth
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+            />
+            <Input
+                id="urlId"
+                name="url"
+                label="主页"
+                fullWidth
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+            />
+            <Input
+                id="introId"
+                name="intro"
+                label="简单介绍"
+                fullWidth
+                value={intro}
+                onChange={(e) => setIntro(e.target.value)}
+            />
+            <Input
+                name="logo"
+                id="logoId"
+                label="Logo直链"
+                fullWidth
+                value={logo}
+                onChange={(e) => setLogo(e.target.value)}
+            />
+            <Input
+                name="email"
+                id="emailId"
+                label="邮箱,用来接收审核通知,非必须"
+                fullWidth
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+            />
+            <Button onClick={() => submit()} fullWidth>
+                提交数据
+            </Button>
+        </div>
     );
 };
 

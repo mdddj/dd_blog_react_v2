@@ -65,7 +65,7 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
         load(nt)
     }
 
-    return <MyBox>
+    return <div className={'flex flex-col gap-5'}>
 
         {
             blogs.map(value => {
@@ -77,7 +77,7 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
         {
             pager && <PagerNextLoad pager={pager} onload={nextPage} loading/>
         }
-    </MyBox>
+    </div>
 }
 
 export default BlogListLoad

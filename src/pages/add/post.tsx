@@ -11,11 +11,11 @@ import {useSearchParams} from "react-router-dom";
 import {useMount, useToggle} from "react-use";
 import {successMessageProvider} from "../../providers/modal/success_modal";
 import {onImageUpload} from "../../utils/EditImageFileUpload";
-import {Box, Button, Chip, CircularProgress, MenuItem, Select, Stack, TextField, Typography} from "@mui/material";
 import {Result, successResultHandle} from "dd_server_api_web/dist/utils/ResultUtil";
 import {BlogData} from "dd_server_api_web/dist/model/result/BlogPushNewResultData";
-import {LoadingButton} from "@mui/lab";
 import {ApiResponse} from "../../models/app_model";
+import {Button, Chip, Input, Select, SelectItem, Spinner} from "@nextui-org/react";
+import Box from "../../components/box/box";
 
 // 发布博客页面
 const AddPostPage: React.FC = () => {
@@ -71,14 +71,14 @@ const AddPostPage: React.FC = () => {
 
     return (
         <MyBox>
-            {on && <CircularProgress/>}
+            {on && <Spinner/>}
 
             {
-                !on && <Stack direction={"column"} spacing={3}>
-                    <Typography variant={'h3'}>
+                !on && <div className={'columns-1'}>
+                    <div>
                         发布博客
-                    </Typography>
-                    <TextField
+                    </div>
+                    <Input
                         placeholder={"输入标题"}
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
@@ -96,46 +96,46 @@ const AddPostPage: React.FC = () => {
                     />
 
                     {archives && (
-                        <Stack direction={"column"} spacing={2}>
-                            <Typography>
+                        <div className={'columns-1'}>
+                            <div>
                                 文章分类
-                            </Typography>
+                            </div>
                             <Select
                                 placeholder="文章分类"
                                 value={updateBlog && categoryId && categoryId !== 'undefined' ? `${categoryId}` : undefined}
                                 onChange={(e) => setCategoryId(e.target.value)}
                             >
                                 {archives.categoryList.map((value) => (
-                                    <MenuItem value={`${value.id}`} key={value.id}>
+                                    <SelectItem value={`${value.id}`} key={value.id}>
                                         {value.name}
-                                    </MenuItem>
+                                    </SelectItem>
                                 ))}
                             </Select>
 
-                            <Typography>
+                            <span>
                                 添加标签{" "}
                                 <span style={{color: "grey", fontSize: 12}}>
                 已选择{tags.length}个
               </span>
-                            </Typography>
-                            <Stack direction={'row'} spacing={2}>
+                            </span>
+                            <div className={'columns-1'}>
                                 {
-                                    tags.map((v) => <Chip label={v} key={v}/>)
+                                    tags.map((v) => <Chip key={v}>{v}</Chip>)
                                 }
-                            </Stack>
+                            </div>
                             <Button onClick={() => {
                                 setShowTagDialog(true)
                             }}>编辑博客标签</Button>
-                        </Stack>
+                        </div>
                     )}
                     <Box>
-                        <LoadingButton fullWidth loading={on} onClick={submit} variant={"contained"}>
+                        <Button fullWidth onClick={submit}>
                             {
                                 updateBlog ? '提交修改' : '发布'
                             }
-                        </LoadingButton>
+                        </Button>
                     </Box>
-                </Stack>
+                </div>
             }
 
             {/*选择标签的弹窗*/}

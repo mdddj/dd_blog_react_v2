@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import ResourceComponents from "../../components/resource_components";
-import { Box } from "@mui/material";
+import Box from "../../components/box/box";
 
 //动态列表的组件
 const DynamicListPage: React.FC = () => {

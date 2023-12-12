@@ -1,18 +1,8 @@
 import React, {useState} from "react";
 import {useRecoilValue} from "recoil";
 import {archivesDataState} from "../../providers/archives";
-import {
-    Box,
-    Button, Chip,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Divider,
-    Stack, TextField,
-    Typography
-} from "@mui/material";
-import {AspectRatio} from "@mui/icons-material";
+import {Button, Chip, Divider, Input, Modal, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/react";
+import Box from "../../components/box/box";
 
 
 type Props = {
@@ -43,22 +33,22 @@ const AddPostTagModal: React.FC<Props> = ({show, onClose,onOk,initVal}) => {
   }
 
     return <>
-        <Dialog open={show} onClose={onClose} maxWidth={'lg'}>
-            <DialogTitle>标签选择器</DialogTitle>
-            <DialogContent>
+        <Modal isOpen={show} onClose={onClose}>
+            <ModalHeader>标签选择器</ModalHeader>
+            <ModalContent>
 
                     <Box >
-                        <Stack spacing={5} direction={'column'}>
-                            <Typography >从已有标签选择</Typography>
-                            <Stack direction={'row'} spacing={1}>
+                        <div className={'columns-1'} >
+                            <span >从已有标签选择</span>
+                            <div className={'columns-1'} >
                                 {tags.map(value => <Button onClick={() => {
                                   onSeleteValue(value.name)
                                 }} key={value.id}>{value.name}</Button>)}
-                            </Stack>
+                            </div>
                             <Divider/>
-                            <Typography>新建标签</Typography>
+                            <span>新建标签</span>
                             <Box>
-                                <TextField placeholder={'创建新标签'} value={inputvalue} onChange={event => setInputValue(event.target.value)} />
+                                <Input placeholder={'创建新标签'} value={inputvalue} onChange={event => setInputValue(event.target.value)} />
                                 <Button onClick={()=>{
                                   if(inputvalue!==''){
                                     onSeleteValue(inputvalue)
@@ -68,33 +58,33 @@ const AddPostTagModal: React.FC<Props> = ({show, onClose,onOk,initVal}) => {
                             </Box>
 
 
-                        </Stack>
+                        </div>
                     </Box>
 
-                    <Stack spacing={1} direction={'row'} mt={4}>
-                        <Typography>已选择标签</Typography>
+                    <div className={'columns-1'}>
+                        <span>已选择标签</span>
 
                         {
-                            values.length === 0 && <AspectRatio >
+                            values.length === 0 && <div className={'aspect-auto'} >
                                 <div style={{textAlign: "center", color: 'grey'}}>
                                     <Box>
                                         暂未选择
                                     </Box>
                                 </div>
-                            </AspectRatio>
+                            </div>
                         }
-                       <Stack direction={'row'} spacing={1}>
+                       <div className={'columns-1'}>
                          {
-                           values.map(value => <Chip key={value} label={value} onClick={()=>{
+                           values.map(value => <Chip key={value}  onClick={()=>{
                             onSeleteValue(value)
-                           }}/>)
+                           }}>{value}</Chip>)
                          }
-                       </Stack>
-                    </Stack>
+                       </div>
+                    </div>
 
-            </DialogContent>
+            </ModalContent>
 
-            <DialogActions>
+            <ModalFooter>
                 <Button  onClick={onClose}>取消</Button>
                 <Button  disabled={values.length===0} onClick={()=>{
                     onOk(values)
@@ -103,8 +93,8 @@ const AddPostTagModal: React.FC<Props> = ({show, onClose,onOk,initVal}) => {
                     确定
                 </Button>
 
-            </DialogActions>
-        </Dialog>
+            </ModalFooter>
+        </Modal>
     </>
 }
 export default AddPostTagModal

@@ -8,21 +8,12 @@ import TwoColumnLayout from "../components/two_column_layout";
 import UserCardWithBlogDetail from "../components/user/user_card";
 import MarkdownView from "../components/MarkdownView";
 import CommentComponent from "../components/comment_component";
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogTitle,
-  Stack,
-  Typography,
-} from "@mui/material";
 import { BlogData } from "dd_server_api_web/dist/model/result/BlogPushNewResultData";
 import { Result } from "dd_server_api_web/dist/utils/ResultUtil";
-import { grey } from "@mui/material/colors";
 import { UserWidget } from "../components/user_widget";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { ApiResponse } from "../models/app_model";
+import Box from "../components/box/box";
+import {Button, Modal, ModalContent, ModalHeader} from "@nextui-org/react";
 //博客详情页面
 const BlogPage: React.FC = () => {
   let { id } = useParams<{ id: string }>();
@@ -77,27 +68,25 @@ const BlogPage: React.FC = () => {
           style={{
             marginBottom: "22px",
             marginTop: "12px",
-            color: grey[500],
             display: "flex",
             alignItems: "center",
             cursor: "pointer",
           }}
           onClick={() => nav(-1)}
         >
-          <ArrowBackIcon sx={{ mr: 1 }} />
           返回上一页
         </span>
-        <Typography variant="h3" gutterBottom>
+        <div >
           {blog?.title}
-        </Typography>
-        <Typography variant={"body1"} color={"secondary"} gutterBottom>
+        </div>
+        <div >
           发布时间:{blog?.dateString}
-        </Typography>
-        <Box mt={5} mb={5}>
+        </div>
+        <Box>
           {blog && <MarkdownView content={blog.content} />}
         </Box>
-        <Box mt={2}>
-          <Stack direction={"row"}>
+        <Box >
+          <div className={'columns-1'}>
             <UserWidget>
               <Button
                 onClick={() => {
@@ -112,15 +101,15 @@ const BlogPage: React.FC = () => {
                 删除博客
               </Button>
             </UserWidget>
-          </Stack>
+          </div>
         </Box>
 
-        <Dialog open={modalShow} onClose={() => setModalShow(false)}>
-          <DialogTitle>删除博客</DialogTitle>
-          <DialogActions>
+        <Modal isOpen={modalShow} onClose={() => setModalShow(false)}>
+          <ModalHeader>删除博客</ModalHeader>
+          <ModalContent>
             <Button onClick={onDeleteConfire}>确认删除</Button>
-          </DialogActions>
-        </Dialog>
+          </ModalContent>
+        </Modal>
       </TwoColumnLayout>
     </>
   );

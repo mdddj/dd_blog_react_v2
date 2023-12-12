@@ -1,13 +1,13 @@
-import React from "react";
+import React, {PropsWithChildren} from "react";
 import {useRecoilValue} from "recoil";
 import {archivesDataState} from "../providers/archives";
 import MyBox from "./box/my_box";
-import {ListItem, Typography,Link} from "@mui/material";
+import {Link} from "@nextui-org/react";
 
 //关于我的卡片
 const AboutMeCard: React.FC = () => {
     return <MyBox>
-        <Typography variant={'h1'} component={'h2'} >关于</Typography>
+        <span>关于</span>
         <p className="mb-0">欢迎来到典典的博客</p>
     </MyBox>
 }
@@ -19,50 +19,56 @@ const ArchiveCard: React.FC = () => {
         return <></>
     }
     let months = archives.monthsCounts
-    return <MyBox>
-        <Typography variant={'h4'}>归档</Typography>
-            {
-                months.map(value => <ListItem key={value.months}><Link 
-                                                                       href={'/month/' + value.months}>{value.months}
-                   </Link> <span>({value.count})</span></ListItem>)
-            }
-    </MyBox>
+    return <SingleColumns title={'归档'}>
+        {
+            months.map(value => <div key={value.months}><Link
+                href={'/month/' + value.months}>{value.months} ({value.count})
+            </Link></div>)
+        }
+    </SingleColumns>
 }
 
 
 //分类卡片
 const CategoryCard: React.FC = () => {
     const categorys = useRecoilValue(archivesDataState)?.categoryList ?? [];
-    return <MyBox>
-        <Typography variant={'h4'}>分类</Typography>
-        {categorys.length === 0 && <span>空空如也~</span>}
+    return <SingleColumns title={'分类'}>
+        {
+            categorys.map(value => {
+                return <div key={value.id}>
+                    <Link href={'/category/' + value.id}>{value.name}
+                    </Link>
+                </div>
+            })
+        }
+    </SingleColumns>
 
-            {
-                categorys.map(value => {
-                    return <ListItem key={value.id}><Link  href={'/category/' + value.id}>{value.name}
-                        </Link></ListItem>
-                })
-            }
-
-    </MyBox>
 }
 
 
 //标签卡片
 const TagCard: React.FC = () => {
     const tags = useRecoilValue(archivesDataState)?.tags ?? [];
-    return <MyBox>
-        <Typography variant={'h4'}>标签</Typography>
-        {tags.length === 0 && <span>空空如也~</span>}
-
-            {
-                tags.map(value => {
-                    return <ListItem key={value.id}><Link  href={'/tag/' + value.id}>{value.name}
-                        </Link></ListItem>
-                })
-            }
-
-    </MyBox>
+    return <SingleColumns title={'标签'}>
+        {
+            tags.map(value => {
+                return <div key={value.id}>
+                    <Link ><Link href={'/tag/' + value.id}>{value.name}
+                    </Link></Link>
+                </div>
+            })
+        }
+    </SingleColumns>
 }
 
-export {AboutMeCard, ArchiveCard, CategoryCard,TagCard}
+
+const SingleColumns: React.FC<PropsWithChildren<{
+    title: string,
+}>> = ({title, children}) => {
+    return <div>
+        <span>{title}</span>
+        {children}
+    </div>
+}
+
+export {AboutMeCard, ArchiveCard, CategoryCard, TagCard}

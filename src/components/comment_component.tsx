@@ -5,18 +5,6 @@ import { blogApi } from "../utils/request";
 import PagerNextLoad from "./pager_next_load";
 import { Comment } from "dd_server_api_web/dist/model/Comment";
 import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  Drawer,
-  Grid,
-  Stack,
-  TextField,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import {
   PagerModel,
   Result,
   successResultHandle,
@@ -26,8 +14,9 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { successMessageProvider } from "../providers/modal/success_modal";
 import { userProvider } from "../providers/user";
 import { useNavigate } from "react-router-dom";
-import CommentIcon from "@mui/icons-material/Comment";
 import { Role } from "dd_server_api_web/dist/model/UserModel";
+import Box from "./box/box";
+import {Avatar, Button, Card, Input, Modal, Textarea, Tooltip} from "@nextui-org/react";
 
 // 评论组件的参数
 interface CommentComponentProps {
@@ -116,36 +105,34 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({
   };
 
   return (
-    <Box>
-      <Typography variant={"h6"}>评论</Typography>
+    <div className={'flex flex-col gap-2'}>
+      <span className={'font-bold text-large'}>评论</span>
 
       {/* 发布评论表单 */}
       <CommentForm onSubmit={submit} />
-      <Box height={12} />
 
       {/* 加载评论列表 */}
       {commmentList.map((v) => (
         <CommentLayout key={v.id} comment={v} onReply={onReply} />
       ))}
       {/* 回复的弹窗 */}
-      <Drawer
+      <Modal
         onClose={() => {
           setReplyComment(undefined);
         }}
-        open={replyComment !== undefined}
-        anchor={"right"}
+        isOpen={replyComment !== undefined}
       >
-        <Box sx={{ p: 6 }}>
-          <Stack spacing={5}>
+        <Box >
+          <div className={'columns-1'}>
             {replyComment && (
               <span>
                 回复{replyComment.name} : {replyComment.content}
               </span>
             )}
             <CommentForm onSubmit={submit} />
-          </Stack>
+          </div>
         </Box>
-      </Drawer>
+      </Modal>
 
       {pager && (
         <PagerNextLoad
@@ -156,7 +143,7 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({
           loading={nextPageLoading}
         />
       )}
-    </Box>
+    </div>
   );
 };
 
@@ -205,40 +192,30 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        width: "100%",
-        justifyItems: "start",
-        flexFlow: "row",
-        marginTop: 2,
-      }}
-    >
+    <div className={'flex gap-5'}>
       <Avatar
-        src={avatarUrl}
-        sx={{ mr: 2 }}
-        onClick={() => {
-          if (!user) {
-            nav("/login");
-          }
-        }}
+          isBordered={true}
+          radius={'sm'}
+          className={'w-16 h-16'}
+          src={avatarUrl}
+          onClick={() => {
+            if (!user) {
+              nav("/login");
+            }
+          }}
       ></Avatar>
-      <Box sx={{ flex: 1 }}>
-        <Grid
-          columns={{ xs: 6, sm: 12, md: 12 }}
-          container
-          spacing={{ xs: 2, md: 3 }}
-        >
-          <Grid item xs={2} sm={4} md={4}>
-            <TextField
+      <div className={'flex-auto'}>
+        <div className={'grid grid-cols-3 gap-2'}>
+          <div >
+            <Input
               fullWidth={true}
               label={"昵称"}
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-          </Grid>
-          <Grid item xs={2} sm={4} md={4}>
-            <TextField
+          </div>
+          <div>
+            <Input
               fullWidth={true}
               label={"邮箱"}
               value={email}
@@ -246,9 +223,9 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
                 setEmail(event.target.value);
               }}
             />
-          </Grid>
-          <Grid item xs={2} sm={4} md={4}>
-            <TextField
+          </div>
+          <div >
+            <Input
               fullWidth={true}
               label={"网站"}
               value={url}
@@ -256,23 +233,22 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
                 setUrl(event.target.value);
               }}
             />
-          </Grid>
-        </Grid>
-        <TextField
-          fullWidth={true}
-          multiline={true}
-          placeholder="说点什么吧"
-          style={{ fontSize: 12, marginTop: 22 }}
-          onChange={(e) => setContent(e.target.value)}
-          value={content}
-          rows={4}
-          margin={"dense"}
+          </div>
+        </div>
+        <Textarea
+            className={'pt-2'}
+            fullWidth={true}
+            placeholder="说点什么吧"
+            style={{ fontSize: 12, marginTop: 22 }}
+            onChange={(e) => setContent(e.target.value)}
+            value={content}
         />
-        <Button onClick={submit} variant={"contained"} sx={{ mt: 2 }}>
+
+        <Button onClick={submit} color={'primary'}>
           发表评论
         </Button>
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 
@@ -292,37 +268,20 @@ const CommentLayout: React.FC<{
   let roleIcons = getRoleIcons();
   return (
     <Box
-      sx={{
-        display: "flex",
-        marginBottom: 2,
-        justifyItems: "start",
-        // marginLeft: isChildComment ? 4 : undefined,
-      }}
     >
       <Box>
         <Avatar
           src={comment.user?.picture ?? comment.avatarUrl}
-          sx={{ mr: 2 }}
         />
       </Box>
-      <Box sx={{ flex: 1 }}>
+      <Box>
         <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
         >
           <Box
-            sx={{
-              display: "flex",
-              flexFlow: "wrap",
-              alignItems: "end",
-            }}
           >
-            <Typography variant={"h6"}> {comment.name}</Typography>
+            <span > {comment.name}</span>
             {roleIcons.map((v) => (
-              <Typography variant={"body2"} key={v.id}>
+              <span  key={v.id}>
                 <Tooltip title={v.description}>
                   <img
                     src={v.icon}
@@ -332,30 +291,24 @@ const CommentLayout: React.FC<{
                     style={{ marginLeft: 2 }}
                   />
                 </Tooltip>
-              </Typography>
+              </span>
             ))}
           </Box>
           <Box>
-            <Typography variant={"subtitle2"} color={"gray"}>
+            <span >
               {formatDateUtil(comment.createDate)}
-            </Typography>
+            </span>
           </Box>
         </Box>
-        <Box sx={{ mt: 2, mb: 2 }}>
-          <Typography variant={"body1"}>{comment.content}</Typography>
+        <Box>
+          <span>{comment.content}</span>
         </Box>
         <Box
-          color={"gray"}
-          sx={{
-            display: "flex",
-            justifyItems: "center",
-          }}
           onClick={() => {
             onReply?.(comment);
           }}
         >
-          <CommentIcon sx={{ mr: 1, cursor: "pointer" }} />
-          <Typography style={{ cursor: "pointer" }}>回复</Typography>
+          <span style={{ cursor: "pointer" }}>回复</span>
         </Box>
         {comment.childComment.length !== 0 && (
           <ChildCommentNode childs={comment.childComment} onReply={onReply} />
@@ -371,7 +324,7 @@ const ChildCommentNode: React.FC<{
   onReply?: (comment: Comment) => void;
 }> = ({ childs, onReply }) => {
   return (
-    <Card sx={{ mt: 2 }}>
+    <Card>
       {childs.map((value) => (
         <CommentLayout
           comment={value}

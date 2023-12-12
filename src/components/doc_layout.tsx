@@ -1,4 +1,3 @@
-import { Grid } from "@mui/material";
 import React, {PropsWithChildren} from "react";
 
 type Props = {
@@ -6,16 +5,16 @@ type Props = {
 }
 //文档类型布局
 const DocLayout: React.FC<PropsWithChildren<Props>> = ({children,sidenav}) => {
-  return <Grid container spacing={2}>
+  return <div className={'flex gap-5'} >
 
-    <Grid item xs={4} >
+    <div className={'w-64 flex-none'} >
       {sidenav}
-    </Grid>
+    </div>
 
-    <Grid item xs={8}>
+    <div className={'flex-auto overflow-x-auto'}>
       {children}
-    </Grid>
-  </Grid>
+    </div>
+  </div>
 }
 
 export default DocLayout

@@ -2,30 +2,30 @@ import React from "react";
 import {useRecoilValue} from "recoil";
 import {archivesDataState} from "../providers/archives";
 import {Link, Outlet} from "react-router-dom";
-import {Box, Grid} from "@mui/material";
+import Box from "../components/box/box";
 
 //标签列表页面
 const TagsPage: React.FC = () => {
     const tags = useRecoilValue(archivesDataState)?.tags ?? [];
 
 
-    return <Grid container spacing={2}>
+    return <div className={'flex'}>
 
-        <Grid item xs={3}>
+        <div className={'w-48'}>
             {tags.map((value) => {
                 return (
-                    <Box key={value.id} m={1}>
-                            <Link to={"/tag/" + value.id}>{value.name}</Link>
+                    <Box key={value.id}>
+                        <Link to={"/tag/" + value.id}>#{value.name}</Link>
                     </Box>
                 );
             })}
-        </Grid>
+        </div>
 
-        <Grid item xs={9}>
+        <div className={'flex-auto'}>
             <Outlet />
-        </Grid>
+        </div>
 
-    </Grid>
+    </div>
 
 
 };

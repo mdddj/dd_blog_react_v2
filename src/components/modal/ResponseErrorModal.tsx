@@ -1,7 +1,8 @@
 import React from "react";
 import {useRecoilState} from "recoil";
 import {errorResponseProvider} from "../../providers/modal/error_response";
-import {Alert, Box, Button, Dialog, DialogActions, DialogContent} from "@mui/material";
+import {Button, Modal, ModalContent, ModalFooter} from "@nextui-org/react";
+import Box from "../box/box";
 
 
 
@@ -20,18 +21,18 @@ const ResponseErrorModal: React.FC = () => {
     const msgList = errorData?.code === 508 ? errorData.data as string[] : []
 
     return (
-        <Dialog open={errorData!==undefined} onClose={close}>
+        <Modal isOpen={errorData!==undefined} onClose={close}>
 
-            <DialogContent>
+            <ModalContent>
                 {errorData?.msg}
 
 
                     {/* 出现参数验证失败的提示 */}
                     {
                         errorData?.code === 508 && msgList.map(value => {
-                            return <Alert severity={'error'}  key={value}>
+                            return <div key={value}>
                                 {value}
-                            </Alert>
+                            </div>
 
                         })
                     }
@@ -47,13 +48,13 @@ const ResponseErrorModal: React.FC = () => {
 
 
 
-                <DialogActions>
+                <ModalFooter>
                     <Button  onClick={close}>
                         关闭
                     </Button>
-                </DialogActions>
-            </DialogContent>
-        </Dialog>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
     )
 }
 export default ResponseErrorModal

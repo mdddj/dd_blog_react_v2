@@ -3,10 +3,11 @@ import {useMount} from "react-use"
 import {useSetRecoilState} from "recoil"
 import {successMessageProvider} from "../../providers/modal/success_modal"
 import {blogApi} from "../../utils/request"
-import {Box, Button, Chip, Dialog, DialogContent, DialogTitle, ListItem} from "@mui/material";
 import {Friend} from "dd_server_api_web/dist/model/friend"
 import {Result, successResultHandle} from "dd_server_api_web/dist/utils/ResultUtil"
 import React from "react"
+import {Button, Chip, Modal, ModalContent, ModalHeader} from "@nextui-org/react";
+import Box from "../box/box";
 
 
 // 友链审核页面
@@ -41,17 +42,17 @@ const FriendsList: React.FC = () => {
     }} onClick={() => setShowModal(true)}>
         {
             friends.length !== 0 &&
-            <Chip label={`发现${friends.length}条友链申请`} color={'primary'}></Chip>
+            <Chip  color={'primary'}>{`发现${friends.length}条友链申请`}</Chip>
         }
 
 
         {/* 审批列表 */}
-        <Dialog open={showModal} onClose={() => setShowModal(false)}>
-            <DialogTitle>申请列表</DialogTitle>
-            <DialogContent>
+        <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+            <ModalHeader>申请列表</ModalHeader>
+            <ModalContent>
                 {
                     friends.map(v => {
-                        return <ListItem key={v.id}>
+                        return <div key={v.id}>
                             {v.name}
                             <Box>
                                 <Button onClick={() => {
@@ -65,11 +66,11 @@ const FriendsList: React.FC = () => {
                                     })
                                 }}>通过</Button>
                             </Box>
-                        </ListItem>
+                        </div>
                     })
                 }
-            </DialogContent>
-        </Dialog>
+            </ModalContent>
+        </Modal>
 
     </div>
 }

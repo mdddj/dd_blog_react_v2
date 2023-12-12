@@ -1,10 +1,4 @@
-import {
-  Box,
-  CircularProgress,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+
 import React, { useEffect, useState } from "react";
 import { apiGetResourceModel } from "../../utils/api";
 import { useSearchParams } from "react-router-dom";
@@ -15,9 +9,10 @@ import { BlogPreviewLight } from "../../components/blog_content_light";
 import { onImageUpload } from "../../utils/EditImageFileUpload";
 import MdEditor from "react-markdown-editor-lite";
 import { ResourceModel } from "dd_server_api_web/dist/model/ResourceModel";
-import { LoadingButton } from "@mui/lab";
 import { blogApi } from "../../utils/request";
 import { ApiResponse } from "../../models/app_model";
+import Box from "../../components/box/box";
+import {Button, Input, Spinner} from "@nextui-org/react";
 ///修改动态的页面
 const UpdateResourcePage: React.FC = () => {
   const [parmas] = useSearchParams();
@@ -72,19 +67,17 @@ const UpdateResourcePage: React.FC = () => {
     <Box>
       {!getLoading && model && (
         <Box>
-          <Typography variant={"h5"} sx={{ mb: 2 }}>
+          <div >
             修改资源
-          </Typography>
+          </div>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack direction={"column"} spacing={2}>
-              <TextField
+            <div className={'columns-1'}>
+              <Input
                 {...register("title", { required: true })}
                 fullWidth
-                error={titleError !== undefined}
                 label={"标题"}
-                helperText={titleError !== undefined ? "请输入标题" : ""}
               />
-              <TextField label={"标签"} {...register("label")} fullWidth />
+              <Input label={"标签"} {...register("label")} fullWidth />
               <MdEditor
                 {...register("content", { required: true })}
                 style={{ height: "500px" }}
@@ -97,24 +90,19 @@ const UpdateResourcePage: React.FC = () => {
                 }
                 onImageUpload={onImageUpload}
               />
-              <LoadingButton
-                loading={isSubmitting}
+              <Button
                 type={"submit"}
-                variant={"contained"}
                 disabled={!isValid}
               >
                 提交修改
-              </LoadingButton>
-            </Stack>
+              </Button>
+            </div>
           </form>
         </Box>
       )}
 
       {getLoading && (
-        <CircularProgress
-          sx={{
-            textAlign: "center",
-          }}
+        <Spinner
         />
       )}
     </Box>

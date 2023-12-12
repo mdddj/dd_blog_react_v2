@@ -1,21 +1,15 @@
 import PageHeader from "../../components/page_header";
 import React, { useEffect, useState } from "react";
 import { fileOpen } from "browser-fs-access";
-import {
-  Box,
-  Button,
-  ImageList,
-  ImageListItem,
-  Stack,
-  TextField,
-} from "@mui/material";
+
 import { getAccessToken, host } from "../../utils/request";
 import { ApiResponse } from "../../models/app_model";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { LoadingButton } from "@mui/lab";
 import { UserWidget } from "../../components/user_widget";
 import LoginTip from "../../components/login_tip";
+import {Button, Input} from "@nextui-org/react";
+import Box from "../../components/box/box";
 
 const AddResPage: React.FC = () => {
   const [files, setFiles] = useState<File[]>([]);
@@ -68,40 +62,36 @@ const AddResPage: React.FC = () => {
       <PageHeader title="发布动态" />
 
       <LoginTip />
-      <Stack direction={"column"} spacing={2}>
-        <TextField
+      <div className={'columns-1'} >
+        <Input
           label={"标题(可选)"}
           fullWidth
           onChange={(e) => setTitle(e.target.value)}
         />
-        <TextField
+        <Input
           fullWidth
-          multiline={true}
-          rows={4}
           label="说点什么吧"
           onChange={(e) => setContent(e.target.value)}
         />
 
-        <ImageList sx={{ width: "100%" }} cols={6} rowHeight={164}>
+        <div className={'grid grid-cols-4 gap-2'}>
           {files.map((item, index) => (
-            <ImageListItem key={index}>
+            <div key={index}>
               <BlobFileView blob={item} />
-            </ImageListItem>
+            </div>
           ))}
-        </ImageList>
-        <Stack direction={"row"} spacing={2}>
+        </div>
+        <div className={'columns-1'}>
           <UserWidget>
-            <LoadingButton
-              variant={"contained"}
+            <Button
               onClick={submit}
-              loading={loading}
             >
               发布动态
-            </LoadingButton>
+            </Button>
           </UserWidget>
           <Button onClick={selectImage}>添加图片</Button>
-        </Stack>
-      </Stack>
+        </div>
+      </div>
     </Box>
   );
 };

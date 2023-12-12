@@ -6,20 +6,12 @@ import { useNavigate } from "react-router-dom";
 import { successMessageProvider } from "../providers/modal/success_modal";
 import { showPasswordModal } from "../providers/setting";
 import {
-  Box,
-  Button,
-  Container,
-  Input,
-  Stack,
-  Tab,
-  Tabs,
-  Typography,
-} from "@mui/material";
-import {
   Result,
   successResultHandle,
 } from "dd_server_api_web/dist/utils/ResultUtil";
 import { ApiResponse, LoginResultModel } from "../models/app_model";
+import {Button, Input, Tab, Tabs} from "@nextui-org/react";
+import Box from "./box/box";
 
 enum LoginType {
   email,
@@ -76,40 +68,42 @@ const LoginComponent: React.FC = () => {
     <>
       {/*未登录*/}
       {!user && (
-        <Container sx={{ mt: 12 }} maxWidth={"sm"}>
-          <Stack spacing={4}>
-            <Typography component={"h3"} variant={"h3"}>
+        <div className={'container'}>
+          <div className={'columns-1'}>
+            <span >
               用户登录
-            </Typography>
-            <Tabs value={loginType} onChange={handleChange}>
-              <Tab label="账号" value={LoginType.account} />
-              <Tab label="邮箱" value={LoginType.email} />
-            </Tabs>
-            <Input
-              placeholder={
-                loginType === LoginType.email ? "请输入邮箱" : "请输入账号"
-              }
-              value={username}
-              onChange={(e) => setUserName(e.target.value)}
-            />
-            <Input
-              placeholder={"请输入密码"}
-              type={"password"}
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-            />
+            </span>
+            <Tabs>
+              <Tab key={'account'} title={'账号'}>
+                <Input
+                    placeholder={
+                      loginType === LoginType.email ? "请输入邮箱" : "请输入账号"
+                    }
+                    value={username}
+                    onChange={(e) => setUserName(e.target.value)}
+                />
+                <Input
+                    placeholder={"请输入密码"}
+                    type={"password"}
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                />
 
-            <Button variant={"contained"} onClick={login}>
-              登 录
-            </Button>
-          </Stack>
-        </Container>
+                <Button  onClick={login}>
+                  登 录
+                </Button>
+              </Tab>
+              <Tab>邮箱</Tab>
+            </Tabs>
+
+          </div>
+        </div>
       )}
 
       {/*已登录*/}
       {user && (
         <Box>
-          <Stack direction={"column"}>
+          <div className={'columns-1'}>
             <Button
               onClick={() => {
                 navigateFunction("/add-post");
@@ -139,7 +133,7 @@ const LoginComponent: React.FC = () => {
             >
               退出登录
             </Button>
-          </Stack>
+          </div>
         </Box>
       )}
     </>

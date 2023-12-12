@@ -29,14 +29,11 @@ import UpdatePasswordModal from "./components/modal/UpdatePasswordModal";
 import FriendsList from "./components/user/FriendsList";
 import DynamicListPage from "./pages/dynamic/DynamicListPage";
 import AddResPage from "./pages/add/add_res_page";
-import { Container, ThemeProvider, Typography } from "@mui/material";
-import { defaultTheme } from "./theme/DefaultTheme";
 import BlogAppbar from "./components/appbar";
 import { ArchiveModel } from "dd_server_api_web/dist/model/ArchiveModel";
 import NameResourceWidget from "./components/resource/name_resource";
 import { ResourceModel } from "dd_server_api_web/dist/model/ResourceModel";
 import { ReactElement } from "react";
-import { grey } from "@mui/material/colors";
 import TextPage from "./pages/text";
 import UpdateResourcePage from "./pages/resource/update";
 
@@ -71,16 +68,12 @@ export const App = () => {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <div>
       <BrowserRouter>
         <main id={"main"}>
           <BlogAppbar />
 
-          <Container
-            sx={{
-              mt: "80px",
-            }}
-          >
+          <div className={'container mx-auto max-w-5xl'}>
             <AppLoadingWidget />
             <MoneyModal />
             <ResponseErrorModal />
@@ -147,7 +140,7 @@ export const App = () => {
 
               <Route path={"/login"} element={<LoginComponent />} />
             </Routes>
-          </Container>
+          </div>
           <div style={{ height: 12 }} />
 
           <FriendsList />
@@ -156,7 +149,7 @@ export const App = () => {
       </BrowserRouter>
 
       <AppFoot />
-    </ThemeProvider>
+    </div>
   );
 };
 
@@ -170,11 +163,11 @@ const AppFoot: React.FC = () => {
         {list &&
           list.map((v) => {
             return (
-              <Typography key={v.id} variant={"body2"}>
-                <a style={{ color: grey[500] }} href={v.content}>
+              <div key={v.id} className={'h2'}>
+                <a style={{ color: "grey" }} href={v.content}>
                   {v.title}
                 </a>
-              </Typography>
+              </div>
             );
           })}
       </>
@@ -185,9 +178,9 @@ const AppFoot: React.FC = () => {
     <>
       <footer className="blog-footer mt-auto">
         <div>
-          <Typography variant={"body1"}>
+          <div >
             梁典典的博客 赣ICP备17011549号-1
-          </Typography>
+          </div>
         </div>
         <div style={{ marginTop: 12 }}>
           <NameResourceWidget categoryName={"博客底部链接"} render={render} />

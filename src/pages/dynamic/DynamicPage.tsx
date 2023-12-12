@@ -5,18 +5,6 @@ import { fileOpen } from "browser-fs-access";
 import { useSetRecoilState } from "recoil";
 import { successMessageProvider } from "../../providers/modal/success_modal";
 import { useNavigate } from "react-router-dom";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Input,
-  Stack,
-  TextField,
-} from "@mui/material";
 import { ResCategory } from "dd_server_api_web/dist/model/ResCategory";
 import { ResourceCategoryType } from "dd_server_api_web/dist/model/ResourceCategoryType";
 import {
@@ -27,9 +15,10 @@ import {
 import MyBox from "../../components/box/my_box";
 import PageHeader from "../../components/page_header";
 import { UserWidget } from "../../components/user_widget";
-import Grid2 from "@mui/material/Unstable_Grid2";
 import { ImageCard } from "../../components/image";
 import UpdateResourceCategoryThumbnail from "../../components/update_resource_category_thumbnail";
+import {Button, Input, Modal, ModalContent, ModalFooter, Spinner} from "@nextui-org/react";
+import Box from "../../components/box/box";
 
 //动态页面
 const DynamicPage: React.FC = () => {
@@ -73,7 +62,7 @@ const DynamicPage: React.FC = () => {
   return (
     <MyBox>
       <PageHeader title="动态" />
-      {initLoading && <CircularProgress />}
+      {initLoading && <Spinner />}
 
       <UserWidget>
         <Button
@@ -85,28 +74,19 @@ const DynamicPage: React.FC = () => {
         </Button>
       </UserWidget>
 
-      <Grid2 container spacing={2}>
+      <div className={'grid grid-cols-4 gap-6'}>
         {plotoAlbums.map((value) => {
           return (
-            <Grid2
+            <div
               key={value.id}
-              {...{ xs: 12, sm: 6, md: 4, lg: 3 }}
-              minHeight={160}
-              sx={{
-                position: "relative",
-              }}
+              className={'relative'}
             >
-              <Box
-                onClick={() => {
-                  navigation("/pics/" + value.name);
-                }}
-              >
-                <ImageCard
+              <ImageCard
+                  onClick={()=>navigation("/pics/" + value.name)}
                   src={getImage(value)}
                   title={value.name ?? ""}
                   imageWith={"100%"}
-                />
-              </Box>
+              />
               {value.id && (
                 <UpdateResourceCategoryThumbnail
                   id={value.id}
@@ -115,38 +95,10 @@ const DynamicPage: React.FC = () => {
                   }}
                 />
               )}
-            </Grid2>
+            </div>
           );
         })}
-      </Grid2>
-
-      {/*<ImageList  gap={12} >*/}
-      {/*  {plotoAlbums.map((item) => (*/}
-      {/*    <ImageListItem*/}
-      {/*      className="m--img"*/}
-      {/*      key={item.id}*/}
-      {/*      onClick={() => {*/}
-      {/*        navigation("/pics/" + item.name);*/}
-      {/*      }}*/}
-      {/*    >*/}
-      {/*      <img*/}
-      {/*        src={`${getImage(item)}?w=164&h=164&fit=crop&auto=format`}*/}
-      {/*        srcSet={`${getImage(*/}
-      {/*          item*/}
-      {/*        )}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}*/}
-      {/*        alt={item.name}*/}
-      {/*        loading="lazy"*/}
-      {/*      />*/}
-      {/*      <ImageListItemBar*/}
-      {/*        style={{*/}
-      {/*          borderBottomRightRadius: 12,*/}
-      {/*          borderBottomLeftRadius: 12,*/}
-      {/*        }}*/}
-      {/*        title={item.name}*/}
-      {/*      ></ImageListItemBar>*/}
-      {/*    </ImageListItem>*/}
-      {/*  ))}*/}
-      {/*</ImageList>*/}
+      </div>
 
       <AddPhoneAlbumsForm
         show={showCreateModal}
@@ -195,10 +147,10 @@ const AddPhoneAlbumsForm: React.FC<{ show: boolean; onClose: () => void }> = ({
   };
 
   return (
-    <Dialog open={show} onClose={onClose} maxWidth={"md"}>
-      <DialogTitle>新建相册</DialogTitle>
-      <DialogContent>
-        <Stack direction={"column"} spacing={2}>
+    <Modal isOpen={show} onClose={onClose}>
+      <span>新建相册</span>
+      <ModalContent>
+        <div className={'columns-1'}>
           <Input
             placeholder="名称"
             value={name}
@@ -244,15 +196,14 @@ const AddPhoneAlbumsForm: React.FC<{ show: boolean; onClose: () => void }> = ({
             ))}
           </Box>
 
-          <TextField
-            multiline={true}
+          <Input
             placeholder="介绍"
             value={intro}
             onChange={(event) => setIntro(event.target.value)}
           />
-        </Stack>
-      </DialogContent>
-      <DialogActions>
+        </div>
+      </ModalContent>
+      <ModalFooter>
         <Button
           onClick={() => {
             setType("images");
@@ -261,8 +212,8 @@ const AddPhoneAlbumsForm: React.FC<{ show: boolean; onClose: () => void }> = ({
           相册类型
         </Button>
         <Button onClick={submit}>创建</Button>
-      </DialogActions>
-    </Dialog>
+      </ModalFooter>
+    </Modal>
   );
 };
 

@@ -1,7 +1,7 @@
 import React from "react";
 import {useRecoilValue} from "recoil";
 import {appLoading} from "../providers/loading";
-import {CircularProgress} from "@mui/material";
+import {Spinner} from "@nextui-org/react";
 
 const AppLoadingWidget: React.FC = () => {
     const loading = useRecoilValue(appLoading)
@@ -9,7 +9,7 @@ const AppLoadingWidget: React.FC = () => {
         return <></>
     }
     return <div>
-        <CircularProgress/>
+        <Spinner/>
     </div>
 }
 export default AppLoadingWidget

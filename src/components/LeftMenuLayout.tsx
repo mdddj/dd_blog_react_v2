@@ -1,6 +1,6 @@
 import React, {PropsWithChildren, ReactNode} from "react";
 import MyBox from "./box/my_box";
-import {Box, Grid, Stack} from "@mui/material";
+import Box from "./box/box";
 
 type Props = {
     left: ReactNode[];
@@ -10,20 +10,20 @@ type Props = {
 ///两列的基本布局
 export const LeftMenuLayout: React.FC<PropsWithChildren<Props>> = ({children,left,bottomComponent}) => {
     return <>
-        <Grid spacing={2}>
-            <Grid item xs={4} >
+        <div className={'grid grid-cols-2 gap-2'} >
+            <div  >
                 {
                     left.map((value,index)=> <div key={index}>{value}</div> )
                 }
-            </Grid>
-            <Grid item xs={8}  >
+            </div>
+            <div   >
                     {children}
-                <Box mt={2} />
+                <Box  />
                 {
                     bottomComponent ? <MyBox>{bottomComponent}</MyBox> : <></>
                 }
 
-            </Grid>
-        </Grid>
+            </div>
+        </div>
     </>
 }

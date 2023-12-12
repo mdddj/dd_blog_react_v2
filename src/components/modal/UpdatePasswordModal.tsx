@@ -3,8 +3,8 @@ import {useRecoilState, useSetRecoilState} from "recoil";
 import {showPasswordModal} from "../../providers/setting";
 import {blogApi} from "../../utils/request";
 import {successMessageProvider} from "../../providers/modal/success_modal";
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Input, Stack} from "@mui/material";
 import { Result, successResultHandle } from "dd_server_api_web/dist/utils/ResultUtil";
+import {Button, Input, Modal, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/react";
 
 /// 修改密码的组件
 const UpdatePasswordModal: React.FC = () => {
@@ -28,19 +28,19 @@ const UpdatePasswordModal: React.FC = () => {
     })
   }
 
-  return <Dialog open={show} onClose={()=>setShow(false)}>
-    <DialogTitle>修改密码</DialogTitle>
-    <DialogContent>
+  return <Modal isOpen={show} onClose={()=>setShow(false)}>
+    <ModalHeader>修改密码</ModalHeader>
+    <ModalContent>
 
-        <Stack direction={'column'}>
+        <div className={'columns-1'} >
           <Input placeholder='原始密码' type={'password'} onChange={event=>setOldPass(event.target.value)} />
           <Input placeholder='新密码' type={'password'} onChange={event=>setNewPass(event.target.value)} />
-        </Stack>
+        </div>
 
-    </DialogContent>
-    <DialogActions>
+    </ModalContent>
+    <ModalFooter>
       <Button  onClick={doUpdate} >确认修改</Button>
-    </DialogActions>
-  </Dialog>
+    </ModalFooter>
+  </Modal>
 }
 export default UpdatePasswordModal;

@@ -6,8 +6,8 @@ import dayjs from "dayjs";
 import PageHeader from "../components/page_header";
 import NothingWidget from "../components/nothing";
 import MyBox from "../components/box/my_box";
-import {Box, Typography} from "@mui/material";
 import { MonthsCount } from "dd_server_api_web/dist/model/ArchiveModel";
+import Box from "../components/box/box";
 
 const Archive: React.FC = () => {
 
@@ -16,14 +16,13 @@ const Archive: React.FC = () => {
     const archives = archive?.archiveModels ?? []
 
     return <>
-
         <PageHeader title={'归档'}/>
         <NothingWidget nothing={archives.length === 0} />
-        <MyBox>
+        <div className={'flex flex-col gap-2'}>
             {
                 archives.map(value => <MonthGroup monthItem={value} key={value.months}/>)
             }
-        </MyBox>
+        </div>
 
     </>
 }
@@ -34,27 +33,22 @@ const MonthGroup: React.FC<{ monthItem: MonthsCount }> = ({monthItem}) => {
     const blogs = monthItem.blogs ?? []
 
 
-    return <Box>
-        <Box mb={5}>
-            <Typography variant={'h2'}>{monthItem.months}</Typography>
-        </Box>
+    return <div>
+            <div className={'font-bold text-large'}>{monthItem.months}</div>
         <ul style={{listStyle: 'none'}}>
             {
                 blogs.map(value => {
                     let dateString = dayjs(value.createTime).format('YYYY-MM-DD')
                     return (<li style={{display: 'block',marginBottom: 12}} key={value.id}>
-                        <Typography variant={'body1'} sx={{float: 'right', color: '#767676'}}>{dateString}</Typography>
-                        <Typography variant={'h6'}>
-                            <Link style={{color: '#007bff', cursor: 'pointer'}}
-                                  to={'/post/' + value.id}>{value.title}</Link>
-                        </Typography>
+                        <div><span className={'text-default-500'}>{dateString}</span>  <Link style={{color: '#007bff', cursor: 'pointer'}}
+                                                 to={'/post/' + value.id}>{value.title}</Link></div>
                     </li>)
                 })
             }
 
         </ul>
 
-    </Box>
+    </div>
 }
 
 
