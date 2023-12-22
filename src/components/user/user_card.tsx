@@ -1,10 +1,8 @@
 import React, {useState} from "react";
 import {useMount} from "react-use";
 import {blogApi} from "../../utils/request";
-import MyBox from "../box/my_box";
 import { User } from "dd_server_api_web/dist/model/UserModel";
-import Box from "../box/box";
-import {Avatar, Button, Card, CardBody, CardFooter, Divider} from "@nextui-org/react";
+import {Avatar, Button} from "@nextui-org/react";
 
 type Props = {
     userId?: number,
@@ -26,21 +24,20 @@ const UserCardWithBlogDetail: React.FC<Props> = ({userId, loginNmae}) => {
 
     return <>
         {
-            user && <Card>
-                <CardBody>
+            user && <div>
+                <div>
                     <Avatar src={user.picture}/>
                     <div>
                         <span >{user.nickName}</span>
                         <div >@{user.loginNumber}</div>
                     </div>
-                </CardBody>
-                <Divider/>
-                <CardFooter >
+                </div>
+                <div >
                     <div className={'flex gap-2'}>
                         <Button onClick={()=>window.open('https://github.com/mdddj','_blank')} >Github</Button>
                     </div>
-                </CardFooter>
-            </Card>
+                </div>
+            </div>
         }
     </>
 }

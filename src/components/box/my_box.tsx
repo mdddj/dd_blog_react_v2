@@ -1,9 +1,4 @@
 import React, { PropsWithChildren } from "react";
-import { useRecoilValue } from "recoil";
-import { appLoading } from "../../providers/loading";
-import Box from "./box";
-import {Skeleton} from "@nextui-org/react";
-
 
 
 ///重构box

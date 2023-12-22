@@ -2,13 +2,9 @@ import React, {useState} from "react";
 import {blogApi} from "../utils/request";
 import {useMount, useToggle} from "react-use";
 import {useSetRecoilState} from "recoil";
-import {appLoading} from "../providers/loading";
-import MdEditor from "react-markdown-editor-lite";
 import Nothing from "./nothing";
 import MarkdownView from "./MarkdownView";
 import CommentComponent from "./comment_component";
-import {BlogPreviewLight} from "./blog_content_light";
-import {onImageUpload} from "../utils/EditImageFileUpload";
 import {successMessageProvider} from "../providers/modal/success_modal";
 import {useSearchParams} from "react-router-dom";
 import {TextModel} from "dd_server_api_web/dist/model/TextModel";
@@ -16,7 +12,6 @@ import {
     Result,
     successResultHandle,
 } from "dd_server_api_web/dist/utils/ResultUtil";
-import {UserWidget} from "./user_widget";
 import Box from "./box/box";
 import {Button, Checkbox, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/react";
 import TwoColumnLayout from "./two_column_layout";
@@ -31,7 +26,6 @@ const KeyPage: React.FC<Props> = ({keyText}) => {
     const [inputPassword, setInputPassword] = useState<string>(urlPass);
     const [model, setModel] = useState<TextModel>();
     const [result, setResult] = useState<Result<any> | undefined>(undefined);
-    const setLoading = useSetRecoilState(appLoading);
     const [on, setToggle] = useToggle(true);
     const [showUpdateOrCreateModal, setShowUpdateOrCreateModal] = useState(false); // 新建或者修改弹窗显示
 
@@ -55,11 +49,9 @@ const KeyPage: React.FC<Props> = ({keyText}) => {
         if (hasPassword && inputPassword.length === 0) {
             return;
         }
-        setLoading(true);
         blogApi()
             .getTextByName(keyText, inputPassword)
             .then((value: Result<TextModel>) => {
-                setLoading(false);
                 setToggle(false);
                 setResult(value);
                 if (inputPassword.length !== 0) {
@@ -93,11 +85,6 @@ const KeyPage: React.FC<Props> = ({keyText}) => {
                     </Box>
                 )}
 
-                <UserWidget>
-        <span onClick={showUpdateModal}>
-          编辑字典
-        </span>
-                </UserWidget>
 
                 {model && <MarkdownView content={model.context}/>}
 
@@ -183,15 +170,15 @@ const CreateT: React.FC<{
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
                             />
-                            <MdEditor
-                                style={{height: "200px"}}
-                                value={content}
-                                renderHTML={(text) => <BlogPreviewLight content={text}/>}
-                                onChange={(data) => {
-                                    setContent(data.text);
-                                }}
-                                onImageUpload={onImageUpload}
-                            />
+                            {/*<MdEditor*/}
+                            {/*    style={{height: "200px"}}*/}
+                            {/*    value={content}*/}
+                            {/*    renderHTML={(text) => <BlogPreviewLight content={text}/>}*/}
+                            {/*    onChange={(data) => {*/}
+                            {/*        setContent(data.text);*/}
+                            {/*    }}*/}
+                            {/*    onImageUpload={onImageUpload}*/}
+                            {/*/>*/}
                             <Input
                                 placeholder="备注"
                                 value={intro}

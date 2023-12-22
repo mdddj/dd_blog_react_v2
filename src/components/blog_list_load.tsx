@@ -2,9 +2,6 @@ import React, {RefObject, useImperativeHandle, useState} from "react";
 import {useMount} from "react-use";
 import PagerNextLoad from "./pager_next_load";
 import BaseBlogCardStyle2 from "./blog/base_blog_card_style2";
-import {useSetRecoilState} from "recoil";
-import {appLoading} from "../providers/loading";
-import MyBox from "./box/my_box";
 import { BlogData } from "dd_server_api_web/dist/model/result/BlogPushNewResultData";
 import { Result, Page, PagerModel } from "dd_server_api_web/dist/utils/ResultUtil";
 
@@ -21,7 +18,6 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
     const [page, setPage] = useState(1)
     const [blogs, setBlogs] = useState<BlogData[]>([])
     const [pager, setPager] = useState<PagerModel>()
-    const appLoadingSet=  useSetRecoilState(appLoading)
 
     useMount(() => load(page))
 
@@ -32,9 +28,6 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
     })
 
     const load = (p: number) => {
-        if(p===1){
-            appLoadingSet(true)
-        }
         api(p).then(value => {
             let bs = blogs;
             if (p === 1) bs = []
@@ -42,7 +35,6 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
             setBlogs([...bs, ...b])
             setPager(value.data?.page)
             setPage(p)
-            appLoadingSet(false)
             if(value.data?.page){
             }
 
@@ -53,7 +45,6 @@ const BlogListLoad: React.FC<Props> = ({api, refd}) => {
         setPage(1)
         setPager(undefined)
         setBlogs([])
-        appLoadingSet(true)
         load(1)
     }
 

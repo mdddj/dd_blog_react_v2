@@ -11,14 +11,14 @@ const PageHeader: React.FC<Props> = (props) => {
     const showBackIcon = props.showBack ?? false
     const nav = useNavigate()
   return (
-    <Box>
+    <div>
         {
             showBackIcon && <Button color="secondary" onClick={()=>nav(-1)}></Button>
         }
       <span className={'font-bold text-large'}>
         {props.title}
       </span>
-    </Box>
+    </div>
   );
 };
 

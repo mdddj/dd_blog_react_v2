@@ -1,29 +1,41 @@
 import React from "react";
 import {useRecoilValue} from "recoil";
 import {archivesDataState} from "../providers/archives";
-import {Link, Outlet} from "react-router-dom";
-import Box from "../components/box/box";
+import {Outlet, useNavigate} from "react-router-dom";
+import {Listbox, ListboxItem} from "@nextui-org/react";
+import TwoColumnLayout from "../components/two_column_layout";
 
 //标签列表页面
 const TagsPage: React.FC = () => {
     const tags = useRecoilValue(archivesDataState)?.tags ?? [];
 
+    const nav = useNavigate()
+    return <div className={'flex flex-col gap-2'}>
 
-    return <div className={'flex'}>
 
-        <div className={'w-48'}>
-            {tags.map((value) => {
-                return (
-                    <Box key={value.id}>
-                        <Link to={"/tag/" + value.id}>#{value.name}</Link>
-                    </Box>
-                );
-            })}
-        </div>
+        {/*<Tabs onSelectionChange={key => {*/}
+        {/*    nav(`/tag/${key}`)*/}
+        {/*}}>*/}
+        {/*    {*/}
+        {/*        tags.map(value => <Tab key={value.name} title={value.name} > <Outlet /></Tab>)*/}
+        {/*    }*/}
+        {/*</Tabs>*/}
+        <TwoColumnLayout right={[
+            <Listbox aria-label={'tags'}>
+                {tags.map((value) => {
+                    return (
+                           <ListboxItem key={value.id} onClick={()=>{
+                               nav(`/tag/${value.id}`)
+                           }}>
+                               {value.name}
+                           </ListboxItem>
+                    );
+                })}
+            </Listbox>
+        ]}>
 
-        <div className={'flex-auto'}>
-            <Outlet />
-        </div>
+            <Outlet/>
+        </TwoColumnLayout>
 
     </div>
 

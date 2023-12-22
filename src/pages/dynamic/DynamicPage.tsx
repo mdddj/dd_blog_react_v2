@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useMount } from "react-use";
 import { blogApi } from "../../utils/request";
-import { fileOpen } from "browser-fs-access";
 import { useSetRecoilState } from "recoil";
 import { successMessageProvider } from "../../providers/modal/success_modal";
 import { useNavigate } from "react-router-dom";
@@ -14,9 +13,7 @@ import {
 } from "dd_server_api_web/dist/utils/ResultUtil";
 import MyBox from "../../components/box/my_box";
 import PageHeader from "../../components/page_header";
-import { UserWidget } from "../../components/user_widget";
 import { ImageCard } from "../../components/image";
-import UpdateResourceCategoryThumbnail from "../../components/update_resource_category_thumbnail";
 import {Button, Input, Modal, ModalContent, ModalFooter, Spinner} from "@nextui-org/react";
 import Box from "../../components/box/box";
 
@@ -64,17 +61,8 @@ const DynamicPage: React.FC = () => {
       <PageHeader title="动态" />
       {initLoading && <Spinner />}
 
-      <UserWidget>
-        <Button
-          onClick={() => {
-            setShowCreateModal(true);
-          }}
-        >
-          新建相册
-        </Button>
-      </UserWidget>
 
-      <div className={'grid grid-cols-4 gap-6'}>
+      <div className={'grid grid-cols-5 gap-2'}>
         {plotoAlbums.map((value) => {
           return (
             <div
@@ -85,16 +73,7 @@ const DynamicPage: React.FC = () => {
                   onClick={()=>navigation("/pics/" + value.name)}
                   src={getImage(value)}
                   title={value.name ?? ""}
-                  imageWith={"100%"}
               />
-              {value.id && (
-                <UpdateResourceCategoryThumbnail
-                  id={value.id}
-                  onSuccess={() => {
-                    fetchPhotoAlbum();
-                  }}
-                />
-              )}
             </div>
           );
         })}
@@ -161,24 +140,24 @@ const AddPhoneAlbumsForm: React.FC<{ show: boolean; onClose: () => void }> = ({
             value={logo}
             onChange={(event) => setLogo(event.target.value)}
           />
-          <Button
-            onClick={async () => {
-              try {
-                const blob = await fileOpen({
-                  mimeTypes: ["image/*"],
-                });
-                let form = new FormData();
-                form.append("file", blob);
-                let result: Result<string> =
-                  await blogApi().uploadFileWithSingle(form);
-                successResultHandle(result, (data) => {
-                  setLogo(data);
-                });
-              } catch (e) {}
-            }}
-          >
-            选择封面图上传
-          </Button>
+          {/*<Button*/}
+          {/*  onClick={async () => {*/}
+          {/*    try {*/}
+          {/*      const blob = await fileOpen({*/}
+          {/*        mimeTypes: ["image/*"],*/}
+          {/*      });*/}
+          {/*      let form = new FormData();*/}
+          {/*      form.append("file", blob);*/}
+          {/*      let result: Result<string> =*/}
+          {/*        await blogApi().uploadFileWithSingle(form);*/}
+          {/*      successResultHandle(result, (data) => {*/}
+          {/*        setLogo(data);*/}
+          {/*      });*/}
+          {/*    } catch (e) {}*/}
+          {/*  }}*/}
+          {/*>*/}
+          {/*  选择封面图上传*/}
+          {/*</Button>*/}
 
           {logo.length !== 0 && <img src={logo} alt="logo" />}
 

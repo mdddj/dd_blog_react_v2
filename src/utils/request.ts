@@ -5,7 +5,7 @@ const MOOSE_REACT_LEARN_ACCESS_TOKEN = "auth_token";
 /// true 表示本地服务器，false表示远程服务器
 let isLocal = false;
 
-const host = isLocal ? "http://localhost:8082" : "https://itbug.shop:9445";
+const host = isLocal ? "http://localhost:8082" : "https://api.itbug.shop";
 
 export type ErrorData = {
   code: number;
@@ -26,6 +26,17 @@ export const getAxiosHeader = () => {
   };
 };
 
+export const logoutFun = (logoutSuccess: (message: string) => void) => {
+  blogApi()
+    .logout()
+    .then((value: Result<string>) => {
+      console.log(value);
+      if (value.state === 200 || value.state === 201) {
+        logoutSuccess(value.message);
+        removeAccessToken();
+      }
+    });
+};
 /**
  * 博客api接口
  */

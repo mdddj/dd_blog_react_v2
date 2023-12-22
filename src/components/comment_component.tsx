@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { useMount } from "react-use";
 import { formatDateUtil } from "../utils/DateUtil";
 import { blogApi } from "../utils/request";
@@ -10,13 +10,21 @@ import {
   successResultHandle,
 } from "dd_server_api_web/dist/utils/ResultUtil";
 import { ApiResponse } from "../models/app_model";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { successMessageProvider } from "../providers/modal/success_modal";
-import { userProvider } from "../providers/user";
 import { useNavigate } from "react-router-dom";
 import { Role } from "dd_server_api_web/dist/model/UserModel";
 import Box from "./box/box";
-import {Avatar, Button, Card, CardBody, CardHeader, Divider, Input, Modal, Textarea, Tooltip} from "@nextui-org/react";
+import {
+  Avatar,
+  Button,
+  Card,
+  Input,
+  Modal, ModalBody,
+  ModalContent, ModalHeader,
+  Textarea,
+  Tooltip
+} from "@nextui-org/react";
 
 // 评论组件的参数
 interface CommentComponentProps {
@@ -105,15 +113,12 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({
   };
 
   return (
-    <Card>
-      <CardHeader>
+    <div>
+      <div>
         <span className={'font-bold text-large'}>评论</span>
-      </CardHeader>
-      <Divider/>
-      <CardBody>
+      </div>
+      <div>
         <div className={'flex flex-col gap-2'}>
-
-
           {/* 发布评论表单 */}
           <CommentForm onSubmit={submit}/>
 
@@ -123,21 +128,26 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({
           ))}
           {/* 回复的弹窗 */}
           <Modal
+              backdrop={'blur'}
+              placement={'bottom'}
+              size={'5xl'}
               onClose={() => {
                 setReplyComment(undefined);
               }}
               isOpen={replyComment !== undefined}
           >
-            <Box>
-              <div className={'columns-1'}>
+            <ModalContent>
+              <ModalHeader>
                 {replyComment && (
                     <span>
                 回复{replyComment.name} : {replyComment.content}
               </span>
                 )}
-                <CommentForm onSubmit={submit}/>
-              </div>
-            </Box>
+              </ModalHeader>
+              <ModalBody>
+                  <CommentForm onSubmit={submit} parentComment={replyComment}/>
+              </ModalBody>
+            </ModalContent>
           </Modal>
 
           {pager && (
@@ -150,34 +160,21 @@ const CommentComponent: FunctionComponent<CommentComponentProps> = ({
               />
           )}
         </div>
-      </CardBody>
-    </Card>
+      </div>
+    </div>
   );
 };
 
 // 评论输入表单封装
 const CommentForm: React.FC<CommentFormProps> = (props) => {
-  const nav = useNavigate();
   const [name, setName] = useState(""); //昵称
   const [email, setEmail] = useState(""); //邮箱
   const [url, setUrl] = useState(""); // 网站链接
   const [content, setContent] = useState(""); //评论内容
-  const [user] = useRecoilState(userProvider);
-  const [avatarUrl, setAvatarUrl] = useState(""); //用户头像
-  // const [open, setOpen] = useState(false) //是否显示选择头像的组件
-
-  // const avatars = useRecoilValue(systemAvatars) // 系统预设头像
-
-  useEffect(() => {
-    if (user) {
-      setName(user.nickName);
-      setEmail(user.email);
-      setAvatarUrl(user.picture);
-    }
-  }, [user]);
 
   //验证错误的消息
   const errorMsg = (msg: string) => {
+
   };
 
   //提交留言
@@ -197,26 +194,21 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
     }
 
     //提交
-    props.onSubmit(name, email, url, content, avatarUrl);
+    props.onSubmit(name, email, url, content,"");
   };
 
+  let rep = props.parentComment
   return (
     <div className={'flex gap-5'}>
-      <Avatar
-          src={avatarUrl}
-          onClick={() => {
-            if (!user) {
-              nav("/login");
-            }
-          }}
-      ></Avatar>
-      <div className={'flex-auto'}>
+      <Avatar/>
+      <div className={'flex-auto flex flex-col gap-2'}>
         <div className={'grid grid-cols-3 gap-2'}>
           <div >
             <Input
               fullWidth={true}
               label={"昵称"}
               value={name}
+              isRequired={true}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
@@ -224,6 +216,7 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
             <Input
               fullWidth={true}
               label={"邮箱"}
+              isRequired={true}
               value={email}
               onChange={(event) => {
                 setEmail(event.target.value);
@@ -242,15 +235,14 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
           </div>
         </div>
         <Textarea
-            className={'pt-2'}
             fullWidth={true}
-            placeholder="说点什么吧"
-            style={{ fontSize: 12, marginTop: 22 }}
+            placeholder={rep ? `回复${rep.name}:${rep.content}` : "说点什么吧"}
             onChange={(e) => setContent(e.target.value)}
             value={content}
+            isRequired={true}
         />
 
-        <Button onClick={submit} color={'primary'} className={'mt-2'}>
+        <Button onClick={submit} isDisabled={content.trim().length === 0}>
           发表评论
         </Button>
       </div>
@@ -266,7 +258,7 @@ const CommentLayout: React.FC<{
   comment: Comment;
   onReply?: (comment: Comment) => void;
   isChildComment?: boolean;
-}> = ({ comment, onReply, isChildComment }) => {
+}> = ({ comment, onReply }) => {
   const getRoleIcons = (): Role[] => {
     let roles = comment.user?.roles ?? [];
     return roles.filter((v) => v.icon !== undefined && v.icon !== "");

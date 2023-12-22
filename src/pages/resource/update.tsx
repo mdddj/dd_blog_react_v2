@@ -5,9 +5,6 @@ import { useSearchParams } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { successMessageProvider } from "../../providers/modal/success_modal";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { BlogPreviewLight } from "../../components/blog_content_light";
-import { onImageUpload } from "../../utils/EditImageFileUpload";
-import MdEditor from "react-markdown-editor-lite";
 import { ResourceModel } from "dd_server_api_web/dist/model/ResourceModel";
 import { blogApi } from "../../utils/request";
 import { ApiResponse } from "../../models/app_model";
@@ -23,9 +20,8 @@ const UpdateResourcePage: React.FC = () => {
   const {
     handleSubmit,
     register,
-    watch,
     setValue,
-    formState: { errors, isSubmitting, isValid },
+    formState: {  isValid },
   } = useForm<ResourceModel>();
   const onSubmit: SubmitHandler<ResourceModel> = async (
     data: ResourceModel
@@ -61,8 +57,7 @@ const UpdateResourcePage: React.FC = () => {
     getUpdateModel().then();
   }, [updateId]);
 
-  const content = watch("content");
-  const titleError = errors.title;
+
   return (
     <Box>
       {!getLoading && model && (
@@ -78,18 +73,18 @@ const UpdateResourcePage: React.FC = () => {
                 label={"标题"}
               />
               <Input label={"标签"} {...register("label")} fullWidth />
-              <MdEditor
-                {...register("content", { required: true })}
-                style={{ height: "500px" }}
-                value={content}
-                renderHTML={(text: string) => (
-                  <BlogPreviewLight content={text} />
-                )}
-                onChange={(data: { text: string }) =>
-                  setValue("content", data.text)
-                }
-                onImageUpload={onImageUpload}
-              />
+              {/*<MdEditor*/}
+              {/*  {...register("content", { required: true })}*/}
+              {/*  style={{ height: "500px" }}*/}
+              {/*  value={content}*/}
+              {/*  renderHTML={(text: string) => (*/}
+              {/*    <BlogPreviewLight content={text} />*/}
+              {/*  )}*/}
+              {/*  onChange={(data: { text: string }) =>*/}
+              {/*    setValue("content", data.text)*/}
+              {/*  }*/}
+              {/*  onImageUpload={onImageUpload}*/}
+              {/*/>*/}
               <Button
                 type={"submit"}
                 disabled={!isValid}

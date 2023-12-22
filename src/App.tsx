@@ -16,12 +16,10 @@ import TagPage from "./pages/tag";
 import AboutPage from "./pages/about";
 import FriendsPage from "./pages/friends";
 import DocsPage from "./pages/doc";
-import AppLoadingWidget from "./components/app_loading_widget";
 import MoneyModal from "./components/modal/money";
 import MonthPage from "./pages/month";
 import DynamicPage from "./pages/dynamic/DynamicPage";
 import DocDetailPage from "./pages/doc/detail";
-import LoginComponent from "./components/login";
 import AddPostPage from "./pages/add/post";
 import ResponseErrorModal from "./components/modal/ResponseErrorModal";
 import AppSuccessModel from "./components/modal/AppSuccessModel";
@@ -73,8 +71,7 @@ export const App = () => {
         <main id={"main"}>
           <BlogAppbar />
 
-          <div className={'container mx-auto max-w-5xl'}>
-            <AppLoadingWidget />
+          <div className={'container mx-auto max-w-5xl p-5'}>
             <MoneyModal />
             <ResponseErrorModal />
             <AppSuccessModel />
@@ -138,7 +135,6 @@ export const App = () => {
               {/* 发布博客的页面 */}
               <Route path={"/add-post"} element={<AddPostPage />} />
 
-              <Route path={"/login"} element={<LoginComponent />} />
             </Routes>
           </div>
           <div style={{ height: 12 }} />

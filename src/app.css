@@ -22,6 +22,7 @@
 .markdown-body pre div{
     border: none !important;
     background-color: transparent !important;
+    overflow-x: scroll;
 }
 /*.markdown-body pre {*/
 /*    background-color: transparent !important;*/

@@ -2,12 +2,9 @@ import React, {useState} from "react";
 import {blogApi} from "../../utils/request";
 import {useNavigate, useParams} from "react-router-dom";
 import {useMount} from "react-use";
-import DocLayout from "../../components/doc_layout";
 import {BlogPreviewLight} from "../../components/blog_content_light";
-import CreateNewDocArticle from "./components/create_new";
 import {useSetRecoilState} from "recoil";
 import {successMessageProvider} from "../../providers/modal/success_modal";
-import {ReactComponent as FolderSvg} from "../../assets/folder_fill.svg";
 import {ReactComponent as FileSvg} from "../../assets/file.svg";
 import {
     ResourceTreeModel,
@@ -18,15 +15,13 @@ import {
     Result,
     successResultHandle,
 } from "dd_server_api_web/dist/utils/ResultUtil";
-import {UserWidget} from "../../components/user_widget";
 import {formatDateUtil} from "../../utils/DateUtil";
 import {
     Button,
     Card,
     CardBody, CardHeader,
-    Chip,
-    Input,
-    Modal,
+    Chip, Divider,
+    Input, Modal,
     ModalContent,
     ModalFooter,
     ModalHeader,
@@ -34,6 +29,7 @@ import {
 } from "@nextui-org/react";
 import Box from "../../components/box/box";
 import {FolderIcon} from "../../assets/svgs";
+import TwoColumnLayout from "../../components/two_column_layout";
 
 //文档详情页面
 const DocDetailPage: React.FC = () => {
@@ -101,26 +97,20 @@ const DocDetailPage: React.FC = () => {
         <div className={'p-5'}>
             {loading && <Spinner/>}
             {treeData && (
-                <DocLayout
-                    sidenav={
-                        <DocSidenav
-                            treeData={treeData}
-                            onSelect={onSelect}
-                            onFolderSelect={onFolderSelect}
-                            currentFolder={currentSelectFolderObject}
-                            id={id}
-                        />
-                    }
-                >
-                    {currentSelectFolderObject && (
-                        <CreateNewDocArticle
-                            currentFolder={currentSelectFolderObject}
-                            onCreateSuccess={onCreateSuccess}
-                        />
-                    )}
+                <TwoColumnLayout
+
+                 right={[
+                     <DocSidenav
+                         treeData={treeData}
+                         onSelect={onSelect}
+                         onFolderSelect={onFolderSelect}
+                         currentFolder={currentSelectFolderObject}
+                         id={id}
+                     />
+                 ]}>
                     <Box/>
                     {selectDoc && (
-                        <div >{selectDoc.title}</div>
+                        <div className={'font-bold text-large text-primary'} >{selectDoc.title}</div>
                     )}
 
                     {
@@ -136,28 +126,16 @@ const DocDetailPage: React.FC = () => {
                             <div className={'overflow-x-scroll'}>
                                 <BlogPreviewLight content={selectDoc.content}/>
                                 {selectDoc.updateDate && <div>[最后更新时间:{formatDateUtil(selectDoc.updateDate)}]</div>}
-                                <UserWidget>
-                                    <div
-                                    >
-                                        <Button
-                                            onClick={() => {
-                                                nav("/r/u?updateId=" + selectDoc.id);
-                                            }}
-                                        >
-                                            编辑
-                                        </Button>
-                                    </div>
-                                </UserWidget>
                             </div>
                         )}
                         {!selectDoc && (
                             <Box
                             >
-                                提示:左侧选择文章即可预览内容
+                                选择文章内容即可预览
                             </Box>
                         )}
                     </div>
-                </DocLayout>
+                </TwoColumnLayout>
             )}
         </div>
     );
@@ -184,21 +162,22 @@ const DocSidenav: React.FC<DocSidenavParams> = ({
 
 
     return (
-        <div className={'sticky'}>
-            <UserWidget>
-                <Button
-                    onClick={() => {
-                        setShow(true);
-                    }}
-                >
-                    新建子文件夹
-                </Button>
-            </UserWidget>
+        <div>
+            {/*<UserWidget>*/}
+            {/*    <Button*/}
+            {/*        onClick={() => {*/}
+            {/*            setShow(true);*/}
+            {/*        }}*/}
+            {/*    >*/}
+            {/*        新建子文件夹*/}
+            {/*    </Button>*/}
+            {/*</UserWidget>*/}
             <Card>
                 <CardBody>
                     <CardHeader>
                         <span>文档目录</span>
                     </CardHeader>
+                    <Divider/>
                     <TreeFolderLayout
                         folder={[root]}
                         onSelect={onSelect}
@@ -359,6 +338,9 @@ const TreeFoldersLayoutItem: React.FC<TreeFolderLayoutPropItem> = ({
             <div
                 // sx={isSub ? {pl: 2 * level} : undefined}
                 // selected={isSelect}
+                style={{
+                    marginLeft: isSub ? 12 * level : undefined
+                }}
                 onClick={() => {
                     onFolderSelect(value);
                     setCollapseIn(!collapseIn);
@@ -366,14 +348,13 @@ const TreeFoldersLayoutItem: React.FC<TreeFolderLayoutPropItem> = ({
                 }}
             >
                 {/*{hasChildren && <>{collapseIn ? <span>展开</span> : <span>收起</span>}</>}*/}
-                <div>
+                <div key={value.id}>
                     <FolderIcon  className={'w-6 h-6 inline'}/> <span>{value.title}</span>
                 </div>
 
 
             </div>
             <div>
-                {/*文件夹*/}
                 {value.children && value.children.length !== 0 && (
                     <TreeFolderLayout
                         currentFolder={currentFolder}
@@ -384,23 +365,25 @@ const TreeFoldersLayoutItem: React.FC<TreeFolderLayoutPropItem> = ({
                         level={level + 1}
                     />
                 )}
-                {/*文章*/}
-                {value.resources.map((value) => {
-                    return (
-                        <div
-                            key={value.id}
-                            onClick={() => {
-                                onSelect(value);
-                                onFolderSelect(undefined);
-                            }}
-                            style={{
-                                marginLeft: isSub ? 6 * level : undefined
-                            }}
-                        >
-                            <div><FileIcon/>{value.title}</div>
-                        </div>
-                    );
-                })}
+                <div>
+                    {value.resources.map((value) => {
+                        return (
+                            <div
+                                key={value.id}
+                                onClick={() => {
+                                    onSelect(value);
+                                    onFolderSelect(undefined);
+                                }}
+                                style={{
+                                    marginLeft: isSub ? 12 * level : undefined
+                                }}
+                            >
+                                <div ><FileIcon/>{value.title}</div>
+                            </div>
+                        );
+                    })}
+                </div>
+
             </div>
         </>
     );

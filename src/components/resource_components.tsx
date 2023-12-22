@@ -13,7 +13,9 @@ import {
 import { ApiResponse, JpaPage } from "../models/app_model";
 import PageHeader from "./page_header";
 import Box from "./box/box";
-import {Avatar, Button, CardHeader, Divider} from "@nextui-org/react";
+import {Avatar, Button, Card, CardBody, CardHeader, Divider} from "@nextui-org/react";
+import TwoColumnLayout from "./two_column_layout";
+import {ImageCard} from "./image";
 
 type Props = {
   resourceCategoryName: string; //动态分类的名字
@@ -62,25 +64,39 @@ const ResourceComponents: React.FC<Props> = ({ resourceCategoryName }) => {
 
   return (
     <>
-      <Box>
-        {resCate && <PageHeader showBack={true} title={resCate.name ?? ""} />}
+      <TwoColumnLayout noCard={true} right={[
+          <div>
+              <div>
+                 <div>
+                     {resCate && <PageHeader title={resCate.name ?? ""} />}
+                 </div>
+                  <Button
+                      onClick={() => {
+                          nav("/add-res/" + params.cateName);
+                      }}
+                  >
+                      发布
+                  </Button>
+              </div>
+          </div>
+      ]}>
 
-        <Button
-            onClick={() => {
-              nav("/add-res/" + params.cateName);
-            }}
-        >
-          发布
-        </Button>
+
+
+          <div className={'flex justify-between'}>
+              <PageHeader title={'列表'}/>
+
+          </div>
+
 
         <div
-            className={'columns-1'}
+            className={'flex flex-col gap-2'}
         >
           {list.map((value) => {
             return <DynamicCard key={value.id} res={value} />;
           })}
         </div>
-      </Box>
+      </TwoColumnLayout>
     </>
   );
 };
@@ -100,33 +116,29 @@ const DynamicCard: React.FC<{ res: ResourceModel }> = ({ res }) => {
 
 const ImageTypeLayout: React.FC<{ res: ResourceModel }> = ({ res }) => {
   return (
-    <>
-        <CardHeader
-        >
-
-          <Avatar src={res.user?.picture} />
-          <span>{res.user?.nickName}</span>
-          <span>{"发布于" + formatDateUtil(res.createDate)}</span>
+    <Card>
+        <CardHeader>
+            <Avatar src={res.user?.picture}  />
+            <div className="flex flex-col ml-2">
+                <p className="text-md">{res.user?.nickName}</p>
+                <p className="text-small text-default-500">{formatDateUtil(res.createDate)}</p>
+            </div>
         </CardHeader>
-        <div>
-          <div color={"text.secondary"}>
-            {res.content}
-          </div>
-          <div className={'grid grid-cols-4 gap-2'}>
-            {res.images!.map((item) => (
-              <div key={item.id}>
-                <img
-                  src={`${item.url}`}
-                  alt={item.fileName}
-                  width={"100%"}
-                  style={{ objectFit: "cover", borderRadius: 12 }}
-                  height={"100%"}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-    </>
+        <Divider />
+        <CardBody>
+            <div className={'my-3'}>
+                {res.content}
+            </div>
+            <div className={'grid grid-cols-4 gap-2'}>
+                {res.images!.map((item) => (
+                    <div key={item.id}>
+                        <ImageCard
+                            src={`${item.url}`}  title={item.intro}/>
+                    </div>
+                ))}
+            </div>
+        </CardBody>
+    </Card>
   );
 };
 

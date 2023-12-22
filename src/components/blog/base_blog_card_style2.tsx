@@ -4,7 +4,7 @@ import TwoColumnBlogCard from "./two_column_card";
 
 const BaseBlogCardStyle2: React.FC<BlogCardProps> = ({ blog }) => {
   return (
-      <TwoColumnBlogCard blog={blog} className="" />
+      <TwoColumnBlogCard blog={blog} />
   );
 };
 

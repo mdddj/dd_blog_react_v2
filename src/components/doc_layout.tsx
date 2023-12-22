@@ -7,7 +7,7 @@ type Props = {
 const DocLayout: React.FC<PropsWithChildren<Props>> = ({children,sidenav}) => {
   return <div className={'flex gap-5'} >
 
-    <div className={'w-64 flex-none'} >
+    <div className={'w-72 flex-none'} >
       {sidenav}
     </div>
 

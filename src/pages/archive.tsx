@@ -5,9 +5,8 @@ import {Link} from "react-router-dom";
 import dayjs from "dayjs";
 import PageHeader from "../components/page_header";
 import NothingWidget from "../components/nothing";
-import MyBox from "../components/box/my_box";
 import {MonthsCount} from "dd_server_api_web/dist/model/ArchiveModel";
-import Box from "../components/box/box";
+import {Card, CardBody, CardHeader, Divider} from "@nextui-org/react";
 
 const Archive: React.FC = () => {
 
@@ -33,23 +32,28 @@ const MonthGroup: React.FC<{ monthItem: MonthsCount }> = ({monthItem}) => {
     const blogs = monthItem.blogs ?? []
 
 
-    return <div>
-        <div className={'font-bold text-large'}>{monthItem.months}</div>
-        <div>
-            {
-                blogs.map(value => {
-                    let dateString = dayjs(value.createTime).format('YYYY-MM-DD')
-                    return (<div key={value.id}>
-                        <div><span className={'text-default-500'}>{dateString}</span> <Link
-                            style={{color: '#007bff', cursor: 'pointer'}}
-                            to={'/post/' + value.id}>{value.title}</Link></div>
-                    </div>)
-                })
-            }
+    return <>
+        <Card>
+            <CardHeader className={'font-bold text-large'}>
+                {monthItem.months}
+            </CardHeader>
+            <Divider/>
+            <CardBody>
+                {
+                    blogs.map(value => {
+                       let dateString = dayjs(value.createTime).format('YYYY-MM-DD')
+                       return (<div key={value.id}>
+                           <div><span>{dateString}</span> <Link
+                               style={{color: '#007bff', cursor: 'pointer'}}
+                               to={'/post/' + value.id}>{value.title}</Link></div>
+                       </div>)
+                   })
+               }
+           </CardBody>
 
-        </div>
+        </Card>
 
-    </div>
+    </>
 }
 
 

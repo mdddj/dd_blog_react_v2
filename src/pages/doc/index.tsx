@@ -1,8 +1,6 @@
 import React, {useState} from "react";
 import {blogApi} from "../../utils/request";
 import {useMount} from "react-use";
-import {useSetRecoilState} from "recoil";
-import {appLoading} from "../../providers/loading";
 import NothingWidget from "../../components/nothing";
 import PageHeader from "../../components/page_header";
 import {useNavigate} from "react-router-dom";
@@ -12,21 +10,17 @@ import {
     Result,
     successResultHandle,
 } from "dd_server_api_web/dist/utils/ResultUtil";
-import MyBox from "../../components/box/my_box";
 import {ImageCard} from "../../components/image";
 import UpdateResourceCategoryThumbnail from "../../components/update_resource_category_thumbnail";
-import Box from "../../components/box/box";
 
 //文档列表页面
 const DocsPage: React.FC = () => {
     const [docs, setDocs] = useState<ResCategory[]>([]);
     const [pager, setPager] = useState<PagerModel>();
-    const setLoading = useSetRecoilState(appLoading);
     const nav = useNavigate();
 
     // 加载数据
     const fetchData = () => {
-        setLoading(true);
         blogApi()
             .getResourceCategoryList(
                 {
@@ -44,7 +38,6 @@ const DocsPage: React.FC = () => {
                         list: ResCategory[];
                     }>
                 ) => {
-                    setLoading(false);
                     successResultHandle(value, (data) => {
                         setDocs(data.list ?? []);
                     });
@@ -68,7 +61,7 @@ const DocsPage: React.FC = () => {
     };
 
     return (
-        <MyBox>
+        <div>
             <PageHeader title={"文档"}/>
             <NothingWidget nothing={pager && pager.total === 0}/>
 
@@ -85,7 +78,6 @@ const DocsPage: React.FC = () => {
                                 }}
                                 src={getImage(value)}
                                 title={value.name ?? ""}
-                                imageWith={"100%"}
                             />
                             {value.id && (
                                 <UpdateResourceCategoryThumbnail
@@ -99,7 +91,7 @@ const DocsPage: React.FC = () => {
                     );
                 })}
             </div>
-        </MyBox>
+        </div>
     );
 };
 export default DocsPage;

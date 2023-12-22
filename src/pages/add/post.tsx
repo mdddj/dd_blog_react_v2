@@ -1,8 +1,4 @@
 import React, {useState} from "react";
-import MyBox from "../../components/box/my_box";
-import MdEditor from "react-markdown-editor-lite";
-import "react-markdown-editor-lite/lib/index.css";
-import {BlogPreviewLight} from "../../components/blog_content_light";
 import {useRecoilValue, useSetRecoilState} from "recoil";
 import {archivesDataState} from "../../providers/archives";
 import AddPostTagModal from "./add_post_tag_modal";
@@ -10,12 +6,11 @@ import {blogApi} from "../../utils/request";
 import {useSearchParams} from "react-router-dom";
 import {useMount, useToggle} from "react-use";
 import {successMessageProvider} from "../../providers/modal/success_modal";
-import {onImageUpload} from "../../utils/EditImageFileUpload";
 import {Result, successResultHandle} from "dd_server_api_web/dist/utils/ResultUtil";
 import {BlogData} from "dd_server_api_web/dist/model/result/BlogPushNewResultData";
 import {ApiResponse} from "../../models/app_model";
 import {Button, Chip, Input, Select, SelectItem, Spinner} from "@nextui-org/react";
-import Box from "../../components/box/box";
+import PageHeader from "../../components/page_header";
 
 // 发布博客页面
 const AddPostPage: React.FC = () => {
@@ -70,33 +65,32 @@ const AddPostPage: React.FC = () => {
     };
 
     return (
-        <MyBox>
+        <div>
             {on && <Spinner/>}
 
             {
-                !on && <div className={'columns-1'}>
-                    <div>
-                        发布博客
-                    </div>
+                !on && <div className={'flex flex-col gap-2'}>
+                    <PageHeader title={'发布博客'} />
                     <Input
+                        isRequired={true}
                         placeholder={"输入标题"}
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                     />
-                    <MdEditor
-                        style={{height: "500px"}}
-                        value={content}
-                        renderHTML={(text) => <BlogPreviewLight content={text}/>}
-                        onChange={(data) => {
-                            setContent(data.text);
-                        }}
-                        onImageUpload={onImageUpload}
+                    {/*<MdEditor*/}
+                    {/*    style={{height: "500px"}}*/}
+                    {/*    value={content}*/}
+                    {/*    renderHTML={(text) => <BlogPreviewLight content={text}/>}*/}
+                    {/*    onChange={(data) => {*/}
+                    {/*        setContent(data.text);*/}
+                    {/*    }}*/}
+                    {/*    onImageUpload={onImageUpload}*/}
 
 
-                    />
+                    {/*/>*/}
 
                     {archives && (
-                        <div className={'columns-1'}>
+                        <div className={'flex flex-col gap-2'}>
                             <div>
                                 文章分类
                             </div>
@@ -128,13 +122,13 @@ const AddPostPage: React.FC = () => {
                             }}>编辑博客标签</Button>
                         </div>
                     )}
-                    <Box>
-                        <Button fullWidth onClick={submit}>
+                    <div>
+                        <Button color={'primary'} onClick={submit}>
                             {
                                 updateBlog ? '提交修改' : '发布'
                             }
                         </Button>
-                    </Box>
+                    </div>
                 </div>
             }
 
@@ -148,7 +142,7 @@ const AddPostPage: React.FC = () => {
                 onClose={() => {
                     setShowTagDialog(false)
                 }}/>
-        </MyBox>
+        </div>
     );
 };
 export default AddPostPage;

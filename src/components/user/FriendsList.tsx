@@ -6,7 +6,7 @@ import {blogApi} from "../../utils/request"
 import {Friend} from "dd_server_api_web/dist/model/friend"
 import {Result, successResultHandle} from "dd_server_api_web/dist/utils/ResultUtil"
 import React from "react"
-import {Button, Chip, Modal, ModalContent, ModalHeader} from "@nextui-org/react";
+import {Button, Chip, Modal, ModalBody, ModalContent, ModalHeader} from "@nextui-org/react";
 import Box from "../box/box";
 
 
@@ -48,27 +48,30 @@ const FriendsList: React.FC = () => {
 
         {/* 审批列表 */}
         <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-            <ModalHeader>申请列表</ModalHeader>
-            <ModalContent>
-                {
-                    friends.map(v => {
-                        return <div key={v.id}>
-                            {v.name}
-                            <Box>
-                                <Button onClick={() => {
-                                    v.state = 1
-                                    blogApi().updateFriendsObject(v).then((r: Result<Friend>) => {
-                                        successResultHandle(r, d => {
-                                            setShowModal(false)
-                                            setMsg(r.message)
 
-                                        }, setMsg)
-                                    })
-                                }}>通过</Button>
-                            </Box>
-                        </div>
-                    })
-                }
+            <ModalContent>
+                <ModalHeader>申请列表</ModalHeader>
+                <ModalBody className={'flex flex-col gap-2'}>
+                    {
+                        friends.map(v => {
+                            return <div key={v.id}>
+                                {v.name}
+                                <Box>
+                                    <Button onClick={() => {
+                                        v.state = 1
+                                        blogApi().updateFriendsObject(v).then((r: Result<Friend>) => {
+                                            successResultHandle(r, d => {
+                                                setShowModal(false)
+                                                setMsg(r.message)
+
+                                            }, setMsg)
+                                        })
+                                    }}>通过</Button>
+                                </Box>
+                            </div>
+                        })
+                    }
+                </ModalBody>
             </ModalContent>
         </Modal>
 
